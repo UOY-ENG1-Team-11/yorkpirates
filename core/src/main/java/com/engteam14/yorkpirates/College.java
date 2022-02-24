@@ -91,6 +91,7 @@ public class College extends GameObject {
                     Array<Texture> sprites = new Array<>();
                     sprites.add(new Texture("tempProjectile.png"));
                     screen.projectiles.add(new Projectile(sprites, 0, this, playerX, playerY, team));
+                    screen.sounds.cannon();
                 }
             }else if(Objects.equals(collegeName, "Home")){
                 boolean victory = true;
@@ -131,9 +132,11 @@ public class College extends GameObject {
 
         if(currentHealth > 0){
             collegeBar.resize(currentHealth);
+            screen.sounds.damage();
         }else{
             if(!Objects.equals(team, GameScreen.playerTeam)){ // Checks if the college is an enemy of the player
                 // College taken over
+            	screen.sounds.death();
                 int pointsGained = 50;
                 screen.points.Add(pointsGained);
                 int lootGained = 15;

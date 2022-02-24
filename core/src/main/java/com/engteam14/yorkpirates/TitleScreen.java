@@ -146,6 +146,7 @@ public class TitleScreen extends ScreenAdapter {
         }
         // Set player name and unpause game
         nextGame.setPaused(false);
+        nextGame.sounds.menu_button();
         nextGame.setPlayerName(playerName);
         game.setScreen(nextGame);
     }

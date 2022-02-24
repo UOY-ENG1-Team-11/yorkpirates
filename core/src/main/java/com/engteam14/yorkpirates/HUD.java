@@ -65,6 +65,7 @@ public class HUD {
 
         menuButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
+            	screen.sounds.menu_button();
                 screen.gamePause();
             }
         });

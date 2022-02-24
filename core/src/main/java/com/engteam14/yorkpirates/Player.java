@@ -151,6 +151,7 @@ public class Player extends GameObject {
         // Health-bar reduction
         if(currentHealth > 0){
             playerHealth.resize(currentHealth);
+            screen.sounds.damage();
         }else{
             playerHealth = null;
             screen.gameEnd(false);

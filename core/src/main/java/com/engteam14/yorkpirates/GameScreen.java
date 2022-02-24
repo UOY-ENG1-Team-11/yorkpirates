@@ -32,6 +32,7 @@ public class GameScreen extends ScreenAdapter {
 
     // Sound
     public Music music;
+    public SoundManager sounds;
 
     // Main classes
     private final YorkPirates game;
@@ -64,6 +65,7 @@ public class GameScreen extends ScreenAdapter {
     public GameScreen(YorkPirates game){
         this.game = game;
         playerName = "Player";
+        
 
         // Initialise points and loot managers
         points = new ScoreManager();
@@ -77,6 +79,7 @@ public class GameScreen extends ScreenAdapter {
         gameHUD =  new HUD(this);
 
         //initialise sound
+        sounds = new SoundManager();
         music = Gdx.audio.newMusic(Gdx.files.internal("Pirate1_Theme1.ogg"));
         music.setLooping(true);
         music.setVolume(0);
@@ -203,6 +206,7 @@ public class GameScreen extends ScreenAdapter {
 
         // Check for projectile creation, then call projectile update
         if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
+        	sounds.cannon();
             Vector3 mouseVector = new Vector3(Gdx.input.getX(), Gdx.input.getY(),0);
             Vector3 mousePos = game.camera.unproject(mouseVector);
 
