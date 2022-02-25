@@ -14,6 +14,7 @@ public class YorkPirates extends Game {
 	public BitmapFont font;
 	public SpriteBatch batch;
 	public OrthographicCamera camera;
+	public TextureHandler textureHandler;
 	public Array<Array<Boolean>> edges;
 
 	// Animations
@@ -39,11 +40,13 @@ public class YorkPirates extends Game {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 16* SCREEN_TO_PIXEL_RATIO, 9* SCREEN_TO_PIXEL_RATIO);
 		batch = new SpriteBatch();
+		
+		// Create texture handler
+		textureHandler = new TextureHandler();
 
 		// Get font from skin
-		TextureAtlas atlas;
-		atlas = new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas"));
-		Skin skin = new Skin(Gdx.files.internal("Skin/YorkPiratesSkin.json"), new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas")));
+		TextureAtlas atlas = textureHandler.loadTextureAtlas("YorkPiratesSkin", Gdx.files.internal("Skin/YorkPiratesSkin.atlas"));
+		Skin skin = new Skin(Gdx.files.internal("Skin/YorkPiratesSkin.json"), atlas);
 		skin.addRegions(atlas);
 		font = skin.getFont("Raleway-Bold");
 
@@ -78,7 +81,7 @@ public class YorkPirates extends Game {
 	 * @return			The animation.
 	 */
 	private Animation<TextureRegion> getAnimator(String path, float fps, int rows, int columns) {
-		Texture logosheet = new Texture(Gdx.files.internal(path));
+		Texture logosheet = textureHandler.loadTexture(path, Gdx.files.internal(path));
 		TextureRegion[][] split = TextureRegion.split(logosheet, logosheet.getWidth() / columns, logosheet.getHeight() / rows);
 		Array<TextureRegion> frames = new Array<>();
 		for (int i = 0; i < rows; i++) {
@@ -96,6 +99,7 @@ public class YorkPirates extends Game {
 	public void dispose () {
 		batch.dispose();
 		font.dispose();
+		textureHandler.dispose();
 	}
 
 	/**

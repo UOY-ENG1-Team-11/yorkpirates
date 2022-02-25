@@ -35,9 +35,8 @@ public class TitleScreen extends ScreenAdapter {
         nextGame.setPlayerName("Player");
 
         // Generates skin
-        TextureAtlas atlas;
-        atlas = new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas"));
-        Skin skin = new Skin(Gdx.files.internal("Skin/YorkPiratesSkin.json"), new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas")));
+        TextureAtlas atlas = game.textureHandler.getTextureAtlas("YorkPiratesSkin");
+        Skin skin = new Skin(Gdx.files.internal("Skin/YorkPiratesSkin.json"), atlas);
         skin.addRegions(atlas);
 
         // Generates stage and table

@@ -38,13 +38,12 @@ public class EndScreen extends ScreenAdapter {
         	screen.sounds.lose();
         	imageN="game_over.png";
         }
-        Texture titleT = new Texture(Gdx.files.internal(imageN));
+        Texture titleT = game.textureHandler.loadTexture(imageN, Gdx.files.internal(imageN));
         Image title = new Image(titleT);
 
         // Generate skin
-        TextureAtlas atlas;
-        atlas = new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas"));
-        Skin skin = new Skin(Gdx.files.internal("Skin/YorkPiratesSkin.json"), new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas")));
+        TextureAtlas atlas = game.textureHandler.getTextureAtlas("YorkPiratesSkin");
+        Skin skin = new Skin(Gdx.files.internal("Skin/YorkPiratesSkin.json"), atlas);
         skin.addRegions(atlas);
 
         // Generate stage and table

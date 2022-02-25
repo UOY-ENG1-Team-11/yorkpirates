@@ -47,9 +47,8 @@ public class HUD {
      */
     public HUD(GameScreen screen){
         // Generate skin
-        TextureAtlas atlas;
-        atlas = new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas"));
-        Skin skin = new Skin(Gdx.files.internal("Skin/YorkPiratesSkin.json"), new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas")));
+        TextureAtlas atlas = screen.getMain().textureHandler.getTextureAtlas("YorkPiratesSkin");
+        Skin skin = new Skin(Gdx.files.internal("Skin/YorkPiratesSkin.json"), atlas);
         skin.addRegions(atlas);
 
         // Generate stage and table
@@ -76,8 +75,8 @@ public class HUD {
         tutorialLabel = new Label("WASD or Arrow Keys\n to Move.", skin);
 
         // Create score related actors
-        Image coin = new Image(new Texture(Gdx.files.internal("loot.png")));
-        Image star = new Image(new Texture(Gdx.files.internal("points.png")));
+        Image coin = new Image(screen.getMain().textureHandler.loadTexture("loot", Gdx.files.internal("loot.png")));
+        Image star = new Image(screen.getMain().textureHandler.loadTexture("points", Gdx.files.internal("points.png")));
         coin.setScaling(Scaling.fit);
         star.setScaling(Scaling.fit);
         loot = new Label(screen.loot.GetString(), skin);
@@ -100,7 +99,7 @@ public class HUD {
 
         // Create player tracker
         Table tracker = new Table();
-        tracker.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture("transparent.png"))));
+        tracker.setBackground(new TextureRegionDrawable(new TextureRegion(screen.getMain().textureHandler.loadTexture("transparent", Gdx.files.internal("transparent.png")))));
         if(YorkPirates.DEBUG_ON) tracker.debug();
 
         // Add score to player tracker

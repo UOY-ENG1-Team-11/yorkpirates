@@ -38,14 +38,14 @@ public class Player extends GameObject {
      * @param height    The size of the object in the y-axis.
      * @param team      The team the player is on.
      */
-    public Player(Array<Texture> frames, float fps, float x, float y, float width, float height, String team){
+    public Player(YorkPirates game, Array<Texture> frames, float fps, float x, float y, float width, float height, String team){
         super(frames, fps, x, y, width, height, team);
         lastMovementScore = 0;
         splashTime = 0;
 
         // Generate health
         Array<Texture> sprites = new Array<>();
-        sprites.add(new Texture("allyHealthBar.png"));
+        sprites.add(game.textureHandler.getTexture("allyHealthBar"));
         setMaxHealth(HEALTH);
         playerHealth = new HealthBar(this,sprites);
     }

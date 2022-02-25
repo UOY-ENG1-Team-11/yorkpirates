@@ -87,10 +87,20 @@ public class GameScreen extends ScreenAdapter {
 
         // Initialise sprites array to be used generating GameObjects
         Array<Texture> sprites = new Array<>();
-
+        
+        // Load some textures
+        getMain().textureHandler.loadTexture("homeArrow", Gdx.files.internal("homeArrow.png"));
+        getMain().textureHandler.loadTexture("allyArrow", Gdx.files.internal("allyArrow.png"));
+        getMain().textureHandler.loadTexture("allyHealthBar", Gdx.files.internal("allyHealthBar.png"));
+        getMain().textureHandler.loadTexture("enemyHealthBar", Gdx.files.internal("enemyHealthBar.png"));
+        getMain().textureHandler.loadTexture("questArrow", Gdx.files.internal("questArrow.png"));
+        getMain().textureHandler.loadTexture("tempProjectile", Gdx.files.internal("tempProjectile.png"));
+        
         // Initialise player
-        sprites.add(new Texture("ship1.png"), new Texture("ship2.png"), new Texture("ship3.png"));
-        player = new Player(sprites, 2, 821, 489, 32, 16, playerTeam);
+        sprites.add(getMain().textureHandler.loadTexture("ship1", Gdx.files.internal("ship1.png")), 
+        		getMain().textureHandler.loadTexture("ship2", Gdx.files.internal("ship2.png")), 
+        		getMain().textureHandler.loadTexture("ship3", Gdx.files.internal("ship3.png")));
+        player = new Player(getMain(), sprites, 2, 821, 489, 32, 16, playerTeam);
         sprites.clear();
         followPos = new Vector3(player.x, player.y, 0f);
         game.camera.position.lerp(new Vector3(760, 510, 0f), 1f);
@@ -106,9 +116,9 @@ public class GameScreen extends ScreenAdapter {
         Array<Texture> collegeSprites = new Array<>();
 
         // Add alcuin
-        collegeSprites.add( new Texture("alcuin.png"),
-                            new Texture("alcuin_2.png"));
-        newCollege = new College(collegeSprites, 1492, 665, 0.5f,"Alcuin", enemyTeam, player, "alcuin_boat.png");
+        collegeSprites.add(getMain().textureHandler.loadTexture("alcuin", Gdx.files.internal("alcuin.png")), 
+        		getMain().textureHandler.loadTexture("alcuin_2", Gdx.files.internal("alcuin_2.png")));
+        newCollege = new College(getMain(), collegeSprites, 1492, 665, 0.5f,"Alcuin", enemyTeam, player, getMain().textureHandler.loadTexture("alcuin_boat", Gdx.files.internal("alcuin_boat.png")));
         newCollege.addBoat(30, -20, -60);
         newCollege.addBoat(-50, -40, -150);
         newCollege.addBoat(-40, -70, 0);
@@ -116,18 +126,18 @@ public class GameScreen extends ScreenAdapter {
         collegeSprites.clear();
 
         // Add derwent
-        collegeSprites.add( new Texture("derwent.png"),
-                            new Texture("derwent_2.png"));
-        newCollege = (new College(collegeSprites, 1815, 2105, 0.8f,"Derwent", enemyTeam, player, "derwent_boat.png"));
+        collegeSprites.add(getMain().textureHandler.loadTexture("derwent", Gdx.files.internal("derwent.png")), 
+        		getMain().textureHandler.loadTexture("derwent_2", Gdx.files.internal("derwent_2.png")));
+        newCollege = (new College(getMain(), collegeSprites, 1815, 2105, 0.8f,"Derwent", enemyTeam, player, getMain().textureHandler.loadTexture("derwent_boat", Gdx.files.internal("derwent_boat.png"))));
         newCollege.addBoat(-70, -20, 60);
         newCollege.addBoat(-70, -60, 70);
         colleges.add(newCollege);
         collegeSprites.clear();
 
         // Add langwith
-        collegeSprites.add( new Texture("langwith.png"),
-                            new Texture("langwith_2.png"));
-        newCollege = (new College(collegeSprites, 1300, 1530, 1.0f,"Langwith", enemyTeam, player, "langwith_boat.png"));
+        collegeSprites.add(getMain().textureHandler.loadTexture("langwith", Gdx.files.internal("langwith.png")), 
+        		getMain().textureHandler.loadTexture("langwith_2", Gdx.files.internal("langwith_2.png")));
+        newCollege = (new College(getMain(), collegeSprites, 1300, 1530, 1.0f,"Langwith", enemyTeam, player, getMain().textureHandler.loadTexture("langwith_boat", Gdx.files.internal("langwith_boat.png"))));
         newCollege.addBoat(-150, -50, 60);
         newCollege.addBoat(-120, -10, -60);
         newCollege.addBoat(-10, -40, 230);
@@ -137,8 +147,8 @@ public class GameScreen extends ScreenAdapter {
         collegeSprites.clear();
 
         // Add goodricke
-        collegeSprites.add( new Texture("goodricke.png"));
-        colleges.add(new College(collegeSprites, 700, 525, 0.7f,"Home",playerTeam,player, "ship1.png"));
+        collegeSprites.add(getMain().textureHandler.loadTexture("goodricke", Gdx.files.internal("goodricke.png")));
+        colleges.add(new College(getMain(), collegeSprites, 700, 525, 0.7f,"Home",playerTeam,player, getMain().textureHandler.getTexture("ship1")));
 
         // Initialise projectiles array to be used storing live projectiles
         projectiles = new Array<>();
@@ -211,7 +221,7 @@ public class GameScreen extends ScreenAdapter {
             Vector3 mousePos = game.camera.unproject(mouseVector);
 
             Array<Texture> sprites = new Array<>();
-            sprites.add(new Texture("tempProjectile.png"));
+            sprites.add(getMain().textureHandler.getTexture("tempProjectile"));
             projectiles.add(new Projectile(sprites, 0, player, mousePos.x, mousePos.y, playerTeam));
             gameHUD.endTutorial();
         } for(int i = projectiles.size - 1; i >= 0; i--) {
