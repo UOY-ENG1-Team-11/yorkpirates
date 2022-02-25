@@ -30,8 +30,14 @@ public class EndScreen extends ScreenAdapter {
 
         // Generate title image based on win/lose
         String imageN;
-        if (win)    imageN="game_win.png";
-        else        imageN="game_over.png";
+        if (win) {
+        	screen.sounds.win();
+        	imageN="game_win.png";
+        }
+        else {
+        	screen.sounds.lose();
+        	imageN="game_over.png";
+        }
         Texture titleT = game.textureHandler.loadTexture(imageN, Gdx.files.internal(imageN));
         Image title = new Image(titleT);
 
@@ -66,6 +72,7 @@ public class EndScreen extends ScreenAdapter {
 
         restartB.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
+            	screen.sounds.menu_button();
                 screen.gameReset();
             }
         });
