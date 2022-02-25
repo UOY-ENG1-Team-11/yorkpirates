@@ -25,9 +25,8 @@ public class PauseScreen extends ScreenAdapter {
         this.screen = screen;
 
         // Generate skin
-        TextureAtlas atlas;
-        atlas = new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas"));
-        Skin skin = new Skin(Gdx.files.internal("Skin/YorkPiratesSkin.json"), new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas")));
+        TextureAtlas atlas = game.textureHandler.getTextureAtlas("YorkPiratesSkin");
+        Skin skin = new Skin(Gdx.files.internal("Skin/YorkPiratesSkin.json"), atlas);
         skin.addRegions(atlas);
 
         // Generate stage and table
@@ -40,7 +39,7 @@ public class PauseScreen extends ScreenAdapter {
         if(YorkPirates.DEBUG_ON) table.setDebug(true);
 
         // Generate title texture
-        Texture titleT = new Texture(Gdx.files.internal("paused.png"));
+        Texture titleT = game.textureHandler.loadTexture("paused", Gdx.files.internal("paused.png"));
         Image title = new Image(titleT);
         title.setScaling(Scaling.fit);
 

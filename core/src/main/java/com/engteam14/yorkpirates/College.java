@@ -35,13 +35,13 @@ public class College extends GameObject {
      * @param name      The name of the college.
      * @param team      The team the college is on.
      */
-    public College(Array<Texture> sprites, float x, float y, float scale, String name, String team, Player player, String boatTexture){
+    public College(YorkPirates game, Array<Texture> sprites, float x, float y, float scale, String name, String team, Player player, Texture boatTexture){
         super(sprites, 0, x, y, sprites.get(0).getWidth()*scale, sprites.get(0).getHeight()*scale, team);
 
         this.boatTexture = new Array<>();
         this.boats = new Array<>();
         this.boatRotations = new Array<>();
-        this.boatTexture.add(new Texture(Gdx.files.internal(boatTexture)));
+        this.boatTexture.add(boatTexture);
         collegeImages = new Array<>();
         for(int i = 0; i < sprites.size; i++) {
             collegeImages.add(sprites.get(i));
@@ -56,15 +56,15 @@ public class College extends GameObject {
         Array<Texture> indicatorSprite = new Array<>();
         if(Objects.equals(team, GameScreen.playerTeam)){
             if(Objects.equals(name, "Home")){
-                indicatorSprite.add(new Texture("homeArrow.png"));
+                indicatorSprite.add(game.textureHandler.getTexture("homeArrow"));
             }else{
-                indicatorSprite.add(new Texture("allyArrow.png"));
+                indicatorSprite.add(game.textureHandler.getTexture("allyArrow"));
             }
-            healthBarSprite.add(new Texture("allyHealthBar.png"));
+            healthBarSprite.add(game.textureHandler.getTexture("allyHealthBar"));
 
         }else{
-            healthBarSprite.add(new Texture("enemyHealthBar.png"));
-            indicatorSprite.add(new Texture("questArrow.png"));
+            healthBarSprite.add(game.textureHandler.getTexture("enemyHealthBar"));
+            indicatorSprite.add(game.textureHandler.getTexture("questArrow"));
         }
         collegeBar = new HealthBar(this,healthBarSprite);
         direction = new Indicator(this,player,indicatorSprite);
@@ -89,7 +89,7 @@ public class College extends GameObject {
                 if (TimeUtils.timeSinceMillis(lastShotFired) > shootFrequency){
                     lastShotFired = TimeUtils.millis();
                     Array<Texture> sprites = new Array<>();
-                    sprites.add(new Texture("tempProjectile.png"));
+                    sprites.add(screen.getMain().textureHandler.getTexture("tempProjectile"));
                     screen.projectiles.add(new Projectile(sprites, 0, this, playerX, playerY, team));
                 }
             }else if(Objects.equals(collegeName, "Home")){
@@ -141,8 +141,8 @@ public class College extends GameObject {
 
                 Array<Texture> healthBarSprite = new Array<>();
                 Array<Texture> indicatorSprite = new Array<>();
-                healthBarSprite.add(new Texture("allyHealthBar.png"));
-                indicatorSprite.add(new Texture("allyArrow.png"));
+                healthBarSprite.add(screen.getMain().textureHandler.getTexture("allyHealthBar"));
+                indicatorSprite.add(screen.getMain().textureHandler.getTexture("allyArrow"));
                 boatTexture.clear();
                 boatTexture.add(screen.getPlayer().anim.getKeyFrame(0f));
 
