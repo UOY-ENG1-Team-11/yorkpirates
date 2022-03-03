@@ -1,6 +1,6 @@
 package com.engteam14.yorkpirates;
 
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Gdx; 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
@@ -108,7 +107,7 @@ public class GameScreen extends ScreenAdapter {
         // Initialise tilemap
         tiledMap = new TmxMapLoader().load("FINAL_MAP.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
-
+        
         // Initialise colleges
         College.capturedCount = 0;
         colleges = new Array<>();
@@ -119,9 +118,9 @@ public class GameScreen extends ScreenAdapter {
         collegeSprites.add(getMain().textureHandler.loadTexture("alcuin", Gdx.files.internal("alcuin.png")), 
         		getMain().textureHandler.loadTexture("alcuin_2", Gdx.files.internal("alcuin_2.png")));
         newCollege = new College(getMain(), collegeSprites, 1492, 665, 0.5f,"Alcuin", enemyTeam, player, getMain().textureHandler.loadTexture("alcuin_boat", Gdx.files.internal("alcuin_boat.png")));
-        newCollege.addBoat(30, -20, -60);
-        newCollege.addBoat(-50, -40, -150);
-        newCollege.addBoat(-40, -70, 0);
+        newCollege.addBoat(80, -20, 0);
+        //newCollege.addBoat(-50, -40, -150);
+        //newCollege.addBoat(-40, -70, 0);
         colleges.add(newCollege);
         collegeSprites.clear();
 
@@ -129,8 +128,8 @@ public class GameScreen extends ScreenAdapter {
         collegeSprites.add(getMain().textureHandler.loadTexture("derwent", Gdx.files.internal("derwent.png")), 
         		getMain().textureHandler.loadTexture("derwent_2", Gdx.files.internal("derwent_2.png")));
         newCollege = (new College(getMain(), collegeSprites, 1815, 2105, 0.8f,"Derwent", enemyTeam, player, getMain().textureHandler.loadTexture("derwent_boat", Gdx.files.internal("derwent_boat.png"))));
-        newCollege.addBoat(-70, -20, 60);
-        newCollege.addBoat(-70, -60, 70);
+        //newCollege.addBoat(-70, -20, 60);
+        //newCollege.addBoat(-70, -60, 70);
         colleges.add(newCollege);
         collegeSprites.clear();
 
@@ -138,11 +137,11 @@ public class GameScreen extends ScreenAdapter {
         collegeSprites.add(getMain().textureHandler.loadTexture("langwith", Gdx.files.internal("langwith.png")), 
         		getMain().textureHandler.loadTexture("langwith_2", Gdx.files.internal("langwith_2.png")));
         newCollege = (new College(getMain(), collegeSprites, 1300, 1530, 1.0f,"Langwith", enemyTeam, player, getMain().textureHandler.loadTexture("langwith_boat", Gdx.files.internal("langwith_boat.png"))));
-        newCollege.addBoat(-150, -50, 60);
-        newCollege.addBoat(-120, -10, -60);
-        newCollege.addBoat(-10, -40, 230);
-        newCollege.addBoat(140, 10, 300);
-        newCollege.addBoat(200, 35, 135);
+        //newCollege.addBoat(-150, -50, 60);
+        //newCollege.addBoat(-120, -10, -60);
+        //newCollege.addBoat(-10, -40, 230);
+        //newCollege.addBoat(140, 10, 300);
+        //newCollege.addBoat(200, 35, 135);
         colleges.add(newCollege);
         collegeSprites.clear();
 
@@ -212,6 +211,9 @@ public class GameScreen extends ScreenAdapter {
         player.update(this, game.camera);
         for(int i = 0; i < colleges.size; i++) {
             colleges.get(i).update(this);
+	        for(int n = 0; n < colleges.get(i).boats.size; n++) {
+	            colleges.get(i).boats.get(n).pathTo(tiledMap, player.x, player.y);
+	        }
         }
 
         // Check for projectile creation, then call projectile update

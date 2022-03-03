@@ -23,7 +23,7 @@ public class College extends GameObject {
     private final String collegeName;
     private final Array<Texture> collegeImages;
     private Array<Texture> boatTexture;
-    private Array<GameObject> boats;
+    public Array<Boat> boats;
     private Array<Float> boatRotations;
 
     private boolean doBloodSplash = false;
@@ -79,7 +79,7 @@ public class College extends GameObject {
         float playerX = screen.getPlayer().x;
         float playerY = screen.getPlayer().y;
         boolean nearPlayer = abs(this.x - playerX) < (Gdx.graphics.getWidth()/15f) && abs(this.y - playerY) < (Gdx.graphics.getHeight()/10f);
-
+        
         if(nearPlayer || screen.isPaused()){
             direction.setVisible(false);
 
@@ -206,7 +206,7 @@ public class College extends GameObject {
      * @param y The y position of the new boat relative to the college.
      */
     public void addBoat(float x, float y, float rotation){
-        boats.add(new GameObject(boatTexture, 0, this.x+x, this.y+y, 25, 12, team));
+        boats.add(new Boat(boatTexture, 0, this.x+x, this.y+y, 25, 12, team));
         boatRotations.add(rotation);
     }
 }
