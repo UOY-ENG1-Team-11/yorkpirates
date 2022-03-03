@@ -12,12 +12,16 @@ public class SoundManager{
 	private Sound snd_game_lose;
 	private Sound snd_death;
 	private Sound snd_menu_button;
+	private float volume;
 	private Random randGen;
 	
 	/**
 	 * SoundManager class. Has method calls for all the sounds the game should make.
 	 * */
 	public SoundManager() {
+		
+		//Set volume (0 by default)
+		volume = 0;
 		
 		//Set sound files
 		snds_cannon_shoot = new Array<Sound>();
@@ -40,27 +44,31 @@ public class SoundManager{
 		randGen = new Random();
 	}
 	
+	public void setVolume(float vol) {
+		this.volume = vol;
+	}
+	
 	public void cannon() {
-		snds_cannon_shoot.get(randGen.nextInt(2)).play();
+		snds_cannon_shoot.get(randGen.nextInt(2)).play(this.volume);
 	}
 	
 	public void death() {
-		snd_death.play();
+		snd_death.play(this.volume);
 	}
 	
 	public void damage() {
-		snds_hurt.get(randGen.nextInt(3)).play();
+		snds_hurt.get(randGen.nextInt(3)).play(this.volume);
 	}
 	
 	public void menu_button() {
-		snd_menu_button.play();
+		snd_menu_button.play(this.volume);
 	}
 	
 	public void win() {
-		snd_game_win.play();
+		snd_game_win.play(this.volume);
 	}
 	
 	public void lose() {
-		snd_game_lose.play();
+		snd_game_lose.play(this.volume);
 	}
 }

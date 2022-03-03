@@ -68,9 +68,11 @@ public class PauseScreen extends ScreenAdapter {
             	screen.sounds.menu_button();
                 if (screen.music.getVolume() == 0) {
                     screen.music.setVolume(1);
+                    screen.sounds.setVolume(1);
                     music.setText("Turn Music OFF");
                 } else {
                     screen.music.setVolume(0);
+                    screen.sounds.setVolume(0);
                     music.setText("Turn Music ON");
 
                 }
