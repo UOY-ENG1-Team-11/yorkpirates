@@ -27,6 +27,7 @@ public class Player extends GameObject {
     private float splashTime;
     private long timeLastHit;
     private boolean doBloodSplash = false;
+    public long lastShotFired;
 
     /**
      * Generates a generic object within the game with animated frame(s) and a hit-box.
@@ -42,6 +43,7 @@ public class Player extends GameObject {
         super(frames, fps, x, y, width, height, team);
         lastMovementScore = 0;
         splashTime = 0;
+        lastShotFired = 0;
 
         // Generate health
         Array<Texture> sprites = new Array<>();
