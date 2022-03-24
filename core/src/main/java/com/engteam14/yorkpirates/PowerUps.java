@@ -31,35 +31,30 @@ public class PowerUps extends Consumables{
         	
         	// Attack speed power-up
         	if (this.powerType == "ATKSPD") {
-        		System.out.println(this.powerType);
         		screen.getPlayer().increaseAttackSpeed(screen);
         		destroy(screen);
         	}
         	
         	// Damage power-up
         	if (this.powerType == "DMGUP") {
-        		System.out.println(this.powerType);
         		screen.getPlayer().increaseDamage(screen);
         		destroy(screen);
         	}
         	
         	// Health power-up
         	if (this.powerType == "HEALTH") {
-        		System.out.println(this.powerType);
         		screen.getPlayer().increaseHealth(screen);
         		destroy(screen);
         	}
         	
         	// Invincible power-up
         	if (this.powerType == "INVINCIBLE") {
-        		System.out.println(this.powerType);
         		screen.getPlayer().setInvincible(screen);
         		destroy(screen);
         	}
         	
         	// Speed power-up
         	if (this.powerType == "SPEED") {
-        		System.out.println(this.powerType);
         		screen.getPlayer().increaseSpeed(screen);
         		destroy(screen);
         	}

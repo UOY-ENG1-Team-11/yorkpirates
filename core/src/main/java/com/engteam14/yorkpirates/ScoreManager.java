@@ -23,7 +23,7 @@ public class ScoreManager {
      *  Adds an integer value to the score.
      * @param amount    the value to be added.
      */
-    public void Add(int amount){
+    public void Add(int amount){;
         score += amount;
 
     }

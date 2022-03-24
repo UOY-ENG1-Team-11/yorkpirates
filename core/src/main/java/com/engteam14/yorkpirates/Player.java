@@ -14,9 +14,8 @@ public class Player extends GameObject {
     // Player constants
     private static final int POINT_FREQUENCY = 1000; // How often the player gains points by moving.
     private static final float CAMERA_SLACK = 0.1f; // What percentage of the screen the player can move in before the camera follows.
-    //private static final float SPEED = 70f; // Player movement speed.
+    private static final float SPEED = 70f; // Player movement speed.
     private static final int HEALTH = 200;
-    private float SPEED = 70f;
     
     // Invincibility Checker
     private boolean invincible = false;
@@ -38,10 +37,10 @@ public class Player extends GameObject {
     private boolean doBloodSplash = false;
     public long lastShotFired;
     
-    private long atkSpdTime;
-    private long dmgUpTime;
-    private long invincibleTime;
-    private long speedUpTime;
+    public static long atkSpdTime;
+    public static long dmgUpTime;
+    public static long invincibleTime;
+    public static long speedUpTime;
 
     /**
      * Generates a generic object within the game with animated frame(s) and a hit-box.
@@ -128,18 +127,22 @@ public class Player extends GameObject {
         
         if (TimeUtils.timeSinceMillis(atkSpdTime) > 10000) {
         	playerAttackSpeedMutliplier = 1;
+        	atkSpdTime = 0;
         }
         
         if (TimeUtils.timeSinceMillis(dmgUpTime) > 10000) {
         	playerProjectileDamageMultiplier = 1f;
+        	dmgUpTime = 0;
         }
         
         if (TimeUtils.timeSinceMillis(invincibleTime) > 10000) {
         	invincible = false;
+        	invincibleTime = 0;
         }
         
         if (TimeUtils.timeSinceMillis(speedUpTime) > 10000) {
         	playerSpeedMultiplier = 1f;
+        	speedUpTime = 0;
         }
         
     }
@@ -201,6 +204,7 @@ public class Player extends GameObject {
     public void increaseAttackSpeed(GameScreen screen) {
     	playerAttackSpeedMutliplier *= 2;
     	// set back to 1
+    	screen.AtkSpdTimer.getTime();
     	atkSpdTime = TimeUtils.millis();
     }
     
@@ -211,6 +215,7 @@ public class Player extends GameObject {
     public void increaseDamage(GameScreen screen) {
     	playerProjectileDamageMultiplier *= 10 ;
     	// set back to 20f
+    	screen.AtkDmgTimer.getTime();
     	dmgUpTime = TimeUtils.millis();
     }
     
@@ -232,6 +237,7 @@ public class Player extends GameObject {
      */
     public void increaseSpeed(GameScreen screen){
     	playerSpeedMultiplier *= 1.5;
+    	screen.SpeedTimer.getTime();
     	speedUpTime = TimeUtils.millis();
     }	
     
@@ -241,6 +247,7 @@ public class Player extends GameObject {
      */
     public void setInvincible(GameScreen screen) {
     	invincible = true;
+    	screen.InvincibleTimer.getTime();
     	invincibleTime = TimeUtils.millis();
     }
 

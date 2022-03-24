@@ -30,7 +30,12 @@ public class GameScreen extends ScreenAdapter {
     public static final String invincible = "INVINCIBLE";
     public static final String speedUp = "SPEED";
     
-
+    // Power-ups timers
+    public PowerUpsTimer AtkSpdTimer;
+    public PowerUpsTimer AtkDmgTimer;
+    public PowerUpsTimer InvincibleTimer;
+    public PowerUpsTimer SpeedTimer;
+    
     // Score managers
     public ScoreManager points;
     public ScoreManager loot;
@@ -82,6 +87,13 @@ public class GameScreen extends ScreenAdapter {
         // Initialise points and loot managers
         points = new ScoreManager();
         loot = new ScoreManager();
+        
+        // Initialise power-ups manager
+        AtkSpdTimer = new PowerUpsTimer();
+        AtkDmgTimer = new PowerUpsTimer();
+        InvincibleTimer = new PowerUpsTimer();
+        SpeedTimer = new PowerUpsTimer();
+
 
         // Initialise HUD
         HUDBatch = new SpriteBatch();
@@ -173,6 +185,8 @@ public class GameScreen extends ScreenAdapter {
         // Add attack speed power-ups
         powerupSprites.add(getMain().textureHandler.loadTexture("UpAtkSpd", Gdx.files.internal("UpAtkSpd.png")));
         newPowerUp = (new PowerUps(getMain(), powerupSprites, 1160, 525, 0.2f, attackSpeed));
+        powerups.add(newPowerUp);
+        newPowerUp = (new PowerUps(getMain(), powerupSprites, 1160, 625, 0.2f, attackSpeed));
         powerups.add(newPowerUp);
         powerupSprites.clear();
         

@@ -19,7 +19,7 @@ public class Projectile extends GameObject{
     private final float projectileSpeed; // Projectile movement speed.
 
     private static final float collegeProjectileDamage = 20f; // College Projectile damage.
-    private float playerProjectileDamage = 20f; // Player Projectile damage
+    private static final float playerProjectileDamage = 20f; // Player Projectile damage
 
     /**
      * Generates a projectile object within the game with animated frame(s) and a hit-box.
