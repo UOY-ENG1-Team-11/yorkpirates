@@ -71,4 +71,23 @@ public class SoundManager{
 	public void lose() {
 		snd_game_lose.play(this.volume);
 	}
+	
+	private void dispose_arrays(Array<Sound> arr) {
+		while (!arr.isEmpty()) {
+			arr.pop().dispose();
+		}
+		arr.clear();
+	}
+	
+	/**
+	 * Disposes all sounds from memory.
+	 */
+	public void dispose() {
+		dispose_arrays(snds_cannon_shoot);
+		dispose_arrays(snds_hurt);
+		snd_game_win.dispose();
+		snd_game_lose.dispose();
+		snd_death.dispose();
+		snd_menu_button.dispose();
+	}
 }

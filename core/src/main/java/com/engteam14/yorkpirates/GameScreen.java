@@ -32,8 +32,8 @@ public class GameScreen extends ScreenAdapter {
     public Array<Projectile> projectiles;
 
     // Sound
-    public Music music;
-    public SoundManager sounds;
+    public final Music music;
+    public final SoundManager sounds;
 
     // Main classes
     private final YorkPirates game;
@@ -339,5 +339,6 @@ public class GameScreen extends ScreenAdapter {
         HUDBatch.dispose();
         tiledMap.dispose();
         music.dispose();
+        sounds.dispose();
     }
 }
