@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
@@ -118,7 +119,7 @@ public class GameScreen extends ScreenAdapter {
         collegeSprites.add(getMain().textureHandler.loadTexture("alcuin", Gdx.files.internal("alcuin.png")), 
         		getMain().textureHandler.loadTexture("alcuin_2", Gdx.files.internal("alcuin_2.png")));
         newCollege = new College(getMain(), collegeSprites, 1492, 665, 0.5f,"Alcuin", enemyTeam, player, getMain().textureHandler.loadTexture("alcuin_boat", Gdx.files.internal("alcuin_boat.png")));
-        newCollege.addBoat(80, -20, 0);
+        newCollege.addBoat(game, 80, -20, 0, new Vector2[] {new Vector2(1572, 645), new Vector2(1700, 500)});
         //newCollege.addBoat(-50, -40, -150);
         //newCollege.addBoat(-40, -70, 0);
         colleges.add(newCollege);
@@ -212,7 +213,7 @@ public class GameScreen extends ScreenAdapter {
         for(int i = 0; i < colleges.size; i++) {
             colleges.get(i).update(this);
 	        for(int n = 0; n < colleges.get(i).boats.size; n++) {
-	            colleges.get(i).boats.get(n).pathTo(tiledMap, player.x, player.y);
+	            colleges.get(i).boats.get(n).update(this, player.x, player.y);
 	        }
         }
 
@@ -224,7 +225,7 @@ public class GameScreen extends ScreenAdapter {
 
             Array<Texture> sprites = new Array<>();
             sprites.add(getMain().textureHandler.getTexture("tempProjectile"));
-            projectiles.add(new Projectile(sprites, 0, player, mousePos.x, mousePos.y, playerTeam));
+            projectiles.add(new Projectile(sprites, 0, 80f, player, mousePos.x, mousePos.y, playerTeam));
             gameHUD.endTutorial();
         } for(int i = projectiles.size - 1; i >= 0; i--) {
             projectiles.get(i).update(this);
@@ -297,6 +298,15 @@ public class GameScreen extends ScreenAdapter {
      * @return  The player.
      */
     public Player getPlayer() { return player; }
+    
+    public College getCollege(String name) {
+    	for(int i = 0; i < colleges.size; i++) {
+    		if(colleges.get(i).collegeName.equalsIgnoreCase(name)) {
+    			return colleges.get(i);
+    		}
+    	}
+    	return null;
+    }
 
     /**
      * Get the main game class.

@@ -1,25 +1,135 @@
 package com.engteam14.yorkpirates;
 
-import java.util.ArrayList;
-import java.util.PriorityQueue;
-
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.TimeUtils;
 
 public class Boat extends GameObject {
 	
-	private static final float SPEED =70f;
+	private static final float SPEED =35f;
+	private static final float DETECT_RANGE = 80f;
+	private static final float STOP_RANGE = 40f;
+	
+	private float rotation;
+	private HealthBar boatHealth;
+	private Vector2[] patrol;
+	private int patrolIndex = 0;
+	private long lastShotFired = 0;
+	public final String collegeName;
 
-	public Boat(Array<Texture> frames, float fps, float x, float y, float width, float height, String team) {
+	public Boat(YorkPirates game, Array<Texture> frames, float fps, float x, float y, float width, float height, String team, Vector2[] patrol, String collegeName) {
 		super(frames, fps, x, y, width, height, team);
-		// TODO Auto-generated constructor stub
+		this.patrol = patrol;
+		this.collegeName = collegeName;
+		setMaxHealth(100);
+		Array<Texture> sprites = new Array<>();
+        sprites.add(game.textureHandler.getTexture("allyHealthBar"));
+        boatHealth = new HealthBar(this,sprites);
 	}
 	
-	public void pathTo(TiledMap map, float x, float y) {
-		TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get("Terrain");
+	public void update(GameScreen screen, float x, float y){
+        Vector2 oldPos = new Vector2(x,y); // Stored for next-frame calculations
+
+        // Get input movement
+        int horizontal = 0;
+        int vertical = 0;
+        int shootFrequency = 700;
+        if(Math.sqrt(Math.pow(x - this.x, 2) + Math.pow(y - this.y, 2)) <= DETECT_RANGE) {
+        	if(TimeUtils.timeSinceMillis(lastShotFired) > shootFrequency) {
+        		lastShotFired = TimeUtils.millis();
+	        	screen.sounds.cannon();
+	            Array<Texture> sprites = new Array<>();
+	            sprites.add(screen.getMain().textureHandler.getTexture("tempProjectile"));
+	            screen.projectiles.add(new Projectile(sprites, 0, 64f, this, x, y, team));
+        	}
+        	if(Math.sqrt(Math.pow(x - this.x, 2) + Math.pow(y - this.y, 2)) >= STOP_RANGE) {
+		        horizontal = (int) Math.signum(Math.floor(x - this.x));
+		        vertical = (int) Math.signum(Math.floor(y - this.y));
+        	}
+        } else {
+	        if(patrol[patrolIndex].dst(this.x, this.y) < 8) {
+	        	patrolIndex++;
+	        	if(patrolIndex >= patrol.length) {
+	        		patrolIndex = 0;
+	        	}
+	        }
+	        horizontal = (int) Math.signum(patrol[patrolIndex].x - this.x);
+	        vertical = (int) Math.signum(Math.floor(patrol[patrolIndex].y - this.y));
+        }
+
+        // Calculate collision && movement
+        if (horizontal != 0 || vertical != 0){
+            move(SPEED *horizontal, SPEED *vertical);
+            rotation = (float) Math.toDegrees(Math.atan2(vertical, horizontal));
+            if (!safeMove(screen.getMain().edges)) {    // Collision
+                Vector2 newPos = new Vector2(x, y);
+                x = oldPos.x;
+                if (!safeMove(screen.getMain().edges)) {
+                    x = newPos.x;
+                    y = oldPos.y;
+                    if (!safeMove(screen.getMain().edges)) {
+                        x = oldPos.x;
+                    }
+                }
+            }
+        }
+        updateHitboxPos();
+    }
+	
+	@Override
+    public void takeDamage(GameScreen screen, float damage, String projectileTeam){
+        currentHealth -= damage;
+        if(currentHealth > 0) {
+        	boatHealth.resize(currentHealth);
+        	screen.sounds.damage();
+        } else {
+        	screen.sounds.death();
+            int pointsGained = 20;
+            screen.points.Add(pointsGained);
+            int lootGained = 5;
+            screen.loot.Add(lootGained);
+            boatHealth = null;
+            destroy(screen);
+        }
+	}
+	
+	@Override
+    public void move(float x, float y){
+        this.x += x * Gdx.graphics.getDeltaTime();
+        this.y += y * Gdx.graphics.getDeltaTime();
+        boatHealth.move(this.x, this.y + height/2 + 2f); // Healthbar moves with boat
+    }
+	
+	private void destroy(GameScreen screen) {
+		screen.getCollege(collegeName).boats.removeValue(this, true);
+	}
+	
+	private Boolean safeMove(Array<Array<Boolean>> edges){
+        return (
+                        edges.get((int)((y+height/2)/16)).get((int)((x+width/2)/16)) &&
+                        edges.get((int)((y+height/2)/16)).get((int)((x-width/2)/16)) &&
+                        edges.get((int)((y-height/2)/16)).get((int)((x+width/2)/16)) &&
+                        edges.get((int)((y-height/2)/16)).get((int)((x-width/2)/16))
+        );
+    }
+	
+	@Override
+    public void draw(SpriteBatch batch, float elapsedTime){
+        // Generates the sprite
+        Texture frame = anim.getKeyFrame((currentHealth/maxHealth > 0.66f) ? 0 : ((currentHealth/maxHealth > 0.33f) ? 2 : 1), true);
+        // Draws sprite and health-bar
+        batch.draw(frame, x - width/2, y - height/2, width/2, height/2, width, height, 1f, 1f, rotation, 0, 0, frame.getWidth(), frame.getHeight(), false, false);
+        batch.setShader(null);
+        if(!(boatHealth == null)) boatHealth.draw(batch, 0);
+    }
+	
+	/*public void pathTo(TiledMap map, float x, float y) {
+		 * A* broken could fix later
+		 * 
+		 * TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get("Terrain");
 		Node[][] nodeMap = new Node[layer.getWidth()][layer.getHeight()];
 		float cx = this.x + width/2;
 		float cy = this.y + height/2;
@@ -116,9 +226,12 @@ public class Boat extends GameObject {
 				updateHitboxPos();
 			}
 		}
+	
 	}
 	
-	private class Node implements Comparable<Node> {
+	 A* Node class
+	 * 
+	 * private class Node implements Comparable<Node> {
 		public Vector2 pos;
 
 		public Node parent = null;
@@ -152,6 +265,6 @@ public class Boat extends GameObject {
 			public float weight;
 			public Node node;
 		}
-	}
+	}*/
 
 }
