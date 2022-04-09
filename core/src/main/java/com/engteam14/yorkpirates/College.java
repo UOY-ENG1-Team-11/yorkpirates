@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
@@ -20,11 +21,10 @@ public class College extends GameObject {
 
     private float splashTime;
     private long lastShotFired;
-    private final String collegeName;
+    public final String collegeName;
     private final Array<Texture> collegeImages;
     private Array<Texture> boatTexture;
-    private Array<GameObject> boats;
-    private Array<Float> boatRotations;
+    public Array<Boat> boats;
 
     private boolean doBloodSplash = false;
 
@@ -40,7 +40,6 @@ public class College extends GameObject {
 
         this.boatTexture = new Array<>();
         this.boats = new Array<>();
-        this.boatRotations = new Array<>();
         this.boatTexture.add(boatTexture);
         collegeImages = new Array<>();
         for(int i = 0; i < sprites.size; i++) {
@@ -79,7 +78,7 @@ public class College extends GameObject {
         float playerX = screen.getPlayer().x;
         float playerY = screen.getPlayer().y;
         boolean nearPlayer = abs(this.x - playerX) < (Gdx.graphics.getWidth()/15f) && abs(this.y - playerY) < (Gdx.graphics.getHeight()/10f);
-
+        
         if(nearPlayer || screen.isPaused()){
             direction.setVisible(false);
 
@@ -90,7 +89,7 @@ public class College extends GameObject {
                     lastShotFired = TimeUtils.millis();
                     Array<Texture> sprites = new Array<>();
                     sprites.add(screen.getMain().textureHandler.getTexture("tempProjectile"));
-                    screen.projectiles.add(new Projectile(sprites, 0, this, playerX, playerY, team));
+                    screen.projectiles.add(new Projectile(sprites, 0, 128f, this, playerX, playerY, team));
                     screen.sounds.cannon();
                 }
             }else if(Objects.equals(collegeName, "Home")){
@@ -192,8 +191,8 @@ public class College extends GameObject {
         // Draw boats before college so under
         batch.setShader(null);
         for(int i = 0; i < boats.size; i++){
-            GameObject boat = boats.get(i);
-            batch.draw(boatTexture.get(0), boat.x+boat.height, boat.y, 0,0, boat.width, boat.height, 1f, 1f, boatRotations.get(i), 0, 0, boatTexture.get(0).getWidth(), boatTexture.get(0).getHeight(), false, false);
+            Boat boat = boats.get(i);
+            boat.draw(batch, elapsedTime);
         }
 
         collegeBar.draw(batch, 0);
@@ -205,8 +204,7 @@ public class College extends GameObject {
      * @param x The x position of the new boat relative to the college.
      * @param y The y position of the new boat relative to the college.
      */
-    public void addBoat(float x, float y, float rotation){
-        boats.add(new GameObject(boatTexture, 0, this.x+x, this.y+y, 25, 12, team));
-        boatRotations.add(rotation);
+    public void addBoat(YorkPirates game, float x, float y, float rotation, Vector2[] patrol){
+        boats.add(new Boat(game, boatTexture, 0, this.x+x, this.y+y, 25, 12, team, patrol, collegeName));
     }
 }

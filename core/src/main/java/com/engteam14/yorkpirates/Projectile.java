@@ -11,7 +11,6 @@ import static java.lang.Math.*;
 public class Projectile extends GameObject{
 
     private final float maxDistance; // Projectile max range.
-    private float distanceTravelled;
     private final GameObject origin;
 
     private final float dx;
@@ -29,7 +28,7 @@ public class Projectile extends GameObject{
      * @param goal_y    The y coordinate within the map the object is moving towards.
      * @param team      The team of the projectile.
      */
-    public Projectile(Array<Texture> frames, float fps, GameObject origin, float goal_x, float goal_y, String team) {
+    public Projectile(Array<Texture> frames, float fps, float range, GameObject origin, float goal_x, float goal_y, String team) {
         super(frames, fps, origin.x, origin.y, 5f,5f,team);
         this.origin = origin;
 
@@ -47,9 +46,7 @@ public class Projectile extends GameObject{
         dx = changeInX / scaleFactor;
         dy = changeInY / scaleFactor;
 
-        distanceTravelled = 0;
-        float rangeModifier = min(origin.hitBox.width,origin.hitBox.height);
-        maxDistance = rangeModifier * projectileSpeed;
+        maxDistance = range;
     }
 
     /**
@@ -60,7 +57,6 @@ public class Projectile extends GameObject{
         // Movement Calculations
         float xMove = projectileSpeed*dx;
         float yMove = projectileSpeed*dy;
-        distanceTravelled += projectileSpeed;
         move(xMove, yMove);
 
         // Hit calculations
@@ -71,6 +67,15 @@ public class Projectile extends GameObject{
                         screen.colleges.get(i).takeDamage(screen,projectileDamage,team);
                     }
                     destroy(screen);
+                } else {
+                	for(int n = 0; n < screen.colleges.get(i).boats.size; n++) {
+                		if (overlaps(screen.colleges.get(i).boats.get(n).hitBox)){
+                            if(!Objects.equals(team, screen.colleges.get(i).team)){ // Checks if projectile and boat are on the same time
+                                screen.colleges.get(i).boats.get(n).takeDamage(screen,projectileDamage,team);
+                            }
+                            destroy(screen);
+                        }
+                	}
                 }
             }
         }else{
@@ -83,7 +88,7 @@ public class Projectile extends GameObject{
         }
 
         // Destroys after max travel distance
-        if(distanceTravelled > maxDistance) destroy(screen);
+        if(Math.sqrt(Math.pow(origin.x - x, 2) + Math.pow(origin.y - y, 2)) > maxDistance) destroy(screen);
     }
 
     /**
