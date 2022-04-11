@@ -22,7 +22,20 @@ public class GameScreen extends ScreenAdapter {
     // Team name constants
     public static final String playerTeam = "PLAYER";
     public static final String enemyTeam = "ENEMY";
-
+    
+    // Powerup type name constants
+    public static final String attackSpeed = "ATKSPD";
+    public static final String damageUp = "DMGUP";
+    public static final String healthUp = "HEALTH";
+    public static final String invincible = "INVINCIBLE";
+    public static final String speedUp = "SPEED";
+    
+    // Power-ups timers
+    public PowerUpsTimer AtkSpdTimer;
+    public PowerUpsTimer AtkDmgTimer;
+    public PowerUpsTimer InvincibleTimer;
+    public PowerUpsTimer SpeedTimer;
+    
     // Score managers
     public ScoreManager points;
     public ScoreManager loot;
@@ -30,6 +43,9 @@ public class GameScreen extends ScreenAdapter {
     // Colleges
     public Array<College> colleges;
     public Array<Projectile> projectiles;
+    
+    // Consumables
+    public Array<PowerUps> powerups;
 
     // Sound
     public final Music music;
@@ -64,13 +80,20 @@ public class GameScreen extends ScreenAdapter {
      * @param game  Passes in the base game class for reference.
      */
     public GameScreen(YorkPirates game){
-        this.game = game;
+		this.game = game;
         playerName = "Player";
         
 
         // Initialise points and loot managers
         points = new ScoreManager();
         loot = new ScoreManager();
+        
+        // Initialise power-ups manager
+        AtkSpdTimer = new PowerUpsTimer();
+        AtkDmgTimer = new PowerUpsTimer();
+        InvincibleTimer = new PowerUpsTimer();
+        SpeedTimer = new PowerUpsTimer();
+
 
         // Initialise HUD
         HUDBatch = new SpriteBatch();
@@ -153,6 +176,46 @@ public class GameScreen extends ScreenAdapter {
 
         // Initialise projectiles array to be used storing live projectiles
         projectiles = new Array<>();
+        
+        // Initialise powerups array to be used for storing the power-ups
+        powerups = new Array<>();
+        PowerUps newPowerUp;
+        Array<Texture> powerupSprites = new Array<>();
+        
+        // Add attack speed power-ups
+        powerupSprites.add(getMain().textureHandler.loadTexture("UpAtkSpd", Gdx.files.internal("UpAtkSpd.png")));
+        newPowerUp = (new PowerUps(getMain(), powerupSprites, 1160, 525, 0.2f, attackSpeed));
+        powerups.add(newPowerUp);
+        newPowerUp = (new PowerUps(getMain(), powerupSprites, 1160, 625, 0.2f, attackSpeed));
+        powerups.add(newPowerUp);
+        powerupSprites.clear();
+        
+        // Add damage up power-ups
+        powerupSprites.add(getMain().textureHandler.loadTexture("UpDmg", Gdx.files.internal("UpDmg.png")));
+        newPowerUp = (new PowerUps(getMain(), powerupSprites, 1080, 525, 0.2f, damageUp));
+        powerups.add(newPowerUp);
+        powerupSprites.clear();
+        
+        // Add Health up power-ups
+        powerupSprites.add(getMain().textureHandler.loadTexture("UpHealth", Gdx.files.internal("UpHealth.png")));
+        newPowerUp = (new PowerUps(getMain(), powerupSprites, 900, 525, 0.2f, healthUp));
+        powerups.add(newPowerUp);
+        newPowerUp = (new PowerUps(getMain(), powerupSprites, 90, 52, 0.2f, healthUp));
+        powerups.add(newPowerUp);
+        powerupSprites.clear();
+        
+        // Add Invincible power-ups
+        powerupSprites.add(getMain().textureHandler.loadTexture("UpInvincible", Gdx.files.internal("UpInvincible.png")));
+        newPowerUp = (new PowerUps(getMain(), powerupSprites, 1020, 525, 0.2f, invincible));
+        powerups.add(newPowerUp);
+        powerupSprites.clear();
+        
+        // Add Speed power-ups
+        powerupSprites.add(getMain().textureHandler.loadTexture("UpSpeed", Gdx.files.internal("UpSpeed.png")));
+        newPowerUp = (new PowerUps(getMain(), powerupSprites, 960, 525, 0.2f, speedUp));
+        powerups.add(newPowerUp);
+        powerupSprites.clear();
+        
     }
 
     /**
@@ -180,6 +243,11 @@ public class GameScreen extends ScreenAdapter {
             projectiles.get(i).draw(game.batch, 0);
         }
 
+        // Draw Consumables
+        for(int i = 0; i < powerups.size; i++) {
+            powerups.get(i).draw(game.batch, 0);
+        }
+        
         // Draw Player, Player Health and Player Name
         if(!isPaused) {
             player.drawHealthBar(game.batch);
@@ -212,14 +280,19 @@ public class GameScreen extends ScreenAdapter {
         // Call updates for all relevant objects
         player.update(this, game.camera);
         for(int i = 0; i < colleges.size; i++) {
+        	//System.out.println(colleges.get(i).team);
             colleges.get(i).update(this);
 	        for(int n = 0; n < colleges.get(i).boats.size; n++) {
 	            colleges.get(i).boats.get(n).update(this, player.x, player.y);
 	        }
         }
 
+        for(int i = 0; i < powerups.size; i++) {
+            powerups.get(i).update(this);
+        }
+        
         // Check for projectile creation, then call projectile update
-        int shootFrequency = 700; // How often the player can shoot
+        int shootFrequency = 700/(Player.playerAttackSpeedMutliplier); // How often the player can shoot
         if(Gdx.input.isButtonPressed(Input.Buttons.LEFT) && TimeUtils.timeSinceMillis(player.lastShotFired) > shootFrequency){
         	player.lastShotFired = TimeUtils.millis();
         	sounds.cannon();

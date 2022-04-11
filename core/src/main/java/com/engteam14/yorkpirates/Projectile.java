@@ -17,7 +17,8 @@ public class Projectile extends GameObject{
     private final float dy;
     private final float projectileSpeed; // Projectile movement speed.
 
-    private static final float projectileDamage = 20f; // Projectile damage.
+    private static final float collegeProjectileDamage = 20f; // College Projectile damage.
+    private static final float playerProjectileDamage = 20f; // Player Projectile damage
 
     /**
      * Generates a projectile object within the game with animated frame(s) and a hit-box.
@@ -54,6 +55,7 @@ public class Projectile extends GameObject{
      * @param screen    The main game screen.
      */
     public void update(GameScreen screen){
+    	
         // Movement Calculations
         float xMove = projectileSpeed*dx;
         float yMove = projectileSpeed*dy;
@@ -63,8 +65,8 @@ public class Projectile extends GameObject{
         if(origin == screen.getPlayer()){
             for(int i = 0; i < screen.colleges.size; i++) {
                 if (overlaps(screen.colleges.get(i).hitBox)){
-                    if(!Objects.equals(team, screen.colleges.get(i).team)){ // Checks if projectile and college are on the same time
-                        screen.colleges.get(i).takeDamage(screen,projectileDamage,team);
+                    if(!Objects.equals(team, screen.colleges.get(i).team)){ // Checks if projectile and college are on the same team
+                        screen.colleges.get(i).takeDamage(screen,playerProjectileDamage*(Player.playerProjectileDamageMultiplier),team);
                     }
                     destroy(screen);
                 } else {
@@ -80,8 +82,8 @@ public class Projectile extends GameObject{
             }
         }else{
             if (overlaps(screen.getPlayer().hitBox)){
-                if(!Objects.equals(team, GameScreen.playerTeam)){ // Checks if projectile and player are on the same time
-                    screen.getPlayer().takeDamage(screen,projectileDamage,team);
+                if(!Objects.equals(team, GameScreen.playerTeam)){ // Checks if projectile and player are on the same team
+                    screen.getPlayer().takeDamage(screen,collegeProjectileDamage,team);
                 }
                 destroy(screen);
             }
@@ -90,6 +92,15 @@ public class Projectile extends GameObject{
         // Destroys after max travel distance
         if(Math.sqrt(Math.pow(origin.x - x, 2) + Math.pow(origin.y - y, 2)) > maxDistance) destroy(screen);
     }
+    /*
+    /**
+     * Called when colliding with a damage increase power-up.
+     * @param screen            The main game screen.
+     
+    public void increaseDamage(GameScreen screen) {
+    	playerProjectileDamage = 400f;
+    }
+    */
 
     /**
      * Called when the projectile needs to be destroyed.
