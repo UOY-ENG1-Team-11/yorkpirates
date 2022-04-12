@@ -22,6 +22,7 @@ public class GameScreen extends ScreenAdapter {
     // Team name constants
     public static final String playerTeam = "PLAYER";
     public static final String enemyTeam = "ENEMY";
+    public static final String neutralTeam = "NEUTRAL";
 
     // Score managers
     public ScoreManager points;
@@ -30,6 +31,9 @@ public class GameScreen extends ScreenAdapter {
     // Colleges
     public Array<College> colleges;
     public Array<Projectile> projectiles;
+    
+    // Enemies
+    public Array<Enemy_Wave> enemy_waves;
 
     // Sound
     public final Music music;
@@ -97,6 +101,8 @@ public class GameScreen extends ScreenAdapter {
         getMain().textureHandler.loadTexture("questArrow", Gdx.files.internal("questArrow.png"));
         getMain().textureHandler.loadTexture("tempProjectile", Gdx.files.internal("tempProjectile.png"));
         
+        
+        
         // Initialise player
         sprites.add(getMain().textureHandler.loadTexture("ship1", Gdx.files.internal("ship1.png")), 
         		getMain().textureHandler.loadTexture("ship2", Gdx.files.internal("ship2.png")), 
@@ -105,6 +111,9 @@ public class GameScreen extends ScreenAdapter {
         sprites.clear();
         followPos = new Vector3(player.x, player.y, 0f);
         game.camera.position.lerp(new Vector3(760, 510, 0f), 1f);
+        
+        //initalise a wave
+        //enemy_waves.add(new Enemy_Wave());
 
         // Initialise tilemap
         tiledMap = new TmxMapLoader().load("FINAL_MAP.tmx");

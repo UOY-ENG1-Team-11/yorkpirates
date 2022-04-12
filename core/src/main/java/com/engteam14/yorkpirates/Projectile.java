@@ -14,8 +14,8 @@ public class Projectile extends GameObject{
     private float distanceTravelled;
     private final GameObject origin;
 
-    private final float dx;
-    private final float dy;
+    private final float dx; //x component to add every frame
+    private final float dy; //y component to add every frame
     private final float projectileSpeed; // Projectile movement speed.
 
     private static final float projectileDamage = 20f; // Projectile damage.
@@ -64,7 +64,7 @@ public class Projectile extends GameObject{
         move(xMove, yMove);
 
         // Hit calculations
-        if(origin == screen.getPlayer()){
+        if(team == screen.playerTeam){
             for(int i = 0; i < screen.colleges.size; i++) {
                 if (overlaps(screen.colleges.get(i).hitBox)){
                     if(!Objects.equals(team, screen.colleges.get(i).team)){ // Checks if projectile and college are on the same time
@@ -75,9 +75,9 @@ public class Projectile extends GameObject{
             }
         }else{
             if (overlaps(screen.getPlayer().hitBox)){
-                if(!Objects.equals(team, GameScreen.playerTeam)){ // Checks if projectile and player are on the same time
-                    screen.getPlayer().takeDamage(screen,projectileDamage,team);
-                }
+                //if(!Objects.equals(team, GameScreen.playerTeam)){ // Checks if projectile and player are on the same time
+                screen.getPlayer().takeDamage(screen,projectileDamage,team);
+                //}
                 destroy(screen);
             }
         }
