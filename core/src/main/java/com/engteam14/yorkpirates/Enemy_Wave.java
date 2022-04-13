@@ -6,18 +6,29 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
+
+import static java.lang.Math.abs;
+import static java.lang.Math.max;
+
 import java.lang.Math;
 
 public class Enemy_Wave extends GameObject {
 	
 	//Movement and coordinate values
 	public static final int MAX_WAVES = 5; //maximum number of wave instances
-	private final float speed  = 5;
-	private int lifespan = 300; //how many frames wave will exist for
+	private static final float projectileDamage = 20f; //damage dealt by the wave
+	
+	private final float speed  = 80f;
+	private final float maxDistance = 8000; //how far the wave can move before disappearing
 	private final float xComponent; //what value to add to x coordinate every frame
 	private final float yComponent; //what value to add to y coordinate every frame
-	private String state = "move";
-	private float elapsed_time = 0;
+	private GameObject target; //reference to target game object
+	
+	private String state = "move"; //state the wave is in
+	private float distanceTravelled = 0; //current distance travelled
+	
+	public static int count = 0; //how many wave instances exist
+	
 	
 	
 	/**
@@ -29,48 +40,42 @@ public class Enemy_Wave extends GameObject {
      * @param width     The size of the object in the x-axis.
      * @param height    The size of the object in the y-axis.
      */
-	public Enemy_Wave(YorkPirates game, Array<Texture> frames, float fps, float x, float y, float width, float height) {
-		super(frames, fps, x, y, width, height, "NEUTRAL");
-		float dir = 0; //Calculate angle between start pos and target pos here and set it
-		//Angles representing compass directions are 360 or 0/90/180/270 for NESW
+	public Enemy_Wave(Array<Texture> frames, float fps, GameObject target, float x, float y) {
+		super(frames, fps, x, y, 5f, 5f, "NEUTRAL");
 		
-		//precalculate the proportion of speed to assign to the x and y components based
-		//on the angle
-		xComponent = (float)Math.sin(dir)*speed;
-		yComponent = (float)Math.cos(dir)*speed;
-	}
-	
-	public void update() {
-		if (state == "move"){
-			x += xComponent;
-			y += yComponent;
-			//check collision at new position
-			//if colliding with player, do damage, set state to splash
-			state = "splash";
-			//else
-			lifespan -= 1;
-			//if lifespan <= 0, hide this instance
-		}
-		if (state == "splash") {
-			//play splash animation and hide instance when finished
-			hide();
-		}
-		if (state == "decay") {
-			//play decay animation and hide instance when finished
-			hide();
-		}
-		draw();
+		// Movement calculations
+        float changeInX = target.x - x;
+        float changeInY = target.y - y;
+        float scaleFactor = max(abs(changeInX),abs(changeInY));
+        xComponent = changeInX / scaleFactor;
+        yComponent = changeInY / scaleFactor;
+        this.target = target;
 	}
 	
 	/**
-	 * Hide this wave instance outside the map.
-	 * Hiding instead of destroying instance as number of waves is fixed and it's
-	 * slightly more performant to just store them outside the map rather than
-	 * creating/destroying them repeatedly. Performance boost is more noticeable if
-	 * we regularly reach the MAX_WAVES cap, spawning in new waves as soon as the old
-	 * ones have finished.
-	 */
-	public void hide() {
-		state = "hidden";
+     * Called once per frame. Used to perform calculations such as projectile movement and collision detection.
+     * @param screen    The main game screen.
+     */
+	public void update(GameScreen screen) {
+		if (state == "move"){
+	        float xMove = speed*xComponent;
+	        float yMove = speed*yComponent;
+	        distanceTravelled += speed;
+	        move(xMove, yMove);
+	        if (overlaps(target.hitBox)){
+	            target.takeDamage(screen,projectileDamage,team);
+	            destroy(screen);
+	        }
+		}
+        // Destroys after max travel distance
+        if(distanceTravelled > maxDistance) {destroy(screen);}
 	}
+	/**
+     * Called when the wave needs to be destroyed.
+     * @param screen    The main game screen.
+     */
+    private void destroy(GameScreen screen){
+    	count -= 1;
+        screen.enemy_waves.removeValue(this,true);
+    }
 }

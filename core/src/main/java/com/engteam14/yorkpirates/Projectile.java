@@ -75,9 +75,7 @@ public class Projectile extends GameObject{
             }
         }else{
             if (overlaps(screen.getPlayer().hitBox)){
-                //if(!Objects.equals(team, GameScreen.playerTeam)){ // Checks if projectile and player are on the same time
                 screen.getPlayer().takeDamage(screen,projectileDamage,team);
-                //}
                 destroy(screen);
             }
         }

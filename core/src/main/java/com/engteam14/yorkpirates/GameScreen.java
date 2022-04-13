@@ -100,6 +100,7 @@ public class GameScreen extends ScreenAdapter {
         getMain().textureHandler.loadTexture("enemyHealthBar", Gdx.files.internal("enemyHealthBar.png"));
         getMain().textureHandler.loadTexture("questArrow", Gdx.files.internal("questArrow.png"));
         getMain().textureHandler.loadTexture("tempProjectile", Gdx.files.internal("tempProjectile.png"));
+        getMain().textureHandler.loadTexture("enemyWave", Gdx.files.internal("enemy_wave.png"));
         
         
         
@@ -162,6 +163,7 @@ public class GameScreen extends ScreenAdapter {
 
         // Initialise projectiles array to be used storing live projectiles
         projectiles = new Array<>();
+        enemy_waves = new Array<>();
     }
 
     /**
@@ -187,6 +189,11 @@ public class GameScreen extends ScreenAdapter {
         // Draw Projectiles
         for(int i = 0; i < projectiles.size; i++) {
             projectiles.get(i).draw(game.batch, 0);
+        }
+        
+        //Draw waves
+        for(int i = 0; i < enemy_waves.size; i++) {
+            enemy_waves.get(i).draw(game.batch, 0);
         }
 
         // Draw Player, Player Health and Player Name
@@ -233,10 +240,14 @@ public class GameScreen extends ScreenAdapter {
             Vector3 mousePos = game.camera.unproject(mouseVector);
             Array<Texture> sprites = new Array<>();
             sprites.add(getMain().textureHandler.getTexture("tempProjectile"));
+            sprites.add(getMain().textureHandler.getTexture("enemyWave"));
             projectiles.add(new Projectile(sprites, 0, player, mousePos.x, mousePos.y, playerTeam));
+            enemy_waves.add(new Enemy_Wave(sprites, 0, player, mousePos.x, mousePos.y));
             gameHUD.endTutorial();
         } for(int i = projectiles.size - 1; i >= 0; i--) {
             projectiles.get(i).update(this);
+        } for(int i = enemy_waves.size - 1; i >= 0; i--) {
+            enemy_waves.get(i).update(this);
         }
 
         // Camera calculations based on player movement
