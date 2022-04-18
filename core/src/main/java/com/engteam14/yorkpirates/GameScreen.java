@@ -316,6 +316,11 @@ public class GameScreen extends ScreenAdapter {
         if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && elapsedTime - lastPause > 0.1f){
             gamePause();
         }
+        
+        // Call to open the shop
+        if(Gdx.input.isKeyJustPressed(Input.Keys.P) && elapsedTime - lastPause > 0.1f){
+            gameShop();
+        }
     }
 
     /**
@@ -324,6 +329,11 @@ public class GameScreen extends ScreenAdapter {
     public void gamePause(){
         isPaused = true;
         game.setScreen(new PauseScreen(game,this));
+    }
+    
+    public void gameShop() {
+    	isPaused = true;
+    	game.setScreen(new ShopScreen(game,this));
     }
 
     /**

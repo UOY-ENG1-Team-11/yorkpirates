@@ -51,6 +51,22 @@ public class PauseScreen extends ScreenAdapter {
                 gameContinue();
             }
         });
+        
+        TextButton shop = new TextButton("Shop", skin);
+        shop.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+            	screen.sounds.menu_button();
+            	screen.gameShop();
+            }
+        });
+        
+        TextButton save = new TextButton("Save", skin);
+        save.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+            	screen.sounds.menu_button();
+            	// Insert save function calls here
+            }
+        });        
 
         TextButton restart = new TextButton("End Game", skin);
         restart.addListener(new ClickListener() {
@@ -95,6 +111,10 @@ public class PauseScreen extends ScreenAdapter {
         table.row();
         table.add(resume).expand();
         table.row();
+        table.add(shop).expand();
+        table.add().row();
+        table.add(save).expand();
+        table.add().row();
         table.add(restart).expand();
         table.row();
         table.add(music).expand();

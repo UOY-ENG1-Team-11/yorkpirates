@@ -20,9 +20,18 @@ public class Player extends GameObject {
     // Invincibility Checker
     private boolean invincible = false;
     
+    // Upgrade check variables
+    public static boolean AtkSpdBought = false;
+    public static boolean AtkDmgBought = false;
+    public static boolean SpdBought = false;
+    
     // Player Multipliers
+    public static float playerProjectileDamageUpgrade = 1;
+    private static int playerAttackSpeedUpgrade = 1;
+    private float playerSpeedUpgrade = 1f;
+    
     public static float playerProjectileDamageMultiplier = 1f; // Player Projectile damage Multiplier
-    public static int playerAttackSpeedMutliplier = 1; // Player Projectile Fire Rate Multiplier
+    public static int playerAttackSpeedMutliplier = 1 * playerAttackSpeedUpgrade; // Player Projectile Fire Rate Multiplier
     private float playerSpeedMultiplier = 1f; // Player Movement Speed Multiplier
     
     // Movement calculation values
@@ -30,13 +39,15 @@ public class Player extends GameObject {
     private int previousDirectionY;
     private float distance;
     private long lastMovementScore;
-
+    
+    // Player Values
     private HealthBar playerHealth;
     private float splashTime;
     private long timeLastHit;
     private boolean doBloodSplash = false;
     public long lastShotFired;
     
+    // Time variable declarations
     public static long atkSpdTime;
     public static long dmgUpTime;
     public static long invincibleTime;
@@ -126,12 +137,12 @@ public class Player extends GameObject {
         }
         
         if (TimeUtils.timeSinceMillis(atkSpdTime) > 10000) {
-        	playerAttackSpeedMutliplier = 1;
+        	playerAttackSpeedMutliplier = 1 * playerAttackSpeedUpgrade;
         	atkSpdTime = 0;
         }
         
         if (TimeUtils.timeSinceMillis(dmgUpTime) > 10000) {
-        	playerProjectileDamageMultiplier = 1f;
+        	playerProjectileDamageMultiplier = 1f * playerProjectileDamageUpgrade;
         	dmgUpTime = 0;
         }
         
@@ -141,9 +152,10 @@ public class Player extends GameObject {
         }
         
         if (TimeUtils.timeSinceMillis(speedUpTime) > 10000) {
-        	playerSpeedMultiplier = 1f;
+        	playerSpeedMultiplier = 1f * playerSpeedUpgrade;
         	speedUpTime = 0;
-        }
+        }      
+        
         
     }
 
@@ -250,6 +262,34 @@ public class Player extends GameObject {
     	screen.InvincibleTimer.getTime();
     	invincibleTime = TimeUtils.millis();
     }
+    
+    /**
+     * Called when attack speed shop upgrade is bought.
+     * @param screen            The main game screen.
+     */
+    public void upgradeAttackSpeed(GameScreen screen) {
+    	playerAttackSpeedUpgrade = 2;
+    	AtkSpdBought = true;
+    }
+
+    /**
+     * Called when attack speed shop upgrade is bought.
+     * @param screen            The main game screen.
+     */
+    public void upgradeAttackDamage(GameScreen screen) {
+    	playerProjectileDamageUpgrade = 5;
+    	AtkDmgBought = true;
+    }
+    
+    /**
+     * Called when attack speed shop upgrade is bought.
+     * @param screen            The main game screen.
+     */
+    public void upgradeSpeed(GameScreen screen) {
+    	playerSpeedUpgrade = 1.5f;
+    	SpdBought = true;
+    }
+
 
     /**
      * Called after update(), calculates whether the camera should follow the player and passes it to the game screen.
