@@ -12,12 +12,12 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-public class TitleScreen extends ScreenAdapter {
+public class NewGameScreen extends ScreenAdapter {
     private final YorkPirates game;
     private final GameScreen nextGame;
     private final Stage stage;
 
-    private final Cell<Image> titleCell;
+    private final TextField textBox;
 
     private float elapsedTime = 0f;
 
@@ -25,7 +25,7 @@ public class TitleScreen extends ScreenAdapter {
      * Initialises the title screen, as well as relevant textures and data it may contain.
      * @param game  Passes in the base game class for reference.
      */
-    public TitleScreen(YorkPirates game){
+    public NewGameScreen(YorkPirates game){
         this.game = game;
 
         // Generates main gameplay for use as background
@@ -46,45 +46,46 @@ public class TitleScreen extends ScreenAdapter {
         table.setBackground(skin.getDrawable("Selection"));
         if(YorkPirates.DEBUG_ON) table.setDebug(true);
 
-        // Get title texture
-        TextureRegion titleT = game.logo.getKeyFrame(0f);
-        Image title = new Image(titleT);
-        title.setScaling(Scaling.fit);
+        // Generate textbox
+        textBox = new TextField("Name (optional)", skin, "edges");
+        textBox.setAlignment(Align.center);
+        textBox.setOnlyFontChars(true);
+        textBox.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                textBox.setText("");
+            }});
 
         // Generate buttons
-        ImageTextButton startButton = new ImageTextButton("New Game", skin);
-        ImageTextButton loadButton = new ImageTextButton("Load Game", skin);
-        ImageTextButton quitButton = new ImageTextButton("Exit Game", skin, "Quit");
+        ImageTextButton startButton = new ImageTextButton("Start Game", skin);
+        ImageTextButton backButton = new ImageTextButton("Back", skin);
 
         startButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                newGameStart();
+                // if difficulty selected
+            	gameStart();
             }
         });
-        
-        loadButton.addListener(new ClickListener() {
+                
+        backButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                //newGameStart();
-            	// add loading function in here
-            }
-        });
-        
-        quitButton.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                game.quit();
+            	game.setScreen(new TitleScreen(game));
             }
         });
 
-        // Add title to table
-        titleCell = table.add(title).expand();
+        // Add textbox to table
+        table.row();
+        Table textBoxFiller = new Table();
+        textBoxFiller.add().expand().padRight(stage.getWidth()/3);
+        textBoxFiller.add(textBox).expand().fillX();
+        textBoxFiller.add().expand().padLeft(stage.getWidth()/3);
+        if(YorkPirates.DEBUG_ON) textBoxFiller.debug();
+        table.add(textBoxFiller).expand().fill();
 
         // Add buttons to table
         table.row();
         table.add(startButton).expand();
         table.row();
-        table.add(loadButton).expand();
-        table.row();
-        table.add(quitButton).expand();
+        table.add(backButton).expand();
 
         // Add table to the stage
         stage.addActor(table);
@@ -106,10 +107,6 @@ public class TitleScreen extends ScreenAdapter {
         ScreenUtils.clear(0f, 0f, 0f, 1.0f);
         nextGame.render(delta);
 
-        // Animate title
-        TextureRegion frame = game.logo.getKeyFrame(elapsedTime, true);
-        titleCell.setActor(new Image(frame));
-
         // Draw UI over the top
         stage.draw();
     }
@@ -119,12 +116,26 @@ public class TitleScreen extends ScreenAdapter {
      */
     private void update(){
         if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
-            newGameStart();
+            gameStart();
         }
     }
-    
-    private void newGameStart() {
-    	game.setScreen(new NewGameScreen(game));
+
+    /**
+     * Is called to create a new game screen.
+     */
+    private void gameStart(){
+        // Get player name
+        String playerName;
+        if ( textBox.getText().equals("Name (optional)") || textBox.getText().equals("")) {
+            playerName = "Player";
+
+        } else{
+            playerName = textBox.getText();
+        }
+        // Set player name and unpause game
+        nextGame.setPaused(false);
+        nextGame.sounds.menu_button();
+        nextGame.setPlayerName(playerName);
+        game.setScreen(nextGame);
     }
-    
 }
