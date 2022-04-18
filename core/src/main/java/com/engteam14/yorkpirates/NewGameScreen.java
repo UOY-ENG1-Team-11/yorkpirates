@@ -18,16 +18,21 @@ public class NewGameScreen extends ScreenAdapter {
     private final Stage stage;
 
     private final TextField textBox;
+    private final Table difficulties;
+    private final Table buttons;
+    private final Label title;
+    private final Label reminder;
 
-    private float elapsedTime = 0f;
-
+    private boolean difficultyChosen = false;
+    private static int difficulty;
+    
     /**
      * Initialises the title screen, as well as relevant textures and data it may contain.
      * @param game  Passes in the base game class for reference.
      */
     public NewGameScreen(YorkPirates game){
         this.game = game;
-
+        
         // Generates main gameplay for use as background
         nextGame = new GameScreen(game);
         nextGame.setPaused(true);
@@ -55,23 +60,108 @@ public class NewGameScreen extends ScreenAdapter {
                 textBox.setText("");
             }});
 
+        // Generate Title
+        title = new Label("New Game Creation" , skin);
+        
+        // Generate difficulty reminder
+        reminder = new Label("Please Select A Difficulty", skin);
+        reminder.setVisible(false);
+        
         // Generate buttons
         ImageTextButton startButton = new ImageTextButton("Start Game", skin);
         ImageTextButton backButton = new ImageTextButton("Back", skin);
-
+        
+        ImageTextButton easyButton = new ImageTextButton("Easy", skin);
+        ImageTextButton normalButton = new ImageTextButton("Normal", skin);
+        ImageTextButton hardButton = new ImageTextButton("Hard", skin);
+        
         startButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                // if difficulty selected
-            	gameStart();
+                if (difficultyChosen == true) {
+                	gameStart();
+                }
+                else {
+                	reminder.setVisible(true);
+                }
             }
         });
-                
+          
+        easyButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+            	if (difficultyChosen == true) {
+            		difficultyChosen = false;
+            		normalButton.setVisible(true);
+            		hardButton.setVisible(true);
+            	}
+            	else {
+            		difficulty = 1;
+            		difficultyChosen = true;
+            		reminder.setVisible(false);
+            		normalButton.setVisible(false);
+            		hardButton.setVisible(false);
+            	}
+            }
+        });
+        
+        normalButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+            	if (difficultyChosen == true) {
+            		difficultyChosen = false;
+            		normalButton.setVisible(true);
+            		hardButton.setVisible(true);
+            	}
+            	else {
+            		difficulty = 2;
+            		difficultyChosen = true;
+            		reminder.setVisible(false);
+            		easyButton.setVisible(false);
+            		hardButton.setVisible(false);
+            	}
+            }
+        });
+        
+        hardButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+            	if (difficultyChosen == true) {
+            		difficultyChosen = false;
+            		easyButton.setVisible(true);
+            		normalButton.setVisible(true);
+            	}
+            	else {
+            		difficulty = 4;
+            		difficultyChosen = true;
+            		reminder.setVisible(false);
+            		easyButton.setVisible(false);
+            		normalButton.setVisible(false);
+            	}
+            }
+        });
+           
+        
         backButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
             	game.setScreen(new TitleScreen(game));
             }
         });
 
+        // Create difficulty selection subtable
+        difficulties = new Table();
+        difficulties.add(easyButton).pad(100);
+        difficulties.add(normalButton).pad(100);
+        difficulties.add(hardButton).pad(100);
+        difficulties.add().row();
+        difficulties.add().expand();
+        difficulties.add(reminder);
+        
+        // Create button selection subtable
+        buttons = new Table();
+        buttons.add(startButton).pad(25).expand();
+        buttons.add(backButton).pad(25).expand();
+        
+        // starts filling in the table
+        table.row();
+        table.add(title).pad(100);
+        
         // Add textbox to table
         table.row();
         Table textBoxFiller = new Table();
@@ -81,11 +171,13 @@ public class NewGameScreen extends ScreenAdapter {
         if(YorkPirates.DEBUG_ON) textBoxFiller.debug();
         table.add(textBoxFiller).expand().fill();
 
+        // adds difficulties to table
+        table.row();
+        table.add(difficulties).expand();
+        
         // Add buttons to table
         table.row();
-        table.add(startButton).expand();
-        table.row();
-        table.add(backButton).expand();
+        table.add(buttons).pad(100);
 
         // Add table to the stage
         stage.addActor(table);
@@ -98,10 +190,7 @@ public class NewGameScreen extends ScreenAdapter {
     @Override
     public void render(float delta){
         // Update values
-        elapsedTime += delta;
         update();
-        game.camera.update();
-        game.batch.setProjectionMatrix(game.camera.combined);
 
         // Render background
         ScreenUtils.clear(0f, 0f, 0f, 1.0f);
@@ -133,9 +222,12 @@ public class NewGameScreen extends ScreenAdapter {
             playerName = textBox.getText();
         }
         // Set player name and unpause game
+        
         nextGame.setPaused(false);
         nextGame.sounds.menu_button();
         nextGame.setPlayerName(playerName);
+        nextGame.setDifficulty(difficulty);
         game.setScreen(nextGame);
     }
+    
 }

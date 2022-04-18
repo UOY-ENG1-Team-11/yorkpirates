@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
 public class Player extends GameObject {
-
+	
     // Player constants
     private static final int POINT_FREQUENCY = 1000; // How often the player gains points by moving.
     private static final float CAMERA_SLACK = 0.1f; // What percentage of the screen the player can move in before the camera follows.
@@ -131,7 +131,8 @@ public class Player extends GameObject {
         
         // Time Checks
         if (TimeUtils.timeSinceMillis(timeLastHit) > 10000){
-            currentHealth += 0.03;
+        	//System.out.println(screen.getDifficulty());
+            currentHealth += (0.03/screen.getDifficulty());
             if(currentHealth > maxHealth) currentHealth = maxHealth;
             playerHealth.resize(currentHealth);
         }
