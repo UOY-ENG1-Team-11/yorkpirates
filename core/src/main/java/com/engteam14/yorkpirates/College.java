@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import java.util.Objects;
@@ -27,6 +28,7 @@ public class College extends GameObject {
     public Array<Boat> boats;
 
     private boolean doBloodSplash = false;
+    private boolean wasCaptured = false;
 
     /**
      * Generates a college object within the game with animated frame(s) and a hit-box.
@@ -158,6 +160,7 @@ public class College extends GameObject {
                 College.capturedCount++;
                 direction.changeImage(indicatorSprite,0);
                 team = GameScreen.playerTeam;
+                wasCaptured = true;
             }else{
                 // Destroy college
                 collegeBar = null;
@@ -206,5 +209,46 @@ public class College extends GameObject {
      */
     public void addBoat(YorkPirates game, float x, float y, float rotation, Vector2[] patrol){
         boats.add(new Boat(game, boatTexture, 0, this.x+x, this.y+y, 25, 12, team, patrol, collegeName));
+    }
+    
+    @Override
+    public JsonValue toJson() {
+    	JsonValue json = super.toJson();
+    	json.addChild("collegeName", new JsonValue(collegeName));
+    	json.addChild("wasCaptured", new JsonValue(wasCaptured));
+    	JsonValue jBoats = new JsonValue(JsonValue.ValueType.object);
+    	for(int i = 0; i < boats.size; i++) {
+    		jBoats.addChild(i + "", boats.get(i).toJson());
+    	}
+    	json.addChild("boats", jBoats);
+    	return json;
+    }
+    
+    
+    public void fromJson(GameScreen screen, JsonValue json) {
+    	super.fromJson(json);
+    	wasCaptured = json.getBoolean("wasCaptured");
+    	if(wasCaptured) {
+    		Array<Texture> healthBarSprite = new Array<>();
+            Array<Texture> indicatorSprite = new Array<>();
+            healthBarSprite.add(screen.getMain().textureHandler.getTexture("allyHealthBar"));
+            indicatorSprite.add(screen.getMain().textureHandler.getTexture("allyArrow"));
+            boatTexture.clear();
+            boatTexture.add(screen.getPlayer().anim.getKeyFrame(0f));
+
+            Array<Texture> sprites = new Array<>();
+            sprites.add(collegeImages.get(1));
+            changeImage(sprites,0);
+
+            collegeBar.changeImage(healthBarSprite,0);
+            direction.changeImage(indicatorSprite,0);
+    	}
+    	boats.clear();
+    	JsonValue boat = json.get("boats").child();
+    	while(boat != null) {
+    		boats.add(new Boat(screen.getMain(), boatTexture, 0, boat, collegeName));
+    		boat = boat.next();
+    	}
+    	collegeBar.resize(currentHealth);
     }
 }
