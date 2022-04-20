@@ -1,9 +1,10 @@
 package com.engteam14.yorkpirates;
 
-import com.badlogic.gdx.Gdx; 
+import com.badlogic.gdx.Gdx;  
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -14,6 +15,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.JsonValue;
+import com.badlogic.gdx.utils.JsonWriter;
+import com.badlogic.gdx.utils.JsonValue.ValueType;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -304,7 +310,8 @@ public class GameScreen extends ScreenAdapter {
             sprites.add(getMain().textureHandler.getTexture("tempProjectile"));
             projectiles.add(new Projectile(sprites, 0, 80f, player, mousePos.x, mousePos.y, playerTeam));
             gameHUD.endTutorial();
-        } for(int i = projectiles.size - 1; i >= 0; i--) {
+        } 
+        for(int i = projectiles.size - 1; i >= 0; i--) {
             projectiles.get(i).update(this);
         }
 
@@ -351,6 +358,67 @@ public class GameScreen extends ScreenAdapter {
      */
     public void gameReset(){
         game.setScreen(new TitleScreen(game));
+    }
+    
+    public void saveGame() {
+    	JsonValue root = new JsonValue(ValueType.object);
+    	
+    	JsonValue general = new JsonValue(ValueType.object);
+    	general.addChild("points", new JsonValue(points.Get()));
+    	general.addChild("loot", new JsonValue(loot.Get()));
+    	general.addChild("playerName", new JsonValue(playerName));
+    	general.addChild("elapsedTime", new JsonValue(elapsedTime));
+    	general.addChild("capturedCount", new JsonValue(College.capturedCount));
+    	
+    	root.addChild("general", general);
+    	root.addChild("player", player.toJson());
+    	
+    	JsonValue jColleges = new JsonValue(ValueType.object);
+    	for(College college : colleges) {
+    		jColleges.addChild(college.collegeName, college.toJson());
+    	}
+    	root.addChild("colleges", jColleges);
+    	
+    	JsonValue proj = new JsonValue(ValueType.object);
+    	for(int i = 0; i < projectiles.size; i++) {
+    		proj.addChild(i + "", projectiles.get(i).toJson());
+    	}
+    	root.addChild("projectiles", proj);
+    	
+    	FileHandle file = Gdx.files.local("savegame.json");
+    	if(file.exists()) {
+    		file.delete();
+    	}
+    	file.writeString(root.toJson(JsonWriter.OutputType.json), true);
+    }
+    
+    public void loadGame() {
+    	projectiles.clear();
+    	JsonValue root = new JsonReader().parse(Gdx.files.local("savegame.json").readString());
+    	JsonValue general = root.get("general");
+    	points.Set(general.getInt("points"));
+    	loot.Set(general.getInt("loot"));
+    	playerName = general.getString("playerName");
+    	elapsedTime = general.getFloat("elapsedTime");
+    	College.capturedCount = general.getInt("capturedCount");
+    	player.fromJson(root.get("player"));
+    	JsonValue college = root.get("colleges").child();
+    	while(college != null) {
+    		College c = getCollege(college.getString("collegeName"));
+    		if(c != null) {
+    			c.fromJson(this, college);
+    		}
+    		college = college.next();
+    	}
+    	Array<Texture> sprites = new Array<>();
+        sprites.add(getMain().textureHandler.getTexture("tempProjectile"));
+    	JsonValue projectile = root.get("projectiles").child();
+    	while(projectile != null) {
+    		projectiles.add(new Projectile(sprites, 0, projectile));
+    		projectile = projectile.next();
+    	}
+    	game.camera.position.x = player.x;
+    	game.camera.position.y = player.y;
     }
 
     /**

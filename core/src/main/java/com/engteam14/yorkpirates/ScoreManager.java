@@ -35,6 +35,14 @@ public class ScoreManager {
     public int Get(){
         return score;
     }
+    
+    /**
+     * Sets the score value
+     * @param score 	the value to set the score to
+     *  */
+    public void Set(int score) {
+    	this.score = score;
+    }
 
     /**
      *  Gets the score value in string form.

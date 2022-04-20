@@ -3,6 +3,7 @@ package com.engteam14.yorkpirates;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.JsonValue;
 
 import java.util.Objects;
 
@@ -49,6 +50,15 @@ public class Projectile extends GameObject{
 
         maxDistance = range;
     }
+    
+    public Projectile(Array<Texture> frames, float fps, JsonValue json) {
+    	super(frames, fps, json);
+    	dx = json.getFloat("dx");
+    	dy = json.getFloat("dy");
+    	projectileSpeed = json.getFloat("speed");
+    	maxDistance = json.getFloat("maxDistance");
+    	origin = new GameObject(null,0,json);
+    }
 
     /**
      * Called once per frame. Used to perform calculations such as projectile movement and collision detection.
@@ -73,7 +83,7 @@ public class Projectile extends GameObject{
                 	for(int n = 0; n < screen.colleges.get(i).boats.size; n++) {
                 		if (overlaps(screen.colleges.get(i).boats.get(n).hitBox)){
                             if(!Objects.equals(team, screen.colleges.get(i).team)){ // Checks if projectile and boat are on the same time
-                                screen.colleges.get(i).boats.get(n).takeDamage(screen,playerProjectileDamage,team);
+                                screen.colleges.get(i).boats.get(n).takeDamage(screen,playerProjectileDamage*(Player.playerProjectileDamageMultiplier),team);
                             }
                             destroy(screen);
                         }
@@ -92,6 +102,19 @@ public class Projectile extends GameObject{
         // Destroys after max travel distance
         if(Math.sqrt(Math.pow(origin.x - x, 2) + Math.pow(origin.y - y, 2)) > maxDistance) destroy(screen);
     }
+    
+    @Override
+    public JsonValue toJson() {
+    	JsonValue json = super.toJson();
+    	json.addChild("dx", new JsonValue(dx));
+    	json.addChild("dy", new JsonValue(dx));
+    	json.addChild("speed", new JsonValue(projectileSpeed));
+    	json.addChild("maxDistance", new JsonValue(maxDistance));
+    	json.addChild("origin", origin.toJson());
+    	return json;
+    }
+   
+    
     /*
     /**
      * Called when colliding with a damage increase power-up.
