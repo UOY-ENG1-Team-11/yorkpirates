@@ -87,7 +87,7 @@ public class HUD {
         tutorialLabel = new Label("WASD or Arrow Keys\n to Move.", skin);
 
         // Create score related actors
-        Image coin = new Image(screen.getMain().textureHandler.loadTexture("loot", Gdx.files.internal("loot.png")));
+        Image coin = new Image(screen.getMain().textureHandler.loadTexture("gold", Gdx.files.internal("loot.png")));
         Image star = new Image(screen.getMain().textureHandler.loadTexture("points", Gdx.files.internal("points.png")));
         coin.setScaling(Scaling.fit);
         star.setScaling(Scaling.fit);
@@ -199,7 +199,6 @@ public class HUD {
         powerupsTable = new Table();
         table.add().expand();
         powerupsTable.add(AtkSpdTable).right().top();
-        //powerupsTable.row();
         powerupsTable.add(InvincibleTable).right().top();
         powerupsTable.row();
         powerupsTable.add(AtkDmgTable).right().top();

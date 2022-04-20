@@ -24,7 +24,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
-public class GameScreen extends ScreenAdapter {
+public class GameScreen extends ScreenAdapter {	
     // Team name constants
     public static final String playerTeam = "PLAYER";
     public static final String enemyTeam = "ENEMY";
@@ -41,6 +41,9 @@ public class GameScreen extends ScreenAdapter {
     public PowerUpsTimer AtkDmgTimer;
     public PowerUpsTimer InvincibleTimer;
     public PowerUpsTimer SpeedTimer;
+    
+	// Difficulty
+	public int difficulty;
     
     // Score managers
     public ScoreManager points;
@@ -158,7 +161,7 @@ public class GameScreen extends ScreenAdapter {
         // Add derwent
         collegeSprites.add(getMain().textureHandler.loadTexture("derwent", Gdx.files.internal("derwent.png")), 
         		getMain().textureHandler.loadTexture("derwent_2", Gdx.files.internal("derwent_2.png")));
-        newCollege = (new College(getMain(), collegeSprites, 1815, 2105, 0.8f,"Derwent", enemyTeam, player, getMain().textureHandler.loadTexture("derwent_boat", Gdx.files.internal("derwent_boat.png"))));
+        newCollege = (new College(getMain(),collegeSprites, 1815, 2105, 0.8f,"Derwent", enemyTeam, player, getMain().textureHandler.loadTexture("derwent_boat", Gdx.files.internal("derwent_boat.png"))));
         //newCollege.addBoat(-70, -20, 60);
         //newCollege.addBoat(-70, -60, 70);
         colleges.add(newCollege);
@@ -167,7 +170,7 @@ public class GameScreen extends ScreenAdapter {
         // Add langwith
         collegeSprites.add(getMain().textureHandler.loadTexture("langwith", Gdx.files.internal("langwith.png")), 
         		getMain().textureHandler.loadTexture("langwith_2", Gdx.files.internal("langwith_2.png")));
-        newCollege = (new College(getMain(), collegeSprites, 1300, 1530, 1.0f,"Langwith", enemyTeam, player, getMain().textureHandler.loadTexture("langwith_boat", Gdx.files.internal("langwith_boat.png"))));
+        newCollege = (new College(getMain(),collegeSprites, 1300, 1530, 1.0f,"Langwith", enemyTeam, player, getMain().textureHandler.loadTexture("langwith_boat", Gdx.files.internal("langwith_boat.png"))));
         //newCollege.addBoat(-150, -50, 60);
         //newCollege.addBoat(-120, -10, -60);
         //newCollege.addBoat(-10, -40, 230);
@@ -178,7 +181,7 @@ public class GameScreen extends ScreenAdapter {
 
         // Add goodricke
         collegeSprites.add(getMain().textureHandler.loadTexture("goodricke", Gdx.files.internal("goodricke.png")));
-        colleges.add(new College(getMain(), collegeSprites, 700, 525, 0.7f,"Home",playerTeam,player, getMain().textureHandler.getTexture("ship1")));
+        colleges.add(new College(getMain(),collegeSprites, 700, 525, 0.7f,"Home",playerTeam,player, getMain().textureHandler.getTexture("ship1")));
 
         // Initialise projectiles array to be used storing live projectiles
         projectiles = new Array<>();
@@ -286,7 +289,6 @@ public class GameScreen extends ScreenAdapter {
         // Call updates for all relevant objects
         player.update(this, game.camera);
         for(int i = 0; i < colleges.size; i++) {
-        	//System.out.println(colleges.get(i).team);
             colleges.get(i).update(this);
 	        for(int n = 0; n < colleges.get(i).boats.size; n++) {
 	            colleges.get(i).boats.get(n).update(this, player.x, player.y);
@@ -323,6 +325,11 @@ public class GameScreen extends ScreenAdapter {
         if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && elapsedTime - lastPause > 0.1f){
             gamePause();
         }
+        
+        // Call to open the shop
+        if(Gdx.input.isKeyJustPressed(Input.Keys.P) && elapsedTime - lastPause > 0.1f){
+            gameShop();
+        }
     }
 
     /**
@@ -331,6 +338,11 @@ public class GameScreen extends ScreenAdapter {
     public void gamePause(){
         isPaused = true;
         game.setScreen(new PauseScreen(game,this));
+    }
+    
+    public void gameShop() {
+    	isPaused = true;
+    	game.setScreen(new ShopScreen(game,this));
     }
 
     /**
@@ -426,7 +438,7 @@ public class GameScreen extends ScreenAdapter {
      * @return  Player's name.
      */
     public String getPlayerName() { return playerName; }
-
+    
     /**
      * Set the player's name.
      * @param playerName    Chosen player name.
@@ -435,7 +447,22 @@ public class GameScreen extends ScreenAdapter {
         this.playerName = playerName;
         gameHUD.updateName(this);
     }
-
+    
+    /**
+     * Set the game difficulty.
+     * @param difficulty    Chosen difficulty.
+     */
+    public void setDifficulty(Integer diff) {
+        difficulty = diff;
+    }
+    
+    /**
+     * Get the game difficulty.
+     * @param difficulty    Chosen difficulty.
+     */
+    public Integer getDifficulty() { return difficulty; }
+    
+    
     /**
      * Get the player.
      * @return  The player.

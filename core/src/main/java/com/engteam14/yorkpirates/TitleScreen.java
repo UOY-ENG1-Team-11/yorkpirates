@@ -17,7 +17,6 @@ public class TitleScreen extends ScreenAdapter {
     private final GameScreen nextGame;
     private final Stage stage;
 
-    private final TextField textBox;
     private final Cell<Image> titleCell;
 
     private float elapsedTime = 0f;
@@ -52,24 +51,24 @@ public class TitleScreen extends ScreenAdapter {
         Image title = new Image(titleT);
         title.setScaling(Scaling.fit);
 
-        // Generate textbox
-        textBox = new TextField("Name (optional)", skin, "edges");
-        textBox.setAlignment(Align.center);
-        textBox.setOnlyFontChars(true);
-        textBox.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                textBox.setText("");
-            }});
-
         // Generate buttons
-        ImageTextButton startButton = new ImageTextButton("Play", skin);
+        ImageTextButton startButton = new ImageTextButton("New Game", skin);
+        ImageTextButton loadButton = new ImageTextButton("Load Game", skin);
         ImageTextButton quitButton = new ImageTextButton("Exit Game", skin, "Quit");
 
         startButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                gameStart();
+                newGameStart();
             }
         });
+        
+        loadButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                //newGameStart();
+            	// add loading function in here
+            }
+        });
+        
         quitButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 game.quit();
@@ -79,18 +78,11 @@ public class TitleScreen extends ScreenAdapter {
         // Add title to table
         titleCell = table.add(title).expand();
 
-        // Add textbox to table
-        table.row();
-        Table textBoxFiller = new Table();
-        textBoxFiller.add().expand().padRight(stage.getWidth()/3);
-        textBoxFiller.add(textBox).expand().fillX();
-        textBoxFiller.add().expand().padLeft(stage.getWidth()/3);
-        if(YorkPirates.DEBUG_ON) textBoxFiller.debug();
-        table.add(textBoxFiller).expand().fill();
-
         // Add buttons to table
         table.row();
         table.add(startButton).expand();
+        table.row();
+        table.add(loadButton).expand();
         table.row();
         table.add(quitButton).expand();
 
@@ -127,26 +119,12 @@ public class TitleScreen extends ScreenAdapter {
      */
     private void update(){
         if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
-            gameStart();
+            newGameStart();
         }
     }
-
-    /**
-     * Is called to create a new game screen.
-     */
-    private void gameStart(){
-        // Get player name
-        String playerName;
-        if ( textBox.getText().equals("Name (optional)") || textBox.getText().equals("")) {
-            playerName = "Player";
-
-        } else{
-            playerName = textBox.getText();
-        }
-        // Set player name and unpause game
-        nextGame.setPaused(false);
-        nextGame.sounds.menu_button();
-        nextGame.setPlayerName(playerName);
-        game.setScreen(nextGame);
+    
+    private void newGameStart() {
+    	game.setScreen(new NewGameScreen(game));
     }
+    
 }

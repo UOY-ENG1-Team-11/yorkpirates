@@ -49,7 +49,7 @@ public class College extends GameObject {
         }
 
         splashTime = 0;
-        setMaxHealth(2000);
+        setMaxHealth(1000);
         lastShotFired = 0;
         collegeName = name;
 
@@ -86,7 +86,7 @@ public class College extends GameObject {
 
             if(!Objects.equals(team, GameScreen.playerTeam)) { // Checks if the college is an enemy of the player
                 // How often the college can shoot.
-                int shootFrequency = 1000;
+                int shootFrequency = 1000/screen.getDifficulty();
                 if (TimeUtils.timeSinceMillis(lastShotFired) > shootFrequency){
                     lastShotFired = TimeUtils.millis();
                     Array<Texture> sprites = new Array<>();
@@ -130,7 +130,7 @@ public class College extends GameObject {
     public void takeDamage(GameScreen screen, float damage, String projectileTeam){
         currentHealth -= damage;
         doBloodSplash = true;
-
+        
         if(currentHealth > 0){
             collegeBar.resize(currentHealth);
             screen.sounds.damage();

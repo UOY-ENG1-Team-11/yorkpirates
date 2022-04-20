@@ -10,7 +10,9 @@ import java.util.Objects;
 import static java.lang.Math.*;
 
 public class Projectile extends GameObject{
-
+    private static final float collegeProjectileDamage = 20f; // College Projectile damage.
+    private static final float playerProjectileDamage = 20f; // Player Projectile damage
+	
     private final float maxDistance; // Projectile max range.
     private final GameObject origin;
 
@@ -18,8 +20,6 @@ public class Projectile extends GameObject{
     private final float dy;
     private final float projectileSpeed; // Projectile movement speed.
 
-    private static final float collegeProjectileDamage = 20f; // College Projectile damage.
-    private static final float playerProjectileDamage = 20f; // Player Projectile damage
 
     /**
      * Generates a projectile object within the game with animated frame(s) and a hit-box.
@@ -76,7 +76,7 @@ public class Projectile extends GameObject{
             for(int i = 0; i < screen.colleges.size; i++) {
                 if (overlaps(screen.colleges.get(i).hitBox)){
                     if(!Objects.equals(team, screen.colleges.get(i).team)){ // Checks if projectile and college are on the same team
-                        screen.colleges.get(i).takeDamage(screen,playerProjectileDamage*(Player.playerProjectileDamageMultiplier),team);
+                        screen.colleges.get(i).takeDamage(screen,((playerProjectileDamage*(Player.playerProjectileDamageMultiplier))/screen.getDifficulty()),team);
                     }
                     destroy(screen);
                 } else {
@@ -93,7 +93,7 @@ public class Projectile extends GameObject{
         }else{
             if (overlaps(screen.getPlayer().hitBox)){
                 if(!Objects.equals(team, GameScreen.playerTeam)){ // Checks if projectile and player are on the same team
-                    screen.getPlayer().takeDamage(screen,collegeProjectileDamage,team);
+                    screen.getPlayer().takeDamage(screen,collegeProjectileDamage*screen.getDifficulty(),team);
                 }
                 destroy(screen);
             }
