@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.TimeUtils;
 
 public class Boat extends GameObject {
@@ -25,6 +26,15 @@ public class Boat extends GameObject {
 		this.patrol = patrol;
 		this.collegeName = collegeName;
 		setMaxHealth(100);
+		Array<Texture> sprites = new Array<>();
+        sprites.add(game.textureHandler.getTexture("allyHealthBar"));
+        boatHealth = new HealthBar(this,sprites);
+	}
+	
+	public Boat(YorkPirates game, Array<Texture> frames, float fps, JsonValue json, String collegeName) {
+		super(frames, fps, json);
+		this.collegeName = collegeName;
+		fromJson(json);
 		Array<Texture> sprites = new Array<>();
         sprites.add(game.textureHandler.getTexture("allyHealthBar"));
         boatHealth = new HealthBar(this,sprites);
@@ -125,6 +135,34 @@ public class Boat extends GameObject {
         batch.setShader(null);
         if(!(boatHealth == null)) boatHealth.draw(batch, 0);
     }
+	
+	@Override
+	public JsonValue toJson() {
+		JsonValue json = super.toJson();
+		json.addChild("rotation", new JsonValue(rotation));
+		JsonValue jPatrol = new JsonValue(JsonValue.ValueType.object);
+		for(int i = 0; i < patrol.length; i++) {
+			JsonValue point = new JsonValue(JsonValue.ValueType.object);
+			point.addChild("x", new JsonValue(patrol[i].x));
+			point.addChild("y", new JsonValue(patrol[i].y));
+			jPatrol.addChild(i + "", point);
+		}
+		json.addChild("patrol", jPatrol);
+		json.addChild("patrolIndex", new JsonValue(patrolIndex));
+		return json;
+	}
+	
+	@Override
+	public void fromJson(JsonValue json) {
+		super.fromJson(json);
+		rotation = json.getFloat("rotation");
+		JsonValue jPatrol = json.get("patrol");
+		patrol = new Vector2[jPatrol.size];
+		for(int i = 0; i < jPatrol.size; i++) {
+			patrol[i] = new Vector2(jPatrol.get(i + "").getFloat("x"), jPatrol.get(i + "").getFloat("y"));
+		}
+		patrolIndex = json.getInt("patrolIndex");
+	}
 	
 	/*public void pathTo(TiledMap map, float x, float y) {
 		 * A* broken could fix later

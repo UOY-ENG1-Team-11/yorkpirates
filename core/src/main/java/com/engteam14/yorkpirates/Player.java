@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.JsonValue;
+import com.badlogic.gdx.utils.JsonValue.ValueType;
 import com.badlogic.gdx.utils.TimeUtils;
 
 public class Player extends GameObject {
@@ -285,5 +287,24 @@ public class Player extends GameObject {
 
     public float getDistance() {
         return distance;
+    }
+    
+    @Override
+    public JsonValue toJson() {
+    	JsonValue json = super.toJson();
+    	json.addChild("previousDirectionX", new JsonValue(previousDirectionX));
+    	json.addChild("previousDirectionY", new JsonValue(previousDirectionY));
+    	json.addChild("distance", new JsonValue(distance));
+    	return json;
+    }
+    
+    @Override
+    public void fromJson(JsonValue json) {
+    	super.fromJson(json);
+    	previousDirectionX = json.getInt("previousDirectionX");
+    	previousDirectionY = json.getInt("previousDirectionY");
+    	distance = json.getFloat("distance");
+    	playerHealth.resize(currentHealth);
+    	playerHealth.move(this.x, this.y + height/2 + 2f);
     }
 }
