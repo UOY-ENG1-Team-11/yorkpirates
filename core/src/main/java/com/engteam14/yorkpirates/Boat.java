@@ -41,13 +41,13 @@ public class Boat extends GameObject {
 	}
 	
 	public void update(GameScreen screen, float x, float y){
-        Vector2 oldPos = new Vector2(x,y); // Stored for next-frame calculations
+        Vector2 oldPos = new Vector2(this.x,this.y); // Stored for next-frame calculations
 
         // Get input movement
         int horizontal = 0;
         int vertical = 0;
         int shootFrequency = 700;
-        if(Math.sqrt(Math.pow(x - this.x, 2) + Math.pow(y - this.y, 2)) <= DETECT_RANGE) {
+        if(Math.sqrt(Math.pow(x - this.x, 2) + Math.pow(y - this.y, 2)) <= DETECT_RANGE && this.team != GameScreen.playerTeam) {
         	if(TimeUtils.timeSinceMillis(lastShotFired) > shootFrequency) {
         		lastShotFired = TimeUtils.millis();
 	        	screen.sounds.cannon();
@@ -76,12 +76,12 @@ public class Boat extends GameObject {
             rotation = (float) Math.toDegrees(Math.atan2(vertical, horizontal));
             if (!safeMove(screen.getMain().edges)) {    // Collision
                 Vector2 newPos = new Vector2(x, y);
-                x = oldPos.x;
+                this.x = oldPos.x;
                 if (!safeMove(screen.getMain().edges)) {
-                    x = newPos.x;
-                    y = oldPos.y;
+                    this.x = newPos.x;
+                    this.y = oldPos.y;
                     if (!safeMove(screen.getMain().edges)) {
-                        x = oldPos.x;
+                        this.x = oldPos.x;
                     }
                 }
             }

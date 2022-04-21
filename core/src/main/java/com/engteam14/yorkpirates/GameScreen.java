@@ -1,6 +1,6 @@
 package com.engteam14.yorkpirates;
 
-import com.badlogic.gdx.Gdx;  
+import com.badlogic.gdx.Gdx;   
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
@@ -15,7 +15,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.JsonWriter;
@@ -23,7 +22,7 @@ import com.badlogic.gdx.utils.JsonValue.ValueType;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-
+ 
 public class GameScreen extends ScreenAdapter {	
     // Team name constants
     public static final String playerTeam = "PLAYER";
@@ -187,43 +186,20 @@ public class GameScreen extends ScreenAdapter {
         projectiles = new Array<>();
         
         // Initialise powerups array to be used for storing the power-ups
-        powerups = new Array<>();
-        PowerUps newPowerUp;
-        Array<Texture> powerupSprites = new Array<>();
+        powerups = new Array<PowerUps>();
+        getMain().textureHandler.loadTexture("UpAtkSpd", Gdx.files.internal("UpAtkSpd.png"));
+        getMain().textureHandler.loadTexture("UpDmg", Gdx.files.internal("UpDmg.png"));
+        getMain().textureHandler.loadTexture("UpHealth", Gdx.files.internal("UpHealth.png"));
+        getMain().textureHandler.loadTexture("UpInvincible", Gdx.files.internal("UpInvincible.png"));
+        getMain().textureHandler.loadTexture("UpSpeed", Gdx.files.internal("UpSpeed.png"));
         
-        // Add attack speed power-ups
-        powerupSprites.add(getMain().textureHandler.loadTexture("UpAtkSpd", Gdx.files.internal("UpAtkSpd.png")));
-        newPowerUp = (new PowerUps(getMain(), powerupSprites, 1160, 525, 0.2f, attackSpeed));
-        powerups.add(newPowerUp);
-        newPowerUp = (new PowerUps(getMain(), powerupSprites, 1160, 625, 0.2f, attackSpeed));
-        powerups.add(newPowerUp);
-        powerupSprites.clear();
-        
-        // Add damage up power-ups
-        powerupSprites.add(getMain().textureHandler.loadTexture("UpDmg", Gdx.files.internal("UpDmg.png")));
-        newPowerUp = (new PowerUps(getMain(), powerupSprites, 1080, 525, 0.2f, damageUp));
-        powerups.add(newPowerUp);
-        powerupSprites.clear();
-        
-        // Add Health up power-ups
-        powerupSprites.add(getMain().textureHandler.loadTexture("UpHealth", Gdx.files.internal("UpHealth.png")));
-        newPowerUp = (new PowerUps(getMain(), powerupSprites, 900, 525, 0.2f, healthUp));
-        powerups.add(newPowerUp);
-        newPowerUp = (new PowerUps(getMain(), powerupSprites, 90, 52, 0.2f, healthUp));
-        powerups.add(newPowerUp);
-        powerupSprites.clear();
-        
-        // Add Invincible power-ups
-        powerupSprites.add(getMain().textureHandler.loadTexture("UpInvincible", Gdx.files.internal("UpInvincible.png")));
-        newPowerUp = (new PowerUps(getMain(), powerupSprites, 1020, 525, 0.2f, invincible));
-        powerups.add(newPowerUp);
-        powerupSprites.clear();
-        
-        // Add Speed power-ups
-        powerupSprites.add(getMain().textureHandler.loadTexture("UpSpeed", Gdx.files.internal("UpSpeed.png")));
-        newPowerUp = (new PowerUps(getMain(), powerupSprites, 960, 525, 0.2f, speedUp));
-        powerups.add(newPowerUp);
-        powerupSprites.clear();
+        createPowerUp(1160, 525, attackSpeed);
+        createPowerUp(1160, 625, attackSpeed);
+        createPowerUp(1080, 525, damageUp);
+        createPowerUp(900, 525, healthUp);
+        createPowerUp(90, 52, healthUp);
+        createPowerUp(1020, 525, invincible);      
+        createPowerUp(960, 525, speedUp);
         
     }
 
@@ -331,6 +307,29 @@ public class GameScreen extends ScreenAdapter {
             gameShop();
         }
     }
+    
+    public void createPowerUp(float x, float y, String powerType) {
+    	Array<Texture> powerupSprites = new Array<>();
+    	switch(powerType) {
+	    	case attackSpeed:
+	    		powerupSprites.add(getMain().textureHandler.getTexture("UpAtkSpd"));
+	    		break;
+	    	case damageUp:
+		    	powerupSprites.add(getMain().textureHandler.getTexture("UpDmg"));
+		    	break;
+	    	case healthUp:
+	    		powerupSprites.add(getMain().textureHandler.getTexture("UpHealth"));
+	    		break;
+	    	case invincible:
+	    		powerupSprites.add(getMain().textureHandler.getTexture("UpInvincible"));
+	    		break;
+	    	case speedUp:
+	    		powerupSprites.add(getMain().textureHandler.getTexture("UpSpeed"));
+	    		break;
+    	}
+    	PowerUps newPowerUp = (new PowerUps(powerupSprites, x, y, 0.2f, powerType));
+        powerups.add(newPowerUp);
+    }
 
     /**
      * Called to switch from the current screen to the pause screen, while retaining the current screen's information.
@@ -366,6 +365,7 @@ public class GameScreen extends ScreenAdapter {
     	JsonValue general = new JsonValue(ValueType.object);
     	general.addChild("points", new JsonValue(points.Get()));
     	general.addChild("loot", new JsonValue(loot.Get()));
+    	general.addChild("difficulty", new JsonValue(difficulty));
     	general.addChild("playerName", new JsonValue(playerName));
     	general.addChild("elapsedTime", new JsonValue(elapsedTime));
     	general.addChild("capturedCount", new JsonValue(College.capturedCount));
@@ -385,19 +385,28 @@ public class GameScreen extends ScreenAdapter {
     	}
     	root.addChild("projectiles", proj);
     	
+    	JsonValue pow = new JsonValue(ValueType.object);
+    	for(int i = 0; i < powerups.size; i++) {
+    		pow.addChild(i + "", powerups.get(i).toJson());
+    	}
+    	root.addChild("powerups", pow);
+    	
     	FileHandle file = Gdx.files.local("savegame.json");
     	if(file.exists()) {
     		file.delete();
     	}
+   
     	file.writeString(root.toJson(JsonWriter.OutputType.json), true);
     }
     
     public void loadGame() {
     	projectiles.clear();
+    	powerups.clear();
     	JsonValue root = new JsonReader().parse(Gdx.files.local("savegame.json").readString());
     	JsonValue general = root.get("general");
     	points.Set(general.getInt("points"));
     	loot.Set(general.getInt("loot"));
+    	difficulty = general.getInt("difficulty");
     	playerName = general.getString("playerName");
     	elapsedTime = general.getFloat("elapsedTime");
     	College.capturedCount = general.getInt("capturedCount");
@@ -416,6 +425,11 @@ public class GameScreen extends ScreenAdapter {
     	while(projectile != null) {
     		projectiles.add(new Projectile(sprites, 0, projectile));
     		projectile = projectile.next();
+    	}
+    	JsonValue pow = root.get("powerups").child();
+    	while(pow != null) {
+    		createPowerUp(pow.getFloat("x"), pow.getFloat("y"), pow.getString("powerType"));
+    		pow = pow.next();
     	}
     	game.camera.position.x = player.x;
     	game.camera.position.y = player.y;

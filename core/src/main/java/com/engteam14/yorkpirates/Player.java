@@ -1,6 +1,6 @@
 package com.engteam14.yorkpirates;
 
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Gdx; 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
-import com.badlogic.gdx.utils.JsonValue.ValueType;
 import com.badlogic.gdx.utils.TimeUtils;
 
 public class Player extends GameObject {
@@ -336,6 +335,12 @@ public class Player extends GameObject {
     	json.addChild("previousDirectionX", new JsonValue(previousDirectionX));
     	json.addChild("previousDirectionY", new JsonValue(previousDirectionY));
     	json.addChild("distance", new JsonValue(distance));
+    	json.addChild("AtkSpdBought", new JsonValue(AtkSpdBought));
+    	json.addChild("AtkDmgBought", new JsonValue(AtkDmgBought));
+    	json.addChild("SpdBought", new JsonValue(SpdBought));
+    	json.addChild("DmgUpgrade", new JsonValue(playerProjectileDamageUpgrade));
+    	json.addChild("AtkSpdUpgrade", new JsonValue(playerAttackSpeedUpgrade));
+    	json.addChild("SpdUpgrade", new JsonValue(playerSpeedUpgrade));
     	return json;
     }
     
@@ -345,6 +350,12 @@ public class Player extends GameObject {
     	previousDirectionX = json.getInt("previousDirectionX");
     	previousDirectionY = json.getInt("previousDirectionY");
     	distance = json.getFloat("distance");
+    	AtkSpdBought = json.getBoolean("AtkSpdBought");
+    	AtkDmgBought = json.getBoolean("AtkDmgBought");
+    	SpdBought = json.getBoolean("SpdBought");
+    	playerProjectileDamageUpgrade = json.getFloat("DmgUpgrade");
+    	playerAttackSpeedUpgrade = json.getInt("AtkSpdUpgrade");
+    	playerSpeedUpgrade = json.getFloat("SpdUpgrade");
     	playerHealth.resize(currentHealth);
     	playerHealth.move(this.x, this.y + height/2 + 2f);
     }

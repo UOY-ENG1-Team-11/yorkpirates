@@ -149,6 +149,10 @@ public class College extends GameObject {
                 indicatorSprite.add(screen.getMain().textureHandler.getTexture("allyArrow"));
                 boatTexture.clear();
                 boatTexture.add(screen.getPlayer().anim.getKeyFrame(0f));
+                for(Boat b : boats) {
+                	b.changeImage(boatTexture, 0);
+                	b.team = GameScreen.playerTeam;
+                }
 
                 Array<Texture> sprites = new Array<>();
                 sprites.add(collegeImages.get(1));

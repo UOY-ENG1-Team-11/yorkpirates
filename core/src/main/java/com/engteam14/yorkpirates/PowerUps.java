@@ -1,24 +1,21 @@
 package com.engteam14.yorkpirates;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.JsonValue;
 
-import java.util.Objects;
-
-import static java.lang.Math.*;
-
-public class PowerUps extends Consumables{
+public class PowerUps extends GameObject{
+	
+	public String powerType;
 
 	/**
      * Generates a power-up object within the game with a hit-box.
      * @param frames    The animation frames, or a single sprite.
      * @param fps       The number of frames to be displayed per second.
      */
-    public PowerUps(YorkPirates game, Array<Texture> sprites, float x, float y, float scale, String powerType) {
-        super(sprites, 0, x, y, sprites.get(0).getWidth()*scale, sprites.get(0).getHeight()*scale, powerType);
-
-        
+    public PowerUps(Array<Texture> sprites, float x, float y, float scale, String powerType) {
+        super(sprites, 0, x, y, sprites.get(0).getWidth()*scale, sprites.get(0).getHeight()*scale, "");
+        this.powerType = powerType;
     }
 
     /**
@@ -67,5 +64,12 @@ public class PowerUps extends Consumables{
      */
     private void destroy(GameScreen screen){
         screen.powerups.removeValue(this,true);
+    }
+    
+    @Override
+    public JsonValue toJson() {
+    	JsonValue json = super.toJson();
+    	json.addChild("powerType", new JsonValue(powerType));
+    	return json;
     }
 }

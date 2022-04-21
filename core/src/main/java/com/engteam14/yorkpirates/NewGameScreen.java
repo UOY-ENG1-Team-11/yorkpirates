@@ -1,6 +1,6 @@
 package com.engteam14.yorkpirates;
 
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Gdx; 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.g2d.*;
@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class NewGameScreen extends ScreenAdapter {
@@ -107,7 +106,7 @@ public class NewGameScreen extends ScreenAdapter {
             public void clicked(InputEvent event, float x, float y) {
             	if (difficultyChosen == true) {
             		difficultyChosen = false;
-            		normalButton.setVisible(true);
+            		easyButton.setVisible(true);
             		hardButton.setVisible(true);
             	}
             	else {

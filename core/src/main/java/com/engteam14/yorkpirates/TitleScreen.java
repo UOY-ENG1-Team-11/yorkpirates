@@ -1,6 +1,6 @@
 package com.engteam14.yorkpirates;
 
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Gdx; 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.g2d.*;
@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.ScreenUtils;
 
@@ -58,14 +57,13 @@ public class TitleScreen extends ScreenAdapter {
 
         startButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                newGameStart();
+                newGameStart(false);
             }
         });
         
         loadButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                //newGameStart();
-            	// add loading function in here
+                newGameStart(true);
             }
         });
         
@@ -119,12 +117,18 @@ public class TitleScreen extends ScreenAdapter {
      */
     private void update(){
         if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
-            newGameStart();
+            newGameStart(false);
         }
     }
     
-    private void newGameStart() {
-    	game.setScreen(new NewGameScreen(game));
+    private void newGameStart(boolean loadGame) {
+    	if(!loadGame) {
+    		game.setScreen(new NewGameScreen(game));
+    	} else {
+    		GameScreen gs = new GameScreen(game);
+    		gs.loadGame();
+    		game.setScreen(gs);
+    	}
     }
     
 }

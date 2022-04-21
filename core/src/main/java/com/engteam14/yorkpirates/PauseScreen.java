@@ -64,7 +64,7 @@ public class PauseScreen extends ScreenAdapter {
         save.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
             	screen.sounds.menu_button();
-            	// Insert save function calls here
+            	screen.saveGame();
             }
         });        
 
