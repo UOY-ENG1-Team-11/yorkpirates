@@ -27,6 +27,7 @@ public class GameScreen extends ScreenAdapter {
     // Team name constants
     public static final String playerTeam = "PLAYER";
     public static final String enemyTeam = "ENEMY";
+    public static final String neutralTeam = "NEUTRAL";
     
     // Powerup type name constants
     public static final String attackSpeed = "ATKSPD";
@@ -52,8 +53,13 @@ public class GameScreen extends ScreenAdapter {
     public Array<College> colleges;
     public Array<Projectile> projectiles;
     
+
+    // Enemies
+    public Array<Enemy_Wave> enemy_waves;
+
     // Consumables
     public Array<PowerUps> powerups;
+
 
     // Sound
     public final Music music;
@@ -127,6 +133,9 @@ public class GameScreen extends ScreenAdapter {
         getMain().textureHandler.loadTexture("enemyHealthBar", Gdx.files.internal("enemyHealthBar.png"));
         getMain().textureHandler.loadTexture("questArrow", Gdx.files.internal("questArrow.png"));
         getMain().textureHandler.loadTexture("tempProjectile", Gdx.files.internal("tempProjectile.png"));
+        getMain().textureHandler.loadTexture("enemyWave", Gdx.files.internal("enemy_wave.png"));
+        
+        
         
         // Initialise player
         sprites.add(getMain().textureHandler.loadTexture("ship1", Gdx.files.internal("ship1.png")), 
@@ -136,6 +145,9 @@ public class GameScreen extends ScreenAdapter {
         sprites.clear();
         followPos = new Vector3(player.x, player.y, 0f);
         game.camera.position.lerp(new Vector3(760, 510, 0f), 1f);
+        
+        //initalise a wave
+        //enemy_waves.add(new Enemy_Wave());
 
         // Initialise tilemap
         tiledMap = new TmxMapLoader().load("FINAL_MAP.tmx");
@@ -184,6 +196,7 @@ public class GameScreen extends ScreenAdapter {
 
         // Initialise projectiles array to be used storing live projectiles
         projectiles = new Array<>();
+        enemy_waves = new Array<>();
         
         // Initialise powerups array to be used for storing the power-ups
         powerups = new Array<PowerUps>();
@@ -200,7 +213,6 @@ public class GameScreen extends ScreenAdapter {
         createPowerUp(90, 52, healthUp);
         createPowerUp(1020, 525, invincible);      
         createPowerUp(960, 525, speedUp);
-        
     }
 
     /**
@@ -226,6 +238,11 @@ public class GameScreen extends ScreenAdapter {
         // Draw Projectiles
         for(int i = 0; i < projectiles.size; i++) {
             projectiles.get(i).draw(game.batch, 0);
+        }
+        
+        //Draw waves
+        for(int i = 0; i < enemy_waves.size; i++) {
+            enemy_waves.get(i).draw(game.batch, 0);
         }
 
         // Draw Consumables
@@ -285,10 +302,15 @@ public class GameScreen extends ScreenAdapter {
             Array<Texture> sprites = new Array<>();
             sprites.add(getMain().textureHandler.getTexture("tempProjectile"));
             projectiles.add(new Projectile(sprites, 0, 80f, player, mousePos.x, mousePos.y, playerTeam));
+            sprites.clear();
+          sprites.add(getMain().textureHandler.getTexture("enemyWave"));
+            enemy_waves.add(new Enemy_Wave(sprites, 0, player, mousePos.x, mousePos.y));
             gameHUD.endTutorial();
         } 
         for(int i = projectiles.size - 1; i >= 0; i--) {
             projectiles.get(i).update(this);
+        } for(int i = enemy_waves.size - 1; i >= 0; i--) {
+            enemy_waves.get(i).update(this);
         }
 
         // Camera calculations based on player movement

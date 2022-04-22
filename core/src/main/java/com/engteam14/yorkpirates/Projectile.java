@@ -15,8 +15,8 @@ public class Projectile extends GameObject{
     private final float maxDistance; // Projectile max range.
     private final GameObject origin;
 
-    private final float dx;
-    private final float dy;
+    private final float dx; //x component to add every frame
+    private final float dy; //y component to add every frame
     private final float projectileSpeed; // Projectile movement speed.
 
 
@@ -71,7 +71,7 @@ public class Projectile extends GameObject{
         move(xMove, yMove);
 
         // Hit calculations
-        if(origin == screen.getPlayer()){
+        if(team == screen.playerTeam){
             for(int i = 0; i < screen.colleges.size; i++) {
                 if (overlaps(screen.colleges.get(i).hitBox)){
                     if(!Objects.equals(team, screen.colleges.get(i).team)){ // Checks if projectile and college are on the same team
