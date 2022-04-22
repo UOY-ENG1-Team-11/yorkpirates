@@ -10,6 +10,8 @@ dependencies {
 	implementation "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
 	implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 	implementation "com.github.crykn.guacamole:gdx-desktop:$guacamoleVersion"
+	implementation(platform('org.junit:junit-bom:5.8.2'))
+	implementation('org.junit.jupiter:junit-jupiter')
 	implementation project(':core')
 }
 
@@ -49,4 +51,11 @@ jar {
 
 // Equivalent to the jar task; here for compatibility with gdx-setup.
 task dist(dependsOn: [jar]) {
+}
+
+test {
+	useJUnitPlatform()
+	testLogging {
+		events "passed", "skipped", "failed"
+	}
 }
