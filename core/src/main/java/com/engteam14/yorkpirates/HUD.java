@@ -1,7 +1,6 @@
 package com.engteam14.yorkpirates;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.Gdx; 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -28,6 +27,17 @@ public class HUD {
     // Player counters
     private final Label score;
     private final Label loot;
+    
+    // Power-ups
+    private final Table powerupsTable;
+    private final Table AtkSpdTable;
+    private final Label AtkSpdTimer;
+    private final Table AtkDmgTable;
+    private final Label AtkDmgTimer;
+    private final Table InvincibleTable;
+    private final Label InvincibleTimer;
+    private final Table SpeedTable;
+    private final Label SpeedTimer;
 
     // Player tasks
     private final Label tasksTitle;
@@ -75,7 +85,7 @@ public class HUD {
         tutorialLabel = new Label("WASD or Arrow Keys\n to Move.", skin);
 
         // Create score related actors
-        Image coin = new Image(screen.getMain().textureHandler.loadTexture("loot", Gdx.files.internal("loot.png")));
+        Image coin = new Image(screen.getMain().textureHandler.loadTexture("gold", Gdx.files.internal("loot.png")));
         Image star = new Image(screen.getMain().textureHandler.loadTexture("points", Gdx.files.internal("points.png")));
         coin.setScaling(Scaling.fit);
         star.setScaling(Scaling.fit);
@@ -83,7 +93,29 @@ public class HUD {
         score = new Label(screen.points.GetString(), skin);
         loot.setFontScale(1.2f);
         score.setFontScale(1.2f);
-
+        
+        // Create power-up related actors
+        Image AtkSpd = new Image(screen.getMain().textureHandler.loadTexture("AtkSpd", Gdx.files.internal("UpAtkSpd.png")));
+        Image AtkDmg = new Image(screen.getMain().textureHandler.loadTexture("AtkDmg", Gdx.files.internal("UpDmg.png")));
+        Image Invincible = new Image(screen.getMain().textureHandler.loadTexture("Invincible", Gdx.files.internal("UpInvincible.png")));
+        Image Speed = new Image(screen.getMain().textureHandler.loadTexture("Speed", Gdx.files.internal("UpSpeed.png")));
+        
+        AtkSpd.setScaling(Scaling.fit);
+        AtkDmg.setScaling(Scaling.fit);
+        Invincible.setScaling(Scaling.fit);
+        Speed.setScaling(Scaling.fit);
+        
+        AtkSpdTimer = new Label(screen.AtkSpdTimer.GetString(), skin);
+        AtkDmgTimer = new Label(screen.AtkDmgTimer.GetString(), skin);
+        InvincibleTimer = new Label(screen.InvincibleTimer.GetString(), skin);
+        SpeedTimer = new Label(screen.SpeedTimer.GetString(), skin);
+        
+        AtkSpdTimer.setFontScale(1.2f);
+        AtkDmgTimer.setFontScale(1.2f);
+        InvincibleTimer.setFontScale(1.2f);
+        SpeedTimer.setFontScale(1.2f);
+        
+        
         // Create task related actors
         tasksTitle = new Label(screen.getPlayerName() + "'s Tasks:", skin);
         tasksTitle.setFontScale(0.5f, 0.5f);
@@ -121,6 +153,32 @@ public class HUD {
         tracker.row();
         tracker.add(pointsTask).left().pad(5);
 
+        // Add power-up display
+        
+        AtkSpdTable = new Table();
+        AtkSpdTable.row();
+        AtkSpdTable.add(AtkSpd).padRight(20);
+        AtkSpdTable.add(AtkSpdTimer).padRight(20);
+        if(YorkPirates.DEBUG_ON) AtkSpdTable.setDebug(true);
+        
+        AtkDmgTable = new Table();
+        AtkDmgTable.row();
+        AtkDmgTable.add(AtkDmg).padRight(20);
+        AtkDmgTable.add(AtkDmgTimer).padRight(20);
+        if(YorkPirates.DEBUG_ON) AtkDmgTable.setDebug(true);
+        
+        InvincibleTable = new Table();
+        InvincibleTable.row();
+        InvincibleTable.add(Invincible).padRight(20);
+        InvincibleTable.add(InvincibleTimer).padRight(20);
+        if(YorkPirates.DEBUG_ON) InvincibleTable.setDebug(true);
+        
+        SpeedTable = new Table();
+        SpeedTable.row();
+        SpeedTable.add(Speed).padRight(20);
+        SpeedTable.add(SpeedTimer).padRight(20);
+        if(YorkPirates.DEBUG_ON) SpeedTable.setDebug(true);
+        
         // Create tutorial placeholder
         tutorial = new Table();
         tutorial.setBackground(tracker.getBackground());
@@ -134,7 +192,17 @@ public class HUD {
         // Add menu button to table
         table.row();
         table.add(menuButton).size(150).left().top().pad(25);
-
+        
+        // Add power-ups to table
+        powerupsTable = new Table();
+        table.add().expand();
+        powerupsTable.add(AtkSpdTable).right().top();
+        powerupsTable.add(InvincibleTable).right().top();
+        powerupsTable.row();
+        powerupsTable.add(AtkDmgTable).right().top();
+        powerupsTable.add(SpeedTable).right().top();
+        table.add(powerupsTable).right().top();
+        
         // Add tutorial to table
         table.row();
         table.add(tutorial.pad(100f));
@@ -143,6 +211,8 @@ public class HUD {
         table.add().expand();
         table.add(tracker);
 
+
+        
         // Add table to the stage
         stage.addActor(table);
     }
@@ -159,6 +229,12 @@ public class HUD {
         score.setText(screen.points.GetString());
         loot.setText(screen.loot.GetString());
 
+        // Update the powerups timer
+        AtkSpdTimer.setText(screen.AtkSpdTimer.GetString());
+        AtkDmgTimer.setText(screen.AtkDmgTimer.GetString());
+        InvincibleTimer.setText(screen.InvincibleTimer.GetString());
+        SpeedTimer.setText(screen.SpeedTimer.GetString());
+        
         // Calculate which part of the tutorial to show
         if(screen.getPlayer().getDistance() < 2){
             // Movement tutorial
@@ -201,6 +277,46 @@ public class HUD {
         if(screen.points.Get() > POINT_GOAL && pointsTask.isChecked()) { screen.loot.Add(POINT_REWARD); }
         pointsTask.setChecked(screen.points.Get() < POINT_GOAL);
         pointsTask.setText("Get "+POINT_GOAL+" points:  "+Math.min(screen.points.Get(), POINT_GOAL)+"/"+POINT_GOAL+"  ");
+        
+        // Attack Speed Timer Calls
+        if(Player.atkSpdTime > 0) {
+        	AtkSpdTimer.setVisible(true);
+        	AtkSpdTable.setVisible(true);
+        	screen.AtkSpdTimer.startTimer();
+        } else {
+        	AtkSpdTimer.setVisible(false);
+        	AtkSpdTable.setVisible(false);
+        }
+        
+        // Attack Damage Timer Calls
+        if(Player.dmgUpTime > 0) {
+        	AtkDmgTimer.setVisible(true);
+        	AtkDmgTable.setVisible(true);
+        	screen.AtkDmgTimer.startTimer();
+        } else {
+        	AtkDmgTimer.setVisible(false);
+        	AtkDmgTable.setVisible(false);
+        }
+        
+        // Invincible Timer Calls
+        if(Player.invincibleTime > 0) {
+        	InvincibleTimer.setVisible(true);
+        	InvincibleTable.setVisible(true);
+        	screen.InvincibleTimer.startTimer();
+        } else {
+        	InvincibleTimer.setVisible(false);
+        	InvincibleTable.setVisible(false);
+        }
+        
+        // Attack Damage Timer Calls
+        if(Player.speedUpTime > 0) {
+        	SpeedTimer.setVisible(true);
+        	SpeedTable.setVisible(true);
+        	screen.SpeedTimer.startTimer();
+        } else {
+        	SpeedTimer.setVisible(false);
+        	SpeedTable.setVisible(false);
+        }
     }
 
     public void updateName(GameScreen screen) { tasksTitle.setText(screen.getPlayerName() +"'s Tasks:"); }

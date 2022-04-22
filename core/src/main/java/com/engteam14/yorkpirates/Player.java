@@ -1,33 +1,58 @@
 package com.engteam14.yorkpirates;
 
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Gdx; 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.TimeUtils;
 
 public class Player extends GameObject {
-
+	
     // Player constants
     private static final int POINT_FREQUENCY = 1000; // How often the player gains points by moving.
     private static final float CAMERA_SLACK = 0.1f; // What percentage of the screen the player can move in before the camera follows.
-    private static final float SPEED =70f; // Player movement speed.
+    private static final float SPEED = 70f; // Player movement speed.
     private static final int HEALTH = 200;
-
+    
+    // Invincibility Checker
+    private boolean invincible = false;
+    
+    // Upgrade check variables
+    public static boolean AtkSpdBought = false;
+    public static boolean AtkDmgBought = false;
+    public static boolean SpdBought = false;
+    
+    // Player Multipliers
+    public static float playerProjectileDamageUpgrade = 1;
+    private static int playerAttackSpeedUpgrade = 1;
+    private float playerSpeedUpgrade = 1f;
+    
+    public static float playerProjectileDamageMultiplier = 1f; // Player Projectile damage Multiplier
+    public static int playerAttackSpeedMutliplier = 1 * playerAttackSpeedUpgrade; // Player Projectile Fire Rate Multiplier
+    private float playerSpeedMultiplier = 1f; // Player Movement Speed Multiplier
+    
     // Movement calculation values
     private int previousDirectionX;
     private int previousDirectionY;
     private float distance;
     private long lastMovementScore;
-
+    
+    // Player Values
     private HealthBar playerHealth;
     private float splashTime;
     private long timeLastHit;
     private boolean doBloodSplash = false;
     public long lastShotFired;
+    
+    // Time variable declarations
+    public static long atkSpdTime;
+    public static long dmgUpTime;
+    public static long invincibleTime;
+    public static long speedUpTime;
 
     /**
      * Generates a generic object within the game with animated frame(s) and a hit-box.
@@ -68,7 +93,7 @@ public class Player extends GameObject {
 
         // Calculate collision && movement
         if (horizontal != 0 || vertical != 0){
-            move(SPEED *horizontal, SPEED *vertical);
+            move(SPEED*playerSpeedMultiplier *horizontal, SPEED*playerSpeedMultiplier *vertical);
             previousDirectionX = horizontal;
             previousDirectionY = vertical;
             if (safeMove(screen.getMain().edges)) {
@@ -104,12 +129,36 @@ public class Player extends GameObject {
                 splashTime += 1;
             }
         }
-
+        
+        // Time Checks
         if (TimeUtils.timeSinceMillis(timeLastHit) > 10000){
-            currentHealth += 0.03;
+        	//System.out.println(screen.getDifficulty());
+            currentHealth += (0.03/screen.getDifficulty());
             if(currentHealth > maxHealth) currentHealth = maxHealth;
             playerHealth.resize(currentHealth);
         }
+        
+        if (TimeUtils.timeSinceMillis(atkSpdTime) > 10000) {
+        	playerAttackSpeedMutliplier = 1 * playerAttackSpeedUpgrade;
+        	atkSpdTime = 0;
+        }
+        
+        if (TimeUtils.timeSinceMillis(dmgUpTime) > 10000) {
+        	playerProjectileDamageMultiplier = 1f * playerProjectileDamageUpgrade;
+        	dmgUpTime = 0;
+        }
+        
+        if (TimeUtils.timeSinceMillis(invincibleTime) > 10000) {
+        	invincible = false;
+        	invincibleTime = 0;
+        }
+        
+        if (TimeUtils.timeSinceMillis(speedUpTime) > 10000) {
+        	playerSpeedMultiplier = 1f * playerSpeedUpgrade;
+        	speedUpTime = 0;
+        }      
+        
+        
     }
 
     /**
@@ -146,19 +195,103 @@ public class Player extends GameObject {
      */
     @Override
     public void takeDamage(GameScreen screen, float damage, String projectileTeam){
-        timeLastHit = TimeUtils.millis();
-        currentHealth -= damage;
-        doBloodSplash = true;
+    	if(invincible == false) {
+            timeLastHit = TimeUtils.millis();
+            currentHealth -= damage;
+            doBloodSplash = true;
 
-        // Health-bar reduction
-        if(currentHealth > 0){
-            playerHealth.resize(currentHealth);
-            screen.sounds.damage();
-        }else{
-            playerHealth = null;
-            screen.gameEnd(false);
+            // Health-bar reduction
+            if(currentHealth > 0){
+                playerHealth.resize(currentHealth);
+                screen.sounds.damage();
+            }else{
+                playerHealth = null;
+                screen.gameEnd(false);
+    	}
         }
     }
+    
+    /**
+     * Called when colliding with an attack speed increase power-up.
+     * @param screen            The main game screen.
+     */
+    public void increaseAttackSpeed(GameScreen screen) {
+    	playerAttackSpeedMutliplier *= 2;
+    	// set back to 1
+    	screen.AtkSpdTimer.getTime();
+    	atkSpdTime = TimeUtils.millis();
+    }
+    
+    /**
+     * Called when colliding with a damage increase power-up.
+     * @param screen            The main game screen.
+     */
+    public void increaseDamage(GameScreen screen) {
+    	playerProjectileDamageMultiplier *= 10 ;
+    	// set back to 20f
+    	screen.AtkDmgTimer.getTime();
+    	dmgUpTime = TimeUtils.millis();
+    }
+    
+    /**
+     * Called when colliding with a health power-up.
+     * @param screen            The main game screen.
+     */
+    public void increaseHealth(GameScreen screen) {
+        currentHealth += 50;
+        if(currentHealth > maxHealth){ 
+        	currentHealth = maxHealth;
+        }
+        playerHealth.resize(currentHealth);
+    }
+    
+    /**
+     * Called when colliding with a speed power-up.
+     * @param screen            The main game screen.
+     */
+    public void increaseSpeed(GameScreen screen){
+    	playerSpeedMultiplier *= 1.5;
+    	screen.SpeedTimer.getTime();
+    	speedUpTime = TimeUtils.millis();
+    }	
+    
+    /**
+     * Called when colliding with an invincibilty power-up.
+     * @param screen            The main game screen.
+     */
+    public void setInvincible(GameScreen screen) {
+    	invincible = true;
+    	screen.InvincibleTimer.getTime();
+    	invincibleTime = TimeUtils.millis();
+    }
+    
+    /**
+     * Called when attack speed shop upgrade is bought.
+     * @param screen            The main game screen.
+     */
+    public void upgradeAttackSpeed(GameScreen screen) {
+    	playerAttackSpeedUpgrade = 2;
+    	AtkSpdBought = true;
+    }
+
+    /**
+     * Called when attack speed shop upgrade is bought.
+     * @param screen            The main game screen.
+     */
+    public void upgradeAttackDamage(GameScreen screen) {
+    	playerProjectileDamageUpgrade = 5;
+    	AtkDmgBought = true;
+    }
+    
+    /**
+     * Called when attack speed shop upgrade is bought.
+     * @param screen            The main game screen.
+     */
+    public void upgradeSpeed(GameScreen screen) {
+    	playerSpeedUpgrade = 1.5f;
+    	SpdBought = true;
+    }
+
 
     /**
      * Called after update(), calculates whether the camera should follow the player and passes it to the game screen.
@@ -194,5 +327,36 @@ public class Player extends GameObject {
 
     public float getDistance() {
         return distance;
+    }
+    
+    @Override
+    public JsonValue toJson() {
+    	JsonValue json = super.toJson();
+    	json.addChild("previousDirectionX", new JsonValue(previousDirectionX));
+    	json.addChild("previousDirectionY", new JsonValue(previousDirectionY));
+    	json.addChild("distance", new JsonValue(distance));
+    	json.addChild("AtkSpdBought", new JsonValue(AtkSpdBought));
+    	json.addChild("AtkDmgBought", new JsonValue(AtkDmgBought));
+    	json.addChild("SpdBought", new JsonValue(SpdBought));
+    	json.addChild("DmgUpgrade", new JsonValue(playerProjectileDamageUpgrade));
+    	json.addChild("AtkSpdUpgrade", new JsonValue(playerAttackSpeedUpgrade));
+    	json.addChild("SpdUpgrade", new JsonValue(playerSpeedUpgrade));
+    	return json;
+    }
+    
+    @Override
+    public void fromJson(JsonValue json) {
+    	super.fromJson(json);
+    	previousDirectionX = json.getInt("previousDirectionX");
+    	previousDirectionY = json.getInt("previousDirectionY");
+    	distance = json.getFloat("distance");
+    	AtkSpdBought = json.getBoolean("AtkSpdBought");
+    	AtkDmgBought = json.getBoolean("AtkDmgBought");
+    	SpdBought = json.getBoolean("SpdBought");
+    	playerProjectileDamageUpgrade = json.getFloat("DmgUpgrade");
+    	playerAttackSpeedUpgrade = json.getInt("AtkSpdUpgrade");
+    	playerSpeedUpgrade = json.getFloat("SpdUpgrade");
+    	playerHealth.resize(currentHealth);
+    	playerHealth.move(this.x, this.y + height/2 + 2f);
     }
 }

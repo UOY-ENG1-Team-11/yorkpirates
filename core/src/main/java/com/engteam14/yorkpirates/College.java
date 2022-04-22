@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import java.util.Objects;
@@ -20,13 +22,13 @@ public class College extends GameObject {
 
     private float splashTime;
     private long lastShotFired;
-    private final String collegeName;
+    public final String collegeName;
     private final Array<Texture> collegeImages;
     private Array<Texture> boatTexture;
-    private Array<GameObject> boats;
-    private Array<Float> boatRotations;
+    public Array<Boat> boats;
 
     private boolean doBloodSplash = false;
+    private boolean wasCaptured = false;
 
     /**
      * Generates a college object within the game with animated frame(s) and a hit-box.
@@ -40,7 +42,6 @@ public class College extends GameObject {
 
         this.boatTexture = new Array<>();
         this.boats = new Array<>();
-        this.boatRotations = new Array<>();
         this.boatTexture.add(boatTexture);
         collegeImages = new Array<>();
         for(int i = 0; i < sprites.size; i++) {
@@ -48,7 +49,7 @@ public class College extends GameObject {
         }
 
         splashTime = 0;
-        setMaxHealth(2000);
+        setMaxHealth(1000);
         lastShotFired = 0;
         collegeName = name;
 
@@ -79,18 +80,18 @@ public class College extends GameObject {
         float playerX = screen.getPlayer().x;
         float playerY = screen.getPlayer().y;
         boolean nearPlayer = abs(this.x - playerX) < (Gdx.graphics.getWidth()/15f) && abs(this.y - playerY) < (Gdx.graphics.getHeight()/10f);
-
+        
         if(nearPlayer || screen.isPaused()){
             direction.setVisible(false);
 
             if(!Objects.equals(team, GameScreen.playerTeam)) { // Checks if the college is an enemy of the player
                 // How often the college can shoot.
-                int shootFrequency = 1000;
+                int shootFrequency = 1000/screen.getDifficulty();
                 if (TimeUtils.timeSinceMillis(lastShotFired) > shootFrequency){
                     lastShotFired = TimeUtils.millis();
                     Array<Texture> sprites = new Array<>();
                     sprites.add(screen.getMain().textureHandler.getTexture("tempProjectile"));
-                    screen.projectiles.add(new Projectile(sprites, 0, this, playerX, playerY, team));
+                    screen.projectiles.add(new Projectile(sprites, 0, 128f, this, playerX, playerY, team));
                     screen.sounds.cannon();
                 }
             }else if(Objects.equals(collegeName, "Home")){
@@ -129,7 +130,7 @@ public class College extends GameObject {
     public void takeDamage(GameScreen screen, float damage, String projectileTeam){
         currentHealth -= damage;
         doBloodSplash = true;
-
+        
         if(currentHealth > 0){
             collegeBar.resize(currentHealth);
             screen.sounds.damage();
@@ -148,6 +149,10 @@ public class College extends GameObject {
                 indicatorSprite.add(screen.getMain().textureHandler.getTexture("allyArrow"));
                 boatTexture.clear();
                 boatTexture.add(screen.getPlayer().anim.getKeyFrame(0f));
+                for(Boat b : boats) {
+                	b.changeImage(boatTexture, 0);
+                	b.team = GameScreen.playerTeam;
+                }
 
                 Array<Texture> sprites = new Array<>();
                 sprites.add(collegeImages.get(1));
@@ -159,6 +164,7 @@ public class College extends GameObject {
                 College.capturedCount++;
                 direction.changeImage(indicatorSprite,0);
                 team = GameScreen.playerTeam;
+                wasCaptured = true;
             }else{
                 // Destroy college
                 collegeBar = null;
@@ -192,8 +198,8 @@ public class College extends GameObject {
         // Draw boats before college so under
         batch.setShader(null);
         for(int i = 0; i < boats.size; i++){
-            GameObject boat = boats.get(i);
-            batch.draw(boatTexture.get(0), boat.x+boat.height, boat.y, 0,0, boat.width, boat.height, 1f, 1f, boatRotations.get(i), 0, 0, boatTexture.get(0).getWidth(), boatTexture.get(0).getHeight(), false, false);
+            Boat boat = boats.get(i);
+            boat.draw(batch, elapsedTime);
         }
 
         collegeBar.draw(batch, 0);
@@ -205,8 +211,48 @@ public class College extends GameObject {
      * @param x The x position of the new boat relative to the college.
      * @param y The y position of the new boat relative to the college.
      */
-    public void addBoat(float x, float y, float rotation){
-        boats.add(new GameObject(boatTexture, 0, this.x+x, this.y+y, 25, 12, team));
-        boatRotations.add(rotation);
+    public void addBoat(YorkPirates game, float x, float y, float rotation, Vector2[] patrol){
+        boats.add(new Boat(game, boatTexture, 0, this.x+x, this.y+y, 25, 12, team, patrol, collegeName));
+    }
+    
+    @Override
+    public JsonValue toJson() {
+    	JsonValue json = super.toJson();
+    	json.addChild("collegeName", new JsonValue(collegeName));
+    	json.addChild("wasCaptured", new JsonValue(wasCaptured));
+    	JsonValue jBoats = new JsonValue(JsonValue.ValueType.object);
+    	for(int i = 0; i < boats.size; i++) {
+    		jBoats.addChild(i + "", boats.get(i).toJson());
+    	}
+    	json.addChild("boats", jBoats);
+    	return json;
+    }
+    
+    
+    public void fromJson(GameScreen screen, JsonValue json) {
+    	super.fromJson(json);
+    	wasCaptured = json.getBoolean("wasCaptured");
+    	if(wasCaptured) {
+    		Array<Texture> healthBarSprite = new Array<>();
+            Array<Texture> indicatorSprite = new Array<>();
+            healthBarSprite.add(screen.getMain().textureHandler.getTexture("allyHealthBar"));
+            indicatorSprite.add(screen.getMain().textureHandler.getTexture("allyArrow"));
+            boatTexture.clear();
+            boatTexture.add(screen.getPlayer().anim.getKeyFrame(0f));
+
+            Array<Texture> sprites = new Array<>();
+            sprites.add(collegeImages.get(1));
+            changeImage(sprites,0);
+
+            collegeBar.changeImage(healthBarSprite,0);
+            direction.changeImage(indicatorSprite,0);
+    	}
+    	boats.clear();
+    	JsonValue boat = json.get("boats").child();
+    	while(boat != null) {
+    		boats.add(new Boat(screen.getMain(), boatTexture, 0, boat, collegeName));
+    		boat = boat.next();
+    	}
+    	collegeBar.resize(currentHealth);
     }
 }

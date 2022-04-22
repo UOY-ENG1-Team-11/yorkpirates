@@ -23,7 +23,7 @@ public class ScoreManager {
      *  Adds an integer value to the score.
      * @param amount    the value to be added.
      */
-    public void Add(int amount){
+    public void Add(int amount){;
         score += amount;
 
     }
@@ -34,6 +34,14 @@ public class ScoreManager {
      */
     public int Get(){
         return score;
+    }
+    
+    /**
+     * Sets the score value
+     * @param score 	the value to set the score to
+     *  */
+    public void Set(int score) {
+    	this.score = score;
     }
 
     /**
