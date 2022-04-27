@@ -1,6 +1,6 @@
 package com.engteam14.yorkpirates;
 
-import com.badlogic.gdx.Gdx; 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -25,7 +25,7 @@ public class GameObject {
     Rectangle hitBox;
     Animation<Texture> anim;
 
-    ShaderProgram shader = new ShaderProgram(Gdx.files.internal("red.vsh"), Gdx.files.internal("red.fsh"));
+    ShaderProgram shader;
 
     /**
      * Generates a generic object within the game with animated frame(s) and a hit-box.
@@ -38,7 +38,10 @@ public class GameObject {
      * @param team      The team the object is on.
      */
     public GameObject(Array<Texture> frames, float fps, float x, float y, float width, float height, String team){
-        changeImage(frames,fps);
+        if(frames != null) {
+            shader = new ShaderProgram(Gdx.files.internal("red.vsh"), Gdx.files.internal("red.fsh"));
+            changeImage(frames,fps);
+        }
         this.x = x;
         this.y = y;
         this.team = team;
@@ -46,12 +49,12 @@ public class GameObject {
         this.height = height;
         setHitbox();
     }
-    
+
     GameObject(Array<Texture> frames, float fps, JsonValue json) {
-    	if(frames != null) {
-    		changeImage(frames,fps);
-    	}
-    	fromJson(json);
+        if(frames != null) {
+            changeImage(frames,fps);
+        }
+        fromJson(json);
     }
 
     /**
@@ -129,28 +132,28 @@ public class GameObject {
     public void draw(SpriteBatch batch, float elapsedTime){
         batch.draw(anim.getKeyFrame(elapsedTime, true), x - width/2, y - height/2, width, height);
     }
-    
+
     public JsonValue toJson() {
-    	JsonValue json = new JsonValue(ValueType.object);
-    	json.addChild("x", new JsonValue(x));
-    	json.addChild("y", new JsonValue(y));
-    	json.addChild("width", new JsonValue(width));
-    	json.addChild("height", new JsonValue(height));
-    	json.addChild("maxHealth", new JsonValue(maxHealth));
-    	json.addChild("currentHealth", new JsonValue(currentHealth));
-    	json.addChild("team", new JsonValue(team));
-    	return json;
+        JsonValue json = new JsonValue(ValueType.object);
+        json.addChild("x", new JsonValue(x));
+        json.addChild("y", new JsonValue(y));
+        json.addChild("width", new JsonValue(width));
+        json.addChild("height", new JsonValue(height));
+        json.addChild("maxHealth", new JsonValue(maxHealth));
+        json.addChild("currentHealth", new JsonValue(currentHealth));
+        json.addChild("team", new JsonValue(team));
+        return json;
     }
-    
+
     public void fromJson(JsonValue json) {
-    	x = json.getFloat("x");
-    	y = json.getFloat("y");
-    	width = json.getFloat("width");
-    	height = json.getFloat("height");
-    	maxHealth = json.getInt("maxHealth");
-    	currentHealth = json.getFloat("currentHealth");
-    	team = json.getString("team");
-    	setHitbox();
+        x = json.getFloat("x");
+        y = json.getFloat("y");
+        width = json.getFloat("width");
+        height = json.getFloat("height");
+        maxHealth = json.getInt("maxHealth");
+        currentHealth = json.getFloat("currentHealth");
+        team = json.getString("team");
+        setHitbox();
     }
 
 }
