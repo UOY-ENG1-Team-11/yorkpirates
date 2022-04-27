@@ -1,11 +1,11 @@
-package io.dimitris.gemo.tests;
+package io.team11.yorkPirates.tests;
 
 import com.badlogic.gdx.Gdx;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.junit.Assert.assertTrue;
 @RunWith(GdxTestRunner.class)
-public class firstTest {
+public class AssetTesting {
     @Test
     public void testShipAssetExists() {
         assertTrue("This test will only pass when the ship.png asset exists.",

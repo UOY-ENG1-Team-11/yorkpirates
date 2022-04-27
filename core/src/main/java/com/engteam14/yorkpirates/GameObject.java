@@ -37,7 +37,7 @@ public class GameObject {
      * @param height    The size of the object in the y-axis.
      * @param team      The team the object is on.
      */
-    GameObject(Array<Texture> frames, float fps, float x, float y, float width, float height, String team){
+    public GameObject(Array<Texture> frames, float fps, float x, float y, float width, float height, String team){
         changeImage(frames,fps);
         this.x = x;
         this.y = y;
@@ -68,7 +68,7 @@ public class GameObject {
      * Called when the health of the object needs to be set.
      * @param mh    The health value for the object
      */
-    void setMaxHealth(int mh){
+    public void setMaxHealth(int mh){
         maxHealth = mh;
         currentHealth = maxHealth;
     }
