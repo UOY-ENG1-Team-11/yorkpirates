@@ -22,7 +22,7 @@ public class GameObject {
 
     String team;
     Texture sprite;
-    Rectangle hitBox;
+    public Rectangle hitBox;
     Animation<Texture> anim;
 
     ShaderProgram shader;
@@ -99,7 +99,7 @@ public class GameObject {
     /**
      * Sets the object's hit-box, based upon it's x, y, width and height values.
      */
-    private void setHitbox(){
+    public void setHitbox(){
         hitBox = new Rectangle();
         updateHitboxPos();
         hitBox.width = width;
@@ -109,7 +109,7 @@ public class GameObject {
     /**
      * Updates the object's hit-box location to match the object's rendered location.
      */
-    void updateHitboxPos() {
+    public void updateHitboxPos() {
         hitBox.x = x - width/2;
         hitBox.y = y - height/2;
     }
@@ -119,7 +119,7 @@ public class GameObject {
      * @param rect  The other object to be checked against.
      * @return      True if overlapping, false otherwise.
      */
-    boolean overlaps(Rectangle rect){
+    public boolean overlaps(Rectangle rect){
         updateHitboxPos();
         return hitBox.overlaps(rect);
     }
