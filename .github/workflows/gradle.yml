@@ -34,6 +34,11 @@ jobs:
       uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
       with:
         arguments: build
+    - name: Jar output
+      uses: actions/upload-artifact@v1
+      with:
+        name: york-pirates-jar
+        path: ./lwjgl3/build/libs/york-pirates-1.0.1.jar
     - name: Unit tests results
       uses: actions/upload-artifact@v1
       with:
