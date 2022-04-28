@@ -22,6 +22,7 @@ public class Enemy_Wave extends GameObject {
 	private final float maxDistance = 8000; //how far the wave can move before disappearing
 	private final float xComponent; //what value to add to x coordinate every frame
 	private final float yComponent; //what value to add to y coordinate every frame
+	private final float rotation;
 	private GameObject target; //reference to target game object
 	
 	private String state = "move"; //state the wave is in
@@ -41,7 +42,7 @@ public class Enemy_Wave extends GameObject {
      * @param height    The size of the object in the y-axis.
      */
 	public Enemy_Wave(Array<Texture> frames, float fps, GameObject target, float x, float y) {
-		super(frames, fps, x, y, 5f, 5f, "NEUTRAL");
+		super(frames, fps, x, y, 25f, 25f, "NEUTRAL");
 		
 		// Movement calculations
         float changeInX = target.x - x;
@@ -49,6 +50,7 @@ public class Enemy_Wave extends GameObject {
         float scaleFactor = max(abs(changeInX),abs(changeInY));
         xComponent = changeInX / scaleFactor;
         yComponent = changeInY / scaleFactor;
+        rotation = (float) Math.toDegrees(Math.atan2(yComponent, xComponent));
         this.target = target;
 	}
 	
@@ -56,11 +58,11 @@ public class Enemy_Wave extends GameObject {
      * Called once per frame. Used to perform calculations such as projectile movement and collision detection.
      * @param screen    The main game screen.
      */
-	public void update(GameScreen screen) {
+	public void update(GameScreen screen, boolean badWeather) {
 		if (state == "move"){
-	        float xMove = speed*xComponent;
-	        float yMove = speed*yComponent;
-	        distanceTravelled += speed;
+	        float xMove = speed*xComponent*(badWeather ? 1.4f : 1);
+	        float yMove = speed*yComponent*(badWeather ? 1.4f : 1);
+	        distanceTravelled += speed*(badWeather ? 1.4f : 1);
 	        move(xMove, yMove);
 	        if (overlaps(target.hitBox)){
 	            target.takeDamage(screen,projectileDamage,team);
@@ -70,12 +72,18 @@ public class Enemy_Wave extends GameObject {
         // Destroys after max travel distance
         if(distanceTravelled > maxDistance) {destroy(screen);}
 	}
+	
+	@Override
+	public void draw(SpriteBatch batch, float elapsedTime) {
+		Texture frame = anim.getKeyFrame(elapsedTime, true);
+		batch.draw(frame, x-width/2, y-height/2, width/2, height/2, width, height, 1f, 1f, rotation, 0, 0, frame.getWidth(), frame.getHeight(), false, false);
+	}
 	/**
      * Called when the wave needs to be destroyed.
      * @param screen    The main game screen.
      */
     private void destroy(GameScreen screen){
     	count -= 1;
-        screen.enemy_waves.removeValue(this,true);
+        screen.weather.waves.removeValue(this,true);
     }
 }

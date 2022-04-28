@@ -16,6 +16,7 @@ public class HUD {
 
     // Stage
     public Stage stage;
+    public final Table table;
 
     // Tutorial
     private final Table tutorial;
@@ -64,7 +65,7 @@ public class HUD {
         // Generate stage and table
         stage = new Stage(screen.getViewport());
         Gdx.input.setInputProcessor(stage);
-        Table table = new Table();
+        table = new Table();
         table.setFillParent(true);
         table.setTouchable(Touchable.enabled);
         if(YorkPirates.DEBUG_ON) table.setDebug(true);
@@ -224,7 +225,7 @@ public class HUD {
     public void renderStage(GameScreen screen){
         Gdx.input.setInputProcessor(stage);
         stage.draw();
-
+        
         // Update the score and loot
         score.setText(screen.points.GetString());
         loot.setText(screen.loot.GetString());
