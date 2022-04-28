@@ -38,5 +38,5 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: unit-tests-results
-        path: ./tests/build.reports/tests/test/index.html
+        path: ./tests/build/reports/tests/test/index.html
     
