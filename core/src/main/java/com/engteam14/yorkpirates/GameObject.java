@@ -1,6 +1,6 @@
 package com.engteam14.yorkpirates;
 
-import com.badlogic.gdx.Gdx; 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -22,7 +22,7 @@ public class GameObject {
 
     String team;
     Texture sprite;
-    Rectangle hitBox;
+    public Rectangle hitBox;
     Animation<Texture> anim;
 
     ShaderProgram shader;
@@ -37,11 +37,11 @@ public class GameObject {
      * @param height    The size of the object in the y-axis.
      * @param team      The team the object is on.
      */
-    GameObject(Array<Texture> frames, float fps, float x, float y, float width, float height, String team){
-    	if(frames != null) {
-    		 shader = new ShaderProgram(Gdx.files.internal("red.vsh"), Gdx.files.internal("red.fsh"));
-    		 changeImage(frames,fps);
-    	}
+    public GameObject(Array<Texture> frames, float fps, float x, float y, float width, float height, String team){
+        if(frames != null) {
+            shader = new ShaderProgram(Gdx.files.internal("red.vsh"), Gdx.files.internal("red.fsh"));
+            changeImage(frames,fps);
+        }
         this.x = x;
         this.y = y;
         this.team = team;
@@ -49,12 +49,12 @@ public class GameObject {
         this.height = height;
         setHitbox();
     }
-    
+
     GameObject(Array<Texture> frames, float fps, JsonValue json) {
-    	if(frames != null) {
-    		changeImage(frames,fps);
-    	}
-    	fromJson(json);
+        if(frames != null) {
+            changeImage(frames,fps);
+        }
+        fromJson(json);
     }
 
     /**
@@ -71,7 +71,7 @@ public class GameObject {
      * Called when the health of the object needs to be set.
      * @param mh    The health value for the object
      */
-    void setMaxHealth(int mh){
+    public void setMaxHealth(int mh){
         maxHealth = mh;
         currentHealth = maxHealth;
     }
@@ -99,7 +99,7 @@ public class GameObject {
     /**
      * Sets the object's hit-box, based upon it's x, y, width and height values.
      */
-    private void setHitbox(){
+    public void setHitbox(){
         hitBox = new Rectangle();
         updateHitboxPos();
         hitBox.width = width;
@@ -109,7 +109,7 @@ public class GameObject {
     /**
      * Updates the object's hit-box location to match the object's rendered location.
      */
-    void updateHitboxPos() {
+    public void updateHitboxPos() {
         hitBox.x = x - width/2;
         hitBox.y = y - height/2;
     }
@@ -119,7 +119,7 @@ public class GameObject {
      * @param rect  The other object to be checked against.
      * @return      True if overlapping, false otherwise.
      */
-    boolean overlaps(Rectangle rect){
+    public boolean overlaps(Rectangle rect){
         updateHitboxPos();
         return hitBox.overlaps(rect);
     }
@@ -132,28 +132,28 @@ public class GameObject {
     public void draw(SpriteBatch batch, float elapsedTime){
         batch.draw(anim.getKeyFrame(elapsedTime, true), x - width/2, y - height/2, width, height);
     }
-    
+
     public JsonValue toJson() {
-    	JsonValue json = new JsonValue(ValueType.object);
-    	json.addChild("x", new JsonValue(x));
-    	json.addChild("y", new JsonValue(y));
-    	json.addChild("width", new JsonValue(width));
-    	json.addChild("height", new JsonValue(height));
-    	json.addChild("maxHealth", new JsonValue(maxHealth));
-    	json.addChild("currentHealth", new JsonValue(currentHealth));
-    	json.addChild("team", new JsonValue(team));
-    	return json;
+        JsonValue json = new JsonValue(ValueType.object);
+        json.addChild("x", new JsonValue(x));
+        json.addChild("y", new JsonValue(y));
+        json.addChild("width", new JsonValue(width));
+        json.addChild("height", new JsonValue(height));
+        json.addChild("maxHealth", new JsonValue(maxHealth));
+        json.addChild("currentHealth", new JsonValue(currentHealth));
+        json.addChild("team", new JsonValue(team));
+        return json;
     }
-    
+
     public void fromJson(JsonValue json) {
-    	x = json.getFloat("x");
-    	y = json.getFloat("y");
-    	width = json.getFloat("width");
-    	height = json.getFloat("height");
-    	maxHealth = json.getInt("maxHealth");
-    	currentHealth = json.getFloat("currentHealth");
-    	team = json.getString("team");
-    	setHitbox();
+        x = json.getFloat("x");
+        y = json.getFloat("y");
+        width = json.getFloat("width");
+        height = json.getFloat("height");
+        maxHealth = json.getInt("maxHealth");
+        currentHealth = json.getFloat("currentHealth");
+        team = json.getString("team");
+        setHitbox();
     }
 
 }

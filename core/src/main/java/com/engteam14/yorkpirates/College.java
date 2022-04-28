@@ -18,7 +18,7 @@ public class College extends GameObject {
     public static int capturedCount = 0;
 
     private HealthBar collegeBar;
-    private Indicator direction;
+    public Indicator direction;
 
     private float splashTime;
     private long lastShotFired;
@@ -28,7 +28,7 @@ public class College extends GameObject {
     public Array<Boat> boats;
 
     private boolean doBloodSplash = false;
-    private boolean wasCaptured = false;
+    public boolean wasCaptured = false;
 
     /**
      * Generates a college object within the game with animated frame(s) and a hit-box.
@@ -38,37 +38,40 @@ public class College extends GameObject {
      * @param team      The team the college is on.
      */
     public College(YorkPirates game, Array<Texture> sprites, float x, float y, float scale, String name, String team, Player player, Texture boatTexture){
-    	super(sprites, 0, x, y, sprites.get(0).getWidth()*scale, sprites.get(0).getHeight()*scale, team);
+        super(sprites, 0, x, y, (sprites != null) ? sprites.get(0).getWidth()*scale : 100*scale, (sprites != null) ? sprites.get(0).getHeight()*scale : 100*scale, team);
 
         this.boatTexture = new Array<>();
         this.boats = new Array<>();
         this.boatTexture.add(boatTexture);
         collegeImages = new Array<>();
-        for(int i = 0; i < sprites.size; i++) {
-            collegeImages.add(sprites.get(i));
+        if (sprite != null) {
+            for (int i = 0; i < sprites.size; i++) {
+                collegeImages.add(sprites.get(i));
+            }
         }
-
         splashTime = 0;
         setMaxHealth(1000);
         lastShotFired = 0;
         collegeName = name;
 
-        Array<Texture> healthBarSprite = new Array<>();
-        Array<Texture> indicatorSprite = new Array<>();
-        if(Objects.equals(team, GameScreen.playerTeam)){
-            if(Objects.equals(name, "Home")){
-                indicatorSprite.add(game.textureHandler.getTexture("homeArrow"));
-            }else{
-                indicatorSprite.add(game.textureHandler.getTexture("allyArrow"));
-            }
-            healthBarSprite.add(game.textureHandler.getTexture("allyHealthBar"));
+        if (game != null) {
+            Array<Texture> healthBarSprite = new Array<>();
+            Array<Texture> indicatorSprite = new Array<>();
+            if (Objects.equals(team, GameScreen.playerTeam)) {
+                if (Objects.equals(name, "Home")) {
+                    indicatorSprite.add(game.textureHandler.getTexture("homeArrow"));
+                } else {
+                    indicatorSprite.add(game.textureHandler.getTexture("allyArrow"));
+                }
+                healthBarSprite.add(game.textureHandler.getTexture("allyHealthBar"));
 
-        }else{
-            healthBarSprite.add(game.textureHandler.getTexture("enemyHealthBar"));
-            indicatorSprite.add(game.textureHandler.getTexture("questArrow"));
+            } else {
+                healthBarSprite.add(game.textureHandler.getTexture("enemyHealthBar"));
+                indicatorSprite.add(game.textureHandler.getTexture("questArrow"));
+            }
+            collegeBar = new HealthBar(this, healthBarSprite);
+            direction = new Indicator(this, player, indicatorSprite);
         }
-        collegeBar = new HealthBar(this,healthBarSprite);
-        direction = new Indicator(this,player,indicatorSprite);
     }
 
     /**
@@ -131,39 +134,41 @@ public class College extends GameObject {
         currentHealth -= damage;
         doBloodSplash = true;
         
-        if(currentHealth > 0){
+        if(currentHealth > 0 && this.collegeBar != null){
             collegeBar.resize(currentHealth);
             screen.sounds.damage();
         }else{
             if(!Objects.equals(team, GameScreen.playerTeam)){ // Checks if the college is an enemy of the player
-                // College taken over
-            	screen.sounds.death();
-                int pointsGained = 50;
-                screen.points.Add(pointsGained);
-                int lootGained = 15;
-                screen.loot.Add(lootGained);
+                if (screen != null) {
+                    // College taken over
+                    screen.sounds.death();
+                    int pointsGained = 50;
+                    screen.points.Add(pointsGained);
+                    int lootGained = 15;
+                    screen.loot.Add(lootGained);
 
-                Array<Texture> healthBarSprite = new Array<>();
-                Array<Texture> indicatorSprite = new Array<>();
-                healthBarSprite.add(screen.getMain().textureHandler.getTexture("allyHealthBar"));
-                indicatorSprite.add(screen.getMain().textureHandler.getTexture("allyArrow"));
-                boatTexture.clear();
-                boatTexture.add(screen.getPlayer().anim.getKeyFrame(0f));
-                for(Boat b : boats) {
-                	b.changeImage(boatTexture, 0);
-                	b.team = GameScreen.playerTeam;
+                    Array<Texture> healthBarSprite = new Array<>();
+                    Array<Texture> indicatorSprite = new Array<>();
+                    healthBarSprite.add(screen.getMain().textureHandler.getTexture("allyHealthBar"));
+                    indicatorSprite.add(screen.getMain().textureHandler.getTexture("allyArrow"));
+                    boatTexture.clear();
+                    boatTexture.add(screen.getPlayer().anim.getKeyFrame(0f));
+                    for (Boat b : boats) {
+                        b.changeImage(boatTexture, 0);
+                        b.team = GameScreen.playerTeam;
+                    }
+
+                    Array<Texture> sprites = new Array<>();
+                    sprites.add(collegeImages.get(1));
+                    changeImage(sprites, 0);
+
+                    collegeBar.changeImage(healthBarSprite, 0);
+                    currentHealth = maxHealth;
+                    collegeBar.resize(currentHealth);
+                    College.capturedCount++;
+                    direction.changeImage(indicatorSprite, 0);
+                    team = GameScreen.playerTeam;
                 }
-
-                Array<Texture> sprites = new Array<>();
-                sprites.add(collegeImages.get(1));
-                changeImage(sprites,0);
-
-                collegeBar.changeImage(healthBarSprite,0);
-                currentHealth = maxHealth;
-                collegeBar.resize(currentHealth);
-                College.capturedCount++;
-                direction.changeImage(indicatorSprite,0);
-                team = GameScreen.playerTeam;
                 wasCaptured = true;
             }else{
                 // Destroy college

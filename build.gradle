@@ -27,6 +27,9 @@ buildscript {
 allprojects {
 	apply plugin: 'eclipse'
 	apply plugin: 'idea'
+	repositories {
+		maven { url 'https://www.jitpack.io' }
+	}
 }
 
 configure(subprojects) {
@@ -60,8 +63,30 @@ subprojects {
 		gradlePluginPortal()
 		maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
 		maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots/' }
-		maven { url 'https://jitpack.io' }
+		maven { url 'https://www.jitpack.io' }
 	}
 }
 
-eclipse.project.name = 'yorkpirates' + '-parent'
+project(":tests") {
+	apply plugin: "java"
+
+	sourceSets.test.java.srcDirs = ["src/"]
+
+	dependencies {
+
+		implementation project(path: ":core", configuration: "default")
+
+		implementation "junit:junit:4.+"
+		implementation "org.mockito:mockito-all:1.9.+"
+
+		implementation  "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+		implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+
+		testImplementation 'junit:junit:4.+'
+		testImplementation "org.mockito:mockito-all:1.9.+"
+
+		testImplementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+		testImplementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+		testImplementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+	}
+}
