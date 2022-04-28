@@ -38,7 +38,7 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: york-pirates-jar
-        path: ./lwjgl3/build/libs/york-pirates-1.0.1.jar
+        path: ./lwjgl3/build/libs/yorkpirates-1.0.1.jar
     - name: Unit tests results
       uses: actions/upload-artifact@v1
       with:
