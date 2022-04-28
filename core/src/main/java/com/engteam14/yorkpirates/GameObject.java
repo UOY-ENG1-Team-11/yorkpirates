@@ -25,7 +25,7 @@ public class GameObject {
     Rectangle hitBox;
     Animation<Texture> anim;
 
-    ShaderProgram shader = new ShaderProgram(Gdx.files.internal("red.vsh"), Gdx.files.internal("red.fsh"));
+    ShaderProgram shader;
 
     /**
      * Generates a generic object within the game with animated frame(s) and a hit-box.
@@ -38,7 +38,10 @@ public class GameObject {
      * @param team      The team the object is on.
      */
     GameObject(Array<Texture> frames, float fps, float x, float y, float width, float height, String team){
-        changeImage(frames,fps);
+    	if(frames != null) {
+    		 shader = new ShaderProgram(Gdx.files.internal("red.vsh"), Gdx.files.internal("red.fsh"));
+    		 changeImage(frames,fps);
+    	}
         this.x = x;
         this.y = y;
         this.team = team;
