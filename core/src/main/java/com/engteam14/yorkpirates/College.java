@@ -38,7 +38,7 @@ public class College extends GameObject {
      * @param team      The team the college is on.
      */
     public College(YorkPirates game, Array<Texture> sprites, float x, float y, float scale, String name, String team, Player player, Texture boatTexture){
-        super(sprites, 0, x, y, sprites.get(0).getWidth()*scale, sprites.get(0).getHeight()*scale, team);
+    	super(sprites, 0, x, y, sprites.get(0).getWidth()*scale, sprites.get(0).getHeight()*scale, team);
 
         this.boatTexture = new Array<>();
         this.boats = new Array<>();

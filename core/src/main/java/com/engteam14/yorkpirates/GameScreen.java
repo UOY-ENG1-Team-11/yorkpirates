@@ -1,6 +1,6 @@
 package com.engteam14.yorkpirates;
 
-import com.badlogic.gdx.Gdx;   
+import com.badlogic.gdx.Gdx;    
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
@@ -54,8 +54,8 @@ public class GameScreen extends ScreenAdapter {
     public Array<Projectile> projectiles;
     
 
-    // Enemies
-    public Array<Enemy_Wave> enemy_waves;
+    // Weather
+    public WeatherManager weather;
 
     // Consumables
     public Array<PowerUps> powerups;
@@ -69,7 +69,7 @@ public class GameScreen extends ScreenAdapter {
     private final YorkPirates game;
 
     // Player
-    private final Player player;
+    public final Player player;
     private String playerName;
     private Vector3 followPos;
     private boolean followPlayer = false;
@@ -134,6 +134,7 @@ public class GameScreen extends ScreenAdapter {
         getMain().textureHandler.loadTexture("questArrow", Gdx.files.internal("questArrow.png"));
         getMain().textureHandler.loadTexture("tempProjectile", Gdx.files.internal("tempProjectile.png"));
         getMain().textureHandler.loadTexture("enemyWave", Gdx.files.internal("enemy_wave.png"));
+        getMain().textureHandler.loadTexture("badWeather", Gdx.files.internal("badWeather.png"));
         
         
         
@@ -152,6 +153,9 @@ public class GameScreen extends ScreenAdapter {
         // Initialise tilemap
         tiledMap = new TmxMapLoader().load("FINAL_MAP.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
+        
+        // Initialise weather
+        weather = new WeatherManager();
         
         // Initialise colleges
         College.capturedCount = 0;
@@ -196,7 +200,6 @@ public class GameScreen extends ScreenAdapter {
 
         // Initialise projectiles array to be used storing live projectiles
         projectiles = new Array<>();
-        enemy_waves = new Array<>();
         
         // Initialise powerups array to be used for storing the power-ups
         powerups = new Array<PowerUps>();
@@ -229,7 +232,7 @@ public class GameScreen extends ScreenAdapter {
         game.camera.update();
         game.batch.setProjectionMatrix(game.camera.combined);
         ScreenUtils.clear(0.1f, 0.6f, 0.6f, 1.0f);
-
+        
         // Gameplay drawing batch
         game.batch.begin();
         tiledMapRenderer.setView(game.camera); // Draw map first so behind everything
@@ -241,9 +244,7 @@ public class GameScreen extends ScreenAdapter {
         }
         
         //Draw waves
-        for(int i = 0; i < enemy_waves.size; i++) {
-            enemy_waves.get(i).draw(game.batch, 0);
-        }
+        weather.draw(game.batch, 0);
 
         // Draw Consumables
         for(int i = 0; i < powerups.size; i++) {
@@ -303,15 +304,12 @@ public class GameScreen extends ScreenAdapter {
             sprites.add(getMain().textureHandler.getTexture("tempProjectile"));
             projectiles.add(new Projectile(sprites, 0, player, mousePos.x, mousePos.y, playerTeam));
             sprites.clear();
-          sprites.add(getMain().textureHandler.getTexture("enemyWave"));
-            enemy_waves.add(new Enemy_Wave(sprites, 0, player, mousePos.x, mousePos.y));
             gameHUD.endTutorial();
         } 
         for(int i = projectiles.size - 1; i >= 0; i--) {
             projectiles.get(i).update(this);
-        } for(int i = enemy_waves.size - 1; i >= 0; i--) {
-            enemy_waves.get(i).update(this);
-        }
+        } 
+        weather.update(this, elapsedTime, player.x, player.y);
 
         // Camera calculations based on player movement
         if(followPlayer) followPos = new Vector3(player.x, player.y, 0);
