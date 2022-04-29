@@ -9,18 +9,21 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.JsonValue;
 
 public class WeatherManager {
 	
 	public boolean badWeather = false;
 	public Array<Enemy_Wave> waves;
 	private float lastWeatherChange = 0;
+	private Array<Texture> waveTex;
 	
 	private Random rand;
 	
-	public WeatherManager() {
+	public WeatherManager(Array<Texture> waveTex) {
 		waves = new Array<Enemy_Wave>();
 		rand = new Random();
+		this.waveTex = waveTex;
 	}
 	
 	public void update(GameScreen screen, float elapsedTime, float playerX, float playerY) {
@@ -62,11 +65,40 @@ public class WeatherManager {
 		}
 	}
 	
-	public Enemy_Wave createWave(GameScreen screen, float x, float y) {
-		Array<Texture> sprites = new Array<Texture>();
-		sprites.add(screen.getMain().textureHandler.getTexture("enemyWave"));
-		Enemy_Wave wave = new Enemy_Wave(sprites, 0, screen.player, x, y);
+	public Enemy_Wave createWave(GameScreen screen, float x, float y) {	
+		Enemy_Wave wave = new Enemy_Wave(waveTex, 0, screen.player, x, y);
 		waves.add(wave);
 		return wave;
+	}
+	
+	public JsonValue toJson() {
+    	JsonValue json = new JsonValue(JsonValue.ValueType.object);
+    	json.addChild("badWeather", new JsonValue(badWeather));
+    	json.addChild("lastWeatherChange", new JsonValue(lastWeatherChange));
+    	JsonValue jWaves = new JsonValue(JsonValue.ValueType.object);
+    	for(int i = 0; i < waves.size; i++) {
+    		jWaves.addChild(i + "", waves.get(i).toJson());
+    	}
+    	json.addChild("waves", jWaves);
+    	return json;
+    }
+	
+	public void fromJson(GameScreen screen, JsonValue json) {
+		waves.clear();
+		badWeather = json.getBoolean("badWeather");
+		if(badWeather) {
+			TextureAtlas atlas = screen.getMain().textureHandler.getTextureAtlas("YorkPiratesSkin");
+	        Skin skin = new Skin(Gdx.files.internal("Skin/YorkPiratesSkin.json"), atlas);
+	        skin.addRegions(atlas);
+			screen.getHUD().table.setBackground(skin.getDrawable("Selection"));
+		} else {
+			screen.getHUD().table.setBackground(new BaseDrawable());
+		}
+		lastWeatherChange = json.getFloat("lastWeatherChange");
+		JsonValue wave = json.get("waves").child();
+		while(wave != null) {
+			waves.add(new Enemy_Wave(waveTex, 0, wave));
+			wave = wave.next();
+		}
 	}
 }

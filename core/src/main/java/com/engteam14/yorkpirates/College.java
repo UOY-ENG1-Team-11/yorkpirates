@@ -144,7 +144,7 @@ public class College extends GameObject {
                     screen.sounds.death();
                     int pointsGained = 50;
                     screen.points.Add(pointsGained);
-                    int lootGained = 15;
+                    int lootGained = 10;
                     screen.loot.Add(lootGained);
 
                     Array<Texture> healthBarSprite = new Array<>();

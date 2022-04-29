@@ -155,7 +155,9 @@ public class GameScreen extends ScreenAdapter {
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
         
         // Initialise weather
-        weather = new WeatherManager();
+        Array<Texture> waveTex = new Array<Texture>();
+        waveTex.add(getMain().textureHandler.getTexture("enemyWave"));
+        weather = new WeatherManager(waveTex);
         
         // Initialise colleges
         College.capturedCount = 0;
@@ -411,6 +413,8 @@ public class GameScreen extends ScreenAdapter {
     	}
     	root.addChild("powerups", pow);
     	
+    	root.addChild("weather", weather.toJson());
+    	
     	FileHandle file = Gdx.files.local("savegame.json");
     	if(file.exists()) {
     		file.delete();
@@ -430,7 +434,9 @@ public class GameScreen extends ScreenAdapter {
     	playerName = general.getString("playerName");
     	elapsedTime = general.getFloat("elapsedTime");
     	College.capturedCount = general.getInt("capturedCount");
+    	
     	player.fromJson(root.get("player"));
+    	
     	JsonValue college = root.get("colleges").child();
     	while(college != null) {
     		College c = getCollege(college.getString("collegeName"));
@@ -439,6 +445,7 @@ public class GameScreen extends ScreenAdapter {
     		}
     		college = college.next();
     	}
+    	
     	Array<Texture> sprites = new Array<>();
         sprites.add(getMain().textureHandler.getTexture("tempProjectile"));
     	JsonValue projectile = root.get("projectiles").child();
@@ -446,11 +453,15 @@ public class GameScreen extends ScreenAdapter {
     		projectiles.add(new Projectile(sprites, 0, projectile));
     		projectile = projectile.next();
     	}
+    	
     	JsonValue pow = root.get("powerups").child();
     	while(pow != null) {
     		createPowerUp(pow.getFloat("x"), pow.getFloat("y"), pow.getString("powerType"));
     		pow = pow.next();
     	}
+    	
+    	weather.fromJson(this, root.get("weather"));
+    	
     	game.camera.position.x = player.x;
     	game.camera.position.y = player.y;
     }
