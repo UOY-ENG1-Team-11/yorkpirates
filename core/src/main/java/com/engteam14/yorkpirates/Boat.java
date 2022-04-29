@@ -99,7 +99,7 @@ public class Boat extends GameObject {
         	screen.sounds.death();
             int pointsGained = 20;
             screen.points.Add(pointsGained);
-            int lootGained = 5;
+            int lootGained = 4;
             screen.loot.Add(lootGained);
             boatHealth = null;
             destroy(screen);
@@ -164,8 +164,10 @@ public class Boat extends GameObject {
 		patrolIndex = json.getInt("patrolIndex");
 	}
 	
-	/*public void pathTo(TiledMap map, float x, float y) {
-		 * A* broken could fix later
+	/*
+	 * A* BROKEN
+	 * 
+	 * public void pathTo(TiledMap map, float x, float y) {
 		 * 
 		 * TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get("Terrain");
 		Node[][] nodeMap = new Node[layer.getWidth()][layer.getHeight()];

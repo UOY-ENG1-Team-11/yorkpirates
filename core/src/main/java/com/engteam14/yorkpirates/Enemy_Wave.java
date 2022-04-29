@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import static java.lang.Math.abs;
@@ -18,7 +19,7 @@ public class Enemy_Wave extends GameObject {
 	public static final int MAX_WAVES = 5; //maximum number of wave instances
 	private static final float projectileDamage = 20f; //damage dealt by the wave
 	
-	private final float speed  = 80f;
+	private final float speed  = 60f;
 	private final float maxDistance = 8000; //how far the wave can move before disappearing
 	private final float xComponent; //what value to add to x coordinate every frame
 	private final float yComponent; //what value to add to y coordinate every frame
@@ -54,15 +55,24 @@ public class Enemy_Wave extends GameObject {
         this.target = target;
 	}
 	
+	public Enemy_Wave(Array<Texture> frames, float fps, JsonValue json) {
+		super(frames, fps, json);
+		xComponent = json.getFloat("xComponent");
+		yComponent = json.getFloat("yComponent");
+		rotation = json.getFloat("rotation");
+		target = new GameObject(null, 0, json.get("target"));
+		distanceTravelled = json.getFloat("distanceTravelled");
+	}
+	
 	/**
      * Called once per frame. Used to perform calculations such as projectile movement and collision detection.
      * @param screen    The main game screen.
      */
 	public void update(GameScreen screen, boolean badWeather) {
 		if (state == "move"){
-	        float xMove = speed*xComponent*(badWeather ? 1.4f : 1);
-	        float yMove = speed*yComponent*(badWeather ? 1.4f : 1);
-	        distanceTravelled += speed*(badWeather ? 1.4f : 1);
+	        float xMove = speed*xComponent*(badWeather ? 1.3f : 1);
+	        float yMove = speed*yComponent*(badWeather ? 1.3f : 1);
+	        distanceTravelled += speed*(badWeather ? 1.3f : 1);
 	        move(xMove, yMove);
 	        if (overlaps(target.hitBox)){
 	            target.takeDamage(screen,projectileDamage,team);
@@ -85,5 +95,16 @@ public class Enemy_Wave extends GameObject {
     private void destroy(GameScreen screen){
     	count -= 1;
         screen.weather.waves.removeValue(this,true);
+    }
+    
+    @Override
+    public JsonValue toJson() {
+    	JsonValue json = super.toJson();
+    	json.addChild("xComponent", new JsonValue(xComponent));
+    	json.addChild("yComponent", new JsonValue(yComponent));
+    	json.addChild("rotation", new JsonValue(rotation));
+    	json.addChild("target", target.toJson());
+    	json.addChild("distanceTravelled", new JsonValue(distanceTravelled));
+    	return json;
     }
 }
