@@ -330,6 +330,12 @@ public class GameScreen extends ScreenAdapter {
         }
     }
     
+    /** 
+     * Creates a powerup on the map
+     * @param x			The x-coordinate to spawn the powerup at
+     * @param y			The y-coordinate to spawn the powerup at
+     * @param powerType	The ID of the type of powerup to make
+     */
     public void createPowerUp(float x, float y, String powerType) {
     	Array<Texture> powerupSprites = new Array<>();
     	switch(powerType) {
@@ -361,6 +367,9 @@ public class GameScreen extends ScreenAdapter {
         game.setScreen(new PauseScreen(game,this));
     }
     
+    /** 
+     * Called to switch from the current screen to the shop screen while retaining the current screen's information
+     */
     public void gameShop() {
     	isPaused = true;
     	game.setScreen(new ShopScreen(game,this));
@@ -381,6 +390,9 @@ public class GameScreen extends ScreenAdapter {
         game.setScreen(new TitleScreen(game));
     }
     
+    /** 
+     * Saves the game to the local file 'savegame.json'
+     */
     public void saveGame() {
     	JsonValue root = new JsonValue(ValueType.object);
     	
@@ -423,6 +435,9 @@ public class GameScreen extends ScreenAdapter {
     	file.writeString(root.toJson(JsonWriter.OutputType.json), true);
     }
     
+    /** 
+     * Loads the game from the local file 'savegame.json'
+     */
     public void loadGame() {
     	projectiles.clear();
     	powerups.clear();

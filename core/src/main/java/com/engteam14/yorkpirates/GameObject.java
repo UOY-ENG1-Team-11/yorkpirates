@@ -132,7 +132,11 @@ public class GameObject {
     public void draw(SpriteBatch batch, float elapsedTime){
         batch.draw(anim.getKeyFrame(elapsedTime, true), x - width/2, y - height/2, width, height);
     }
-
+    
+    /** 
+     * Saves all the object's properties in JSON format.
+     * @return	A JsonValue containing all the object's properties.
+     */
     public JsonValue toJson() {
         JsonValue json = new JsonValue(ValueType.object);
         json.addChild("x", new JsonValue(x));
@@ -144,7 +148,11 @@ public class GameObject {
         json.addChild("team", new JsonValue(team));
         return json;
     }
-
+    
+    /** 
+     * Sets all properties to those contained in the passed JsonValue.
+     * @param json	The root JsonValue containing the object properties.
+     */
     public void fromJson(JsonValue json) {
         x = json.getFloat("x");
         y = json.getFloat("y");
