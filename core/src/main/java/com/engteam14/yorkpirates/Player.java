@@ -55,7 +55,7 @@ public class Player extends GameObject {
     public static long speedUpTime;
 
     /**
-     * Generates a generic object within the game with animated frame(s) and a hit-box.
+     * Generates a player object within the game with animated frame(s) and a hit-box.
      * @param frames    The animation frames, or a single sprite.
      * @param fps       The number of frames to be displayed per second.
      * @param x         The x coordinate within the map to initialise the object at.
@@ -177,8 +177,8 @@ public class Player extends GameObject {
 
     /**
      * Moves the player within the x and y-axis of the game world.
-     * @param x     The amount to move the object within the x-axis.
-     * @param y     The amount to move the object within the y-axis.
+     * @param x     The amount to move the player within the x-axis.
+     * @param y     The amount to move the player within the y-axis.
      */
     @Override
     public void move(float x, float y){
@@ -320,7 +320,10 @@ public class Player extends GameObject {
         batch.draw(frame, x - width/2, y - height/2, width/2, height/2, width, height, 1f, 1f, rotation, 0, 0, frame.getWidth(), frame.getHeight(), false, false);
         batch.setShader(null);
     }
-
+    /**
+     * Draws the player's healthbar to the screen
+     * @param batch	The sprite batch to draw the healthbar with
+     */
     public void drawHealthBar(SpriteBatch batch){
         if(!(playerHealth == null)) playerHealth.draw(batch, 0);
     }
@@ -329,6 +332,10 @@ public class Player extends GameObject {
         return distance;
     }
     
+    /** 
+     * Saves all the players's properties in JSON format.
+     * @return	A JsonValue containing all the player's properties.
+     */
     @Override
     public JsonValue toJson() {
     	JsonValue json = super.toJson();
@@ -344,6 +351,10 @@ public class Player extends GameObject {
     	return json;
     }
     
+    /** 
+     * Sets all properties to those contained in the passed JsonValue.
+     * @param json	The root JsonValue containing the player properties.
+     */
     @Override
     public void fromJson(JsonValue json) {
     	super.fromJson(json);

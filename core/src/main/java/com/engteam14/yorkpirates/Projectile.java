@@ -50,6 +50,12 @@ public class Projectile extends GameObject{
         maxDistance = range;
     }
     
+    /** 
+     * Generates a projectile object within the game from a saved JsonValue.
+     * @param frames	The animation frames, or a single sprite.
+     * @param fps		The number of frames to be displayed per second.
+     * @param json		The JsonValue to read the projectile's properties from.
+     */
     public Projectile(Array<Texture> frames, float fps, JsonValue json) {
     	super(frames, fps, json);
     	dx = json.getFloat("dx");

@@ -34,7 +34,7 @@ public class Enemy_Wave extends GameObject {
 	
 	
 	/**
-     * Generates a generic object within the game with animated frame(s) and a hit-box.
+     * Generates an enemy wave within the game with animated frame(s) and a hit-box.
      * @param frames    The animation frames, or a single sprite.
      * @param fps       The number of frames to be displayed per second.
      * @param x         The x coordinate within the map to initialise the object at.
@@ -55,6 +55,12 @@ public class Enemy_Wave extends GameObject {
         this.target = target;
 	}
 	
+	/**
+	 * Generates an enemy wave from the json value passed.
+	 * @param frames	The animation frames, or a single sprite.
+	 * @param fps		The number of frames to be displayed per second
+	 * @param json		The root JsonValue storing the wave's properties
+	 */
 	public Enemy_Wave(Array<Texture> frames, float fps, JsonValue json) {
 		super(frames, fps, json);
 		xComponent = json.getFloat("xComponent");
@@ -97,6 +103,10 @@ public class Enemy_Wave extends GameObject {
         screen.weather.waves.removeValue(this,true);
     }
     
+    /** 
+     * Saves all the waves's properties in JSON format.
+     * @return	A JsonValue containing all the wave's properties.
+     */
     @Override
     public JsonValue toJson() {
     	JsonValue json = super.toJson();

@@ -21,6 +21,19 @@ public class Boat extends GameObject {
 	private long lastShotFired = 0;
 	public final String collegeName;
 
+	/**
+     * Generates an enemy boat within the game with animated frame(s) and a hit-box.
+     * @param game			The main class.
+     * @param frames    	The animation frames, or a single sprite.
+     * @param fps       	The number of frames to be displayed per second.
+     * @param x         	The x coordinate within the map to initialise the boat at.
+     * @param y         	The y coordinate within the map to initialise the boat at.
+     * @param width     	The size of the boat in the x-axis.
+     * @param height    	The size of the boat in the y-axis.
+     * @param team      	The team the player is on.
+     * @param patrol		An array of Vector positions for the boat to move between.
+     * @param collegeName	The name of the college this boat belongs to.
+     */
 	public Boat(YorkPirates game, Array<Texture> frames, float fps, float x, float y, float width, float height, String team, Vector2[] patrol, String collegeName) {
 		super(frames, fps, x, y, width, height, team);
 		this.patrol = patrol;
@@ -31,6 +44,14 @@ public class Boat extends GameObject {
         boatHealth = new HealthBar(this,sprites);
 	}
 	
+	/**
+     * Generates an enemy boat within the game with animated frame(s) and a hit-box using properties from a JSON.
+     * @param game			The main class.
+     * @param frames    	The animation frames, or a single sprite.
+     * @param fps       	The number of frames to be displayed per second.
+     * @param json			The JsonValue to load the boat's properties from
+     * @param collegeName	The name of the college this boat belongs to.
+     */
 	public Boat(YorkPirates game, Array<Texture> frames, float fps, JsonValue json, String collegeName) {
 		super(frames, fps, json);
 		this.collegeName = collegeName;
@@ -40,6 +61,12 @@ public class Boat extends GameObject {
         boatHealth = new HealthBar(this,sprites);
 	}
 	
+	/**
+     * Called once per frame. Used to movement perform calculations.
+     * @param screen	The main game screen.
+     * @param x			The player's x-coordinate.
+     * @param y			The player's y-coordinate.
+     */
 	public void update(GameScreen screen, float x, float y){
         Vector2 oldPos = new Vector2(this.x,this.y); // Stored for next-frame calculations
 
@@ -89,6 +116,12 @@ public class Boat extends GameObject {
         updateHitboxPos();
     }
 	
+	/**
+	 * Called when a projectile hits the boat.
+	 * @param screen			The main game screen.
+	 * @param damage			The damage dealt by the projectile
+	 * @param projectileTeam	The team of the projectile
+	 */
 	@Override
     public void takeDamage(GameScreen screen, float damage, String projectileTeam){
         currentHealth -= damage;
@@ -106,6 +139,11 @@ public class Boat extends GameObject {
         }
 	}
 	
+	/**
+     * Moves the boat within the x and y-axis of the game world.
+     * @param x     The amount to move the boat within the x-axis.
+     * @param y     The amount to move the boat within the y-axis.
+     */
 	@Override
     public void move(float x, float y){
         this.x += x * Gdx.graphics.getDeltaTime();
@@ -113,10 +151,19 @@ public class Boat extends GameObject {
         boatHealth.move(this.x, this.y + height/2 + 2f); // Healthbar moves with boat
     }
 	
+	/**
+	 * Called when the boat needs to be destroyed.
+	 * @param screen	The main game screen. 
+	 */
 	private void destroy(GameScreen screen) {
 		screen.getCollege(collegeName).boats.removeValue(this, true);
 	}
 	
+	/**
+     *  Calculate if the current boat position is safe to be in.
+     * @param edges A 2d array containing safe/unsafe positions to be in.
+     * @return      If the current position is safe.
+     */
 	private Boolean safeMove(Array<Array<Boolean>> edges){
         return (
                         edges.get((int)((y+height/2)/16)).get((int)((x+width/2)/16)) &&
@@ -126,6 +173,11 @@ public class Boat extends GameObject {
         );
     }
 	
+	/**
+	 * Called when drawing the boat.
+	 * @param batch			The batch to draw the boat with.
+	 * @param elapsedTime	The current time the game has been running for. 
+	 */
 	@Override
     public void draw(SpriteBatch batch, float elapsedTime){
         // Generates the sprite
@@ -136,6 +188,10 @@ public class Boat extends GameObject {
         if(!(boatHealth == null)) boatHealth.draw(batch, 0);
     }
 	
+	/** 
+     * Saves all the players's properties in JSON format.
+     * @return	A JsonValue containing all the boat's properties.
+     */
 	@Override
 	public JsonValue toJson() {
 		JsonValue json = super.toJson();
@@ -152,6 +208,10 @@ public class Boat extends GameObject {
 		return json;
 	}
 	
+	/** 
+     * Sets all properties to those contained in the passed JsonValue.
+     * @param json	The root JsonValue containing the boat properties.
+     */
 	@Override
 	public void fromJson(JsonValue json) {
 		super.fromJson(json);

@@ -220,6 +220,10 @@ public class College extends GameObject {
         boats.add(new Boat(game, boatTexture, 0, this.x+x, this.y+y, 25, 12, team, patrol, collegeName));
     }
     
+    /** 
+     * Saves all the college's properties in JSON format.
+     * @return	A JsonValue containing all the college's properties.
+     */
     @Override
     public JsonValue toJson() {
     	JsonValue json = super.toJson();
@@ -233,7 +237,10 @@ public class College extends GameObject {
     	return json;
     }
     
-    
+    /** 
+     * Sets all properties to those contained in the passed JsonValue.
+     * @param json	The root JsonValue containing the college properties.
+     */
     public void fromJson(GameScreen screen, JsonValue json) {
     	super.fromJson(json);
     	wasCaptured = json.getBoolean("wasCaptured");

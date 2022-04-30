@@ -20,12 +20,23 @@ public class WeatherManager {
 	
 	private Random rand;
 	
+	/**
+	 * Creates the weather manager for waves and the current weather.
+	 * @param waveTex	The texture to use for waves spawned. 
+	 */
 	public WeatherManager(Array<Texture> waveTex) {
 		waves = new Array<Enemy_Wave>();
 		rand = new Random();
 		this.waveTex = waveTex;
 	}
 	
+	/**
+	 * Called once per frame. Used to update waves and the weather state.
+	 * @param screen		The main game screen.
+	 * @param elapsedTime	The current time the game has been running for.
+	 * @param playerX		The player's x-coordinate.
+	 * @param playerY		The player's y-coordinate.
+	 */
 	public void update(GameScreen screen, float elapsedTime, float playerX, float playerY) {
 		for(Enemy_Wave wave : waves) {
 			wave.update(screen, badWeather);
@@ -59,18 +70,33 @@ public class WeatherManager {
 		
 	}
 	
+	/**
+	 * Called to draw the waves.
+	 * @param batch			The batch to draw the waves with.
+	 * @param elapsedTime	The current time the game has been running for.
+	 */
 	public void draw(SpriteBatch batch, float elapsedTime) {
 		for(Enemy_Wave wave : waves) {
 			wave.draw(batch, elapsedTime);
 		}
 	}
 	
+	/**
+	 * Creates a wave.
+	 * @param screen	The main game screen.
+	 * @param x			The x-coordinate to spawn the wave at.
+	 * @param y			The y-coordinate to spawn the wave at. 
+	 */
 	public Enemy_Wave createWave(GameScreen screen, float x, float y) {	
 		Enemy_Wave wave = new Enemy_Wave(waveTex, 0, screen.player, x, y);
 		waves.add(wave);
 		return wave;
 	}
 	
+	/** 
+     * Saves all the weather manager's properties in JSON format.
+     * @return	A JsonValue containing all the weather manager's properties.
+     */
 	public JsonValue toJson() {
     	JsonValue json = new JsonValue(JsonValue.ValueType.object);
     	json.addChild("badWeather", new JsonValue(badWeather));
@@ -83,6 +109,10 @@ public class WeatherManager {
     	return json;
     }
 	
+	/** 
+     * Sets all properties to those contained in the passed JsonValue.
+     * @param json	The root JsonValue containing the weather manager properties.
+     */
 	public void fromJson(GameScreen screen, JsonValue json) {
 		waves.clear();
 		badWeather = json.getBoolean("badWeather");

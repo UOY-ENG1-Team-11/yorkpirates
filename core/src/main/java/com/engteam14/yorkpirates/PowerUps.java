@@ -66,6 +66,10 @@ public class PowerUps extends GameObject{
         screen.powerups.removeValue(this,true);
     }
     
+    /** 
+     * Saves all the powerup's properties in JSON format.
+     * @return	A JsonValue containing all the powerup's properties.
+     */
     @Override
     public JsonValue toJson() {
     	JsonValue json = super.toJson();
