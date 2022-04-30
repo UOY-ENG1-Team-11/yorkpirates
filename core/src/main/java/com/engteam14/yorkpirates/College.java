@@ -213,8 +213,11 @@ public class College extends GameObject {
 
     /**
      * Add a boat to this college.
-     * @param x The x position of the new boat relative to the college.
-     * @param y The y position of the new boat relative to the college.
+     * @param game 		The main class.
+     * @param x 		The x position of the new boat relative to the college.
+     * @param y 		The y position of the new boat relative to the college.
+     * @param rotation 	The direction the boat spawns facing.
+     * @param patrol	The route for the boat to move on while idle.
      */
     public void addBoat(YorkPirates game, float x, float y, float rotation, Vector2[] patrol){
         boats.add(new Boat(game, boatTexture, 0, this.x+x, this.y+y, 25, 12, team, patrol, collegeName));

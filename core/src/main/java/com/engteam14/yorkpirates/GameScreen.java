@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -169,9 +170,7 @@ public class GameScreen extends ScreenAdapter {
         collegeSprites.add(getMain().textureHandler.loadTexture("alcuin", Gdx.files.internal("alcuin.png")), 
         		getMain().textureHandler.loadTexture("alcuin_2", Gdx.files.internal("alcuin_2.png")));
         newCollege = new College(getMain(), collegeSprites, 1492, 665, 0.5f,"Alcuin", enemyTeam, player, getMain().textureHandler.loadTexture("alcuin_boat", Gdx.files.internal("alcuin_boat.png")));
-        newCollege.addBoat(game, 80, -20, 0, new Vector2[] {new Vector2(1572, 645), new Vector2(1700, 500)});
-        //newCollege.addBoat(-50, -40, -150);
-        //newCollege.addBoat(-40, -70, 0);
+        newCollege.addBoat(game, 80, -20, 0, new Vector2[] {new Vector2(1600, 528), new Vector2(1376, 528), new Vector2(1376, 736), new Vector2(1600, 736)});
         colleges.add(newCollege);
         collegeSprites.clear();
 
@@ -179,8 +178,10 @@ public class GameScreen extends ScreenAdapter {
         collegeSprites.add(getMain().textureHandler.loadTexture("derwent", Gdx.files.internal("derwent.png")), 
         		getMain().textureHandler.loadTexture("derwent_2", Gdx.files.internal("derwent_2.png")));
         newCollege = (new College(getMain(),collegeSprites, 1815, 2105, 0.8f,"Derwent", enemyTeam, player, getMain().textureHandler.loadTexture("derwent_boat", Gdx.files.internal("derwent_boat.png"))));
-        //newCollege.addBoat(-70, -20, 60);
-        //newCollege.addBoat(-70, -60, 70);
+        newCollege.addBoat(game, -295, 87, 0, new Vector2[] {new Vector2(1520,2192), new Vector2(1520,1792), new Vector2(1680, 1760), new Vector2(1520, 1792)});
+        newCollege.addBoat(game, 249, -313, 0, new Vector2[] {new Vector2(2064, 1792), new Vector2(1520,1792), new Vector2(1488, 1888), new Vector2(1520, 1792)});
+        newCollege.addBoat(game, -215, -25, 0, new Vector2[] {new Vector2(1600, 2080), new Vector2(1872,2304), new Vector2(2160, 2080), new Vector2(1872, 2304)});
+        newCollege.addBoat(game, 345, -25, 0, new Vector2[] {new Vector2(1600, 2080), new Vector2(1872,2304), new Vector2(2160, 2080), new Vector2(1872, 2304)});
         colleges.add(newCollege);
         collegeSprites.clear();
 
@@ -188,11 +189,10 @@ public class GameScreen extends ScreenAdapter {
         collegeSprites.add(getMain().textureHandler.loadTexture("langwith", Gdx.files.internal("langwith.png")), 
         		getMain().textureHandler.loadTexture("langwith_2", Gdx.files.internal("langwith_2.png")));
         newCollege = (new College(getMain(),collegeSprites, 1300, 1530, 1.0f,"Langwith", enemyTeam, player, getMain().textureHandler.loadTexture("langwith_boat", Gdx.files.internal("langwith_boat.png"))));
-        //newCollege.addBoat(-150, -50, 60);
-        //newCollege.addBoat(-120, -10, -60);
-        //newCollege.addBoat(-10, -40, 230);
-        //newCollege.addBoat(140, 10, 300);
-        //newCollege.addBoat(200, 35, 135);
+        newCollege.addBoat(game, 460, -400, 0, new Vector2[] {new Vector2(816,1130), new Vector2(1760,1130)});
+        newCollege.addBoat(game, -484, -400, 0, new Vector2[] {new Vector2(816,1130), new Vector2(1760,1130)});
+        newCollege.addBoat(game, -340, -42, 0, new Vector2[] {new Vector2(960, 1488), new Vector2(1344, 1664)});
+        newCollege.addBoat(game, 44, 134, 0, new Vector2[] {new Vector2(1344,1664), new Vector2(1632,1616), new Vector2(1712,1440), new Vector2(1632, 1616)});
         colleges.add(newCollege);
         collegeSprites.clear();
 
@@ -211,13 +211,31 @@ public class GameScreen extends ScreenAdapter {
         getMain().textureHandler.loadTexture("UpInvincible", Gdx.files.internal("UpInvincible.png"));
         getMain().textureHandler.loadTexture("UpSpeed", Gdx.files.internal("UpSpeed.png"));
         
-        createPowerUp(1160, 525, attackSpeed);
-        createPowerUp(1160, 625, attackSpeed);
-        createPowerUp(1080, 525, damageUp);
-        createPowerUp(900, 525, healthUp);
-        createPowerUp(90, 52, healthUp);
-        createPowerUp(1020, 525, invincible);      
-        createPowerUp(960, 525, speedUp);
+        createPowerUp(768, 1120, attackSpeed);
+        createPowerUp(1456, 1088, attackSpeed);
+        createPowerUp(1520, 432, attackSpeed);
+        createPowerUp(1264, 1760, attackSpeed);
+        createPowerUp(2112, 1824, attackSpeed);
+        createPowerUp(1200, 592, damageUp);
+        createPowerUp(912, 1456, damageUp);
+        createPowerUp(1552, 1840, damageUp);
+        createPowerUp(2048, 2240, damageUp);
+        createPowerUp(560, 720, healthUp);
+        createPowerUp(1312, 848, healthUp);
+        createPowerUp(1744, 624, healthUp);
+        createPowerUp(928, 1664, healthUp);
+        createPowerUp(528, 1888, healthUp);
+        createPowerUp(1248, 2144, healthUp);
+        createPowerUp(1744, 1440, healthUp);
+        createPowerUp(2208, 1936, healthUp);
+        createPowerUp(1184, 992, invincible);
+        createPowerUp(1600, 1632, invincible);
+        createPowerUp(1472, 2064, invincible);
+        createPowerUp(944, 528, speedUp);
+        createPowerUp(720, 1264, speedUp);
+        createPowerUp(1776, 1200, speedUp);
+        createPowerUp(1152, 1872, speedUp);
+        createPowerUp(1952, 1696, speedUp);
     }
 
     /**

@@ -93,7 +93,7 @@ public class Boat extends GameObject {
 	        		patrolIndex = 0;
 	        	}
 	        }
-	        horizontal = (int) Math.signum(patrol[patrolIndex].x - this.x);
+	        horizontal = (int) Math.signum(Math.floor(patrol[patrolIndex].x - this.x));
 	        vertical = (int) Math.signum(Math.floor(patrol[patrolIndex].y - this.y));
         }
 

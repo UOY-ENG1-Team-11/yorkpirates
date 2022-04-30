@@ -1,13 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.1" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="165" height="165" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="1">
+<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="165" height="165" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="1">
  <editorsettings>
   <export target="../../../Desktop/FINAL_MAP..csv" format="csv"/>
  </editorsettings>
  <tileset firstgid="1" source="tiles_sheet2 new.tsx"/>
- <tileset firstgid="97" name="PowerUps" tilewidth="16" tileheight="16" tilecount="1" columns="0">
+ <tileset firstgid="97" name="PowerUps" tilewidth="63" tileheight="64" tilecount="5" columns="0">
   <grid orientation="orthogonal" width="1" height="1"/>
-  <tile id="2">
-   <image width="16" height="16" source="points-2.png"/>
+  <tile id="3" type="ATKSPD">
+   <image width="63" height="64" source="UpAtkSpd.png"/>
+  </tile>
+  <tile id="4" type="DMGUP">
+   <image width="63" height="64" source="UpDmg.png"/>
+  </tile>
+  <tile id="5" type="HEALTH">
+   <image width="63" height="64" source="UpHealth.png"/>
+  </tile>
+  <tile id="6" type="INVINCIBLE">
+   <image width="63" height="64" source="UpInvincible.png"/>
+  </tile>
+  <tile id="7" type="SPEED">
+   <image width="63" height="64" source="UpSpeed.png"/>
   </tile>
  </tileset>
  <layer id="2" name="Water" width="165" height="165">
@@ -348,7 +360,7 @@
 23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39
 </data>
  </layer>
- <layer id="3" name="Aesthetics" width="165" height="165" visible="0">
+ <layer id="3" name="Aesthetics" width="165" height="165">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,24,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,24,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,24,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,24,0,0,0,0,0,0,0,24,0,0,0,0,0,0,0,0,24,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,24,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,24,0,0,0,0,0,0,24,0,0,0,0,0,0,0,0,0,
