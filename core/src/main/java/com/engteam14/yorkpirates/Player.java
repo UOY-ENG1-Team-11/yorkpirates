@@ -15,7 +15,7 @@ public class Player extends GameObject {
     // Player constants
     private static final int POINT_FREQUENCY = 1000; // How often the player gains points by moving.
     private static final float CAMERA_SLACK = 0.1f; // What percentage of the screen the player can move in before the camera follows.
-    private static final float SPEED = 70f; // Player movement speed.
+    public static final float SPEED = 70f; // Player movement speed.
     private static final int HEALTH = 200;
     
     // Invincibility Checker
@@ -28,12 +28,12 @@ public class Player extends GameObject {
     
     // Player Multipliers
     public static float playerProjectileDamageUpgrade = 1;
-    private static int playerAttackSpeedUpgrade = 1;
-    private float playerSpeedUpgrade = 1f;
+    public static int playerAttackSpeedUpgrade = 1;
+    public float playerSpeedUpgrade = 1f;
     
     public static float playerProjectileDamageMultiplier = 1f; // Player Projectile damage Multiplier
-    public static int playerAttackSpeedMutliplier = 1 * playerAttackSpeedUpgrade; // Player Projectile Fire Rate Multiplier
-    private float playerSpeedMultiplier = 1f; // Player Movement Speed Multiplier
+    public static int playerAttackSpeedMultiplier = 1 * playerAttackSpeedUpgrade; // Player Projectile Fire Rate Multiplier
+    public float playerSpeedMultiplier = 1f * playerSpeedUpgrade; // Player Movement Speed Multiplier
     
     // Movement calculation values
     private int previousDirectionX;
@@ -47,6 +47,8 @@ public class Player extends GameObject {
     private long timeLastHit;
     private boolean doBloodSplash = false;
     public long lastShotFired;
+
+    public boolean alive = true;
     
     // Time variable declarations
     public static long atkSpdTime;
@@ -71,10 +73,12 @@ public class Player extends GameObject {
         lastShotFired = 0;
 
         // Generate health
-        Array<Texture> sprites = new Array<>();
-        sprites.add(game.textureHandler.getTexture("allyHealthBar"));
         setMaxHealth(HEALTH);
-        playerHealth = new HealthBar(this,sprites);
+        if (game != null) {
+            Array<Texture> sprites = new Array<>();
+            sprites.add(game.textureHandler.getTexture("allyHealthBar"));
+            playerHealth = new HealthBar(this, sprites);
+        }
     }
 
     /**
@@ -139,7 +143,7 @@ public class Player extends GameObject {
         }
         
         if (TimeUtils.timeSinceMillis(atkSpdTime) > 10000) {
-        	playerAttackSpeedMutliplier = 1 * playerAttackSpeedUpgrade;
+        	playerAttackSpeedMultiplier = 1 * playerAttackSpeedUpgrade;
         	atkSpdTime = 0;
         }
         
@@ -202,12 +206,17 @@ public class Player extends GameObject {
 
             // Health-bar reduction
             if(currentHealth > 0){
-                playerHealth.resize(currentHealth);
-                screen.sounds.damage();
-            }else{
+                if (screen != null) {
+                    playerHealth.resize(currentHealth);
+                    screen.sounds.damage();
+                }
+            }else {
                 playerHealth = null;
-                screen.gameEnd(false);
-    	}
+                alive = false;
+                if (screen != null) {
+                    screen.gameEnd(alive);
+                }
+            }
         }
     }
     
@@ -216,9 +225,11 @@ public class Player extends GameObject {
      * @param screen            The main game screen.
      */
     public void increaseAttackSpeed(GameScreen screen) {
-    	playerAttackSpeedMutliplier *= 2;
+    	playerAttackSpeedMultiplier *= 2;
     	// set back to 1
-    	screen.AtkSpdTimer.getTime();
+        if (screen != null) {
+            screen.AtkSpdTimer.getTime();
+        }
     	atkSpdTime = TimeUtils.millis();
     }
     
@@ -229,7 +240,9 @@ public class Player extends GameObject {
     public void increaseDamage(GameScreen screen) {
     	playerProjectileDamageMultiplier *= 10 ;
     	// set back to 20f
-    	screen.AtkDmgTimer.getTime();
+        if (screen != null) {
+            screen.AtkDmgTimer.getTime();
+        }
     	dmgUpTime = TimeUtils.millis();
     }
     
@@ -242,7 +255,9 @@ public class Player extends GameObject {
         if(currentHealth > maxHealth){ 
         	currentHealth = maxHealth;
         }
-        playerHealth.resize(currentHealth);
+        if (screen != null) {
+            playerHealth.resize(currentHealth);
+        }
     }
     
     /**
@@ -251,7 +266,9 @@ public class Player extends GameObject {
      */
     public void increaseSpeed(GameScreen screen){
     	playerSpeedMultiplier *= 1.5;
-    	screen.SpeedTimer.getTime();
+        if (screen != null) {
+            screen.SpeedTimer.getTime();
+        }
     	speedUpTime = TimeUtils.millis();
     }	
     
@@ -261,7 +278,9 @@ public class Player extends GameObject {
      */
     public void setInvincible(GameScreen screen) {
     	invincible = true;
-    	screen.InvincibleTimer.getTime();
+        if (screen != null) {
+            screen.InvincibleTimer.getTime();
+        }
     	invincibleTime = TimeUtils.millis();
     }
     
@@ -275,7 +294,7 @@ public class Player extends GameObject {
     }
 
     /**
-     * Called when attack speed shop upgrade is bought.
+     * Called when attack damage shop upgrade is bought.
      * @param screen            The main game screen.
      */
     public void upgradeAttackDamage(GameScreen screen) {
@@ -284,7 +303,7 @@ public class Player extends GameObject {
     }
     
     /**
-     * Called when attack speed shop upgrade is bought.
+     * Called when speed shop upgrade is bought.
      * @param screen            The main game screen.
      */
     public void upgradeSpeed(GameScreen screen) {

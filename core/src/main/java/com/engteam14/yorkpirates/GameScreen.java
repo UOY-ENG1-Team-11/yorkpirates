@@ -314,7 +314,7 @@ public class GameScreen extends ScreenAdapter {
         }
         
         // Check for projectile creation, then call projectile update
-        int shootFrequency = 700/(Player.playerAttackSpeedMutliplier); // How often the player can shoot
+        int shootFrequency = 700/(Player.playerAttackSpeedMultiplier); // How often the player can shoot
         if(Gdx.input.isButtonPressed(Input.Buttons.LEFT) && TimeUtils.timeSinceMillis(player.lastShotFired) > shootFrequency){
         	player.lastShotFired = TimeUtils.millis();
         	sounds.cannon();
