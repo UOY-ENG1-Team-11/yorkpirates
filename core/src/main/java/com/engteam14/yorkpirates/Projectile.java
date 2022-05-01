@@ -17,7 +17,7 @@ public class Projectile extends GameObject{
 
     private final float dx; //x component to add every frame
     private final float dy; //y component to add every frame
-    private final float projectileSpeed; // Projectile movement speed.
+    public final float projectileSpeed; // Projectile movement speed.
 
 
     /**
