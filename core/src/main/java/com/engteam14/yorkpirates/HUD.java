@@ -1,6 +1,7 @@
 package com.engteam14.yorkpirates;
 
-import com.badlogic.gdx.Gdx; 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -25,6 +26,8 @@ public class HUD {
     private boolean tutorialComplete = false;
     private boolean canEndGame = false;
 
+    public static boolean shopTutorialComplete = false;
+
     // Player counters
     private final Label score;
     private final Label loot;
@@ -39,6 +42,11 @@ public class HUD {
     private final Label InvincibleTimer;
     private final Table SpeedTable;
     private final Label SpeedTimer;
+
+    // Weather
+
+    private final Table weatherTable;
+    private final Table topLeft;
 
     // Player tasks
     private final Label tasksTitle;
@@ -80,6 +88,9 @@ public class HUD {
             }
         });
 
+        // Create Weather Box (New Requirement)
+        Image badWeather = new Image(screen.getMain().textureHandler.loadTexture("stormWeather", Gdx.files.internal("badWeather.png")));
+
         // Create tutorial actors
         Image tutorialImg = new Image(screen.getMain().keyboard.getKeyFrame(0f));
         tutorialImg.setScaling(Scaling.fit);
@@ -95,7 +106,7 @@ public class HUD {
         loot.setFontScale(1.2f);
         score.setFontScale(1.2f);
         
-        // Create power-up related actors
+        // Create power-up related actors (New Requirement)
         Image AtkSpd = new Image(screen.getMain().textureHandler.loadTexture("AtkSpd", Gdx.files.internal("UpAtkSpd.png")));
         Image AtkDmg = new Image(screen.getMain().textureHandler.loadTexture("AtkDmg", Gdx.files.internal("UpDmg.png")));
         Image Invincible = new Image(screen.getMain().textureHandler.loadTexture("Invincible", Gdx.files.internal("UpInvincible.png")));
@@ -154,7 +165,7 @@ public class HUD {
         tracker.row();
         tracker.add(pointsTask).left().pad(5);
 
-        // Add power-up display
+        // Add power-up display (New Requirement)
         
         AtkSpdTable = new Table();
         AtkSpdTable.row();
@@ -188,11 +199,21 @@ public class HUD {
         tutorial.add(tutorialLabel);
         if(YorkPirates.DEBUG_ON) tutorial.setDebug(true);
 
+        // Create Weather Table (New Requirement)
+        weatherTable = new Table();
+        weatherTable.add(badWeather).size(150);
+
+        // Create Top Left Table
+        topLeft = new Table();
+        topLeft.add(menuButton).size(150).left().top().pad(25);
+        topLeft.add(weatherTable).size(150).pad(25);
+
+
         // Start main table
 
         // Add menu button to table
         table.row();
-        table.add(menuButton).size(150).left().top().pad(25);
+        table.add(topLeft).left().top().pad(25);
         
         // Add power-ups to table
         powerupsTable = new Table();
@@ -249,7 +270,11 @@ public class HUD {
             newimg.setScaling(Scaling.fit);
             tutorialImg.setActor(newimg);
             tutorialLabel.setText("Click to shoot.");
-        } else if(canEndGame) {
+        }
+        else if (screen.loot.Get() >= 10 && shopTutorialComplete != true) { // New Requirement
+            tutorial.setVisible(true);
+            tutorialLabel.setText("Open the shop via the menu or press P");
+        }else if(canEndGame) {
             // Able to end the game
             tutorial.setVisible(true);
             Image newimg = new Image(screen.getMain().enter.getKeyFrame(screen.getElapsedTime(), true));
@@ -317,6 +342,13 @@ public class HUD {
         } else {
         	SpeedTimer.setVisible(false);
         	SpeedTable.setVisible(false);
+        }
+
+        // New Requirement
+        if(WeatherManager.weatherPass == true){
+            weatherTable.setVisible(true);
+        } else {
+            weatherTable.setVisible(false);
         }
     }
 

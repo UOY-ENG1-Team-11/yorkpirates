@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.JsonValue;
 public class WeatherManager {
 	
 	public boolean badWeather = false;
+	public static boolean weatherPass = false;
 	public Array<Enemy_Wave> waves;
 	private float lastWeatherChange = 0;
 	private Array<Texture> waveTex;
@@ -49,6 +50,7 @@ public class WeatherManager {
 			}
 			if(elapsedTime > lastWeatherChange + 30 && rand.nextInt(500) == 1) {
 				badWeather = true;
+				weatherPass = true;
 				lastWeatherChange = elapsedTime;
 				TextureAtlas atlas = screen.getMain().textureHandler.getTextureAtlas("YorkPiratesSkin");
 		        Skin skin = new Skin(Gdx.files.internal("Skin/YorkPiratesSkin.json"), atlas);
@@ -63,6 +65,7 @@ public class WeatherManager {
 			}
 			if(elapsedTime > lastWeatherChange + 10 && rand.nextInt(50) == 1) {
 				badWeather = false;
+				weatherPass = false;
 				lastWeatherChange = elapsedTime;
 				screen.getHUD().table.setBackground(new BaseDrawable());
 			}
@@ -92,7 +95,8 @@ public class WeatherManager {
 		waves.add(wave);
 		return wave;
 	}
-	
+
+
 	/** 
      * Saves all the weather manager's properties in JSON format.
      * @return	A JsonValue containing all the weather manager's properties.
@@ -100,6 +104,7 @@ public class WeatherManager {
 	public JsonValue toJson() {
     	JsonValue json = new JsonValue(JsonValue.ValueType.object);
     	json.addChild("badWeather", new JsonValue(badWeather));
+		json.addChild("weatherPass", new JsonValue(weatherPass));
     	json.addChild("lastWeatherChange", new JsonValue(lastWeatherChange));
     	JsonValue jWaves = new JsonValue(JsonValue.ValueType.object);
     	for(int i = 0; i < waves.size; i++) {
@@ -116,6 +121,7 @@ public class WeatherManager {
 	public void fromJson(GameScreen screen, JsonValue json) {
 		waves.clear();
 		badWeather = json.getBoolean("badWeather");
+		weatherPass = json.getBoolean("weatherPass");
 		if(badWeather) {
 			TextureAtlas atlas = screen.getMain().textureHandler.getTextureAtlas("YorkPiratesSkin");
 	        Skin skin = new Skin(Gdx.files.internal("Skin/YorkPiratesSkin.json"), atlas);
