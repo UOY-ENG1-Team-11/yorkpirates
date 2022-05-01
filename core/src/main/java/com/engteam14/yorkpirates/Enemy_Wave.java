@@ -24,7 +24,7 @@ public class Enemy_Wave extends GameObject {
 	public final float xComponent; //what value to add to x coordinate every frame
 	public final float yComponent; //what value to add to y coordinate every frame
 	public final float rotation;
-	private GameObject target; //reference to target game object
+	public GameObject target; //reference to target game object
 	
 	private String state = "move"; //state the wave is in
 	public float distanceTravelled = 0; //current distance travelled

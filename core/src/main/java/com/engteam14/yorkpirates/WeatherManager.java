@@ -46,7 +46,7 @@ public class WeatherManager {
 			if(rand.nextInt(130) == 1) {
 				float xOffset = (rand.nextBoolean() ? 1 : -1) * (rand.nextInt(100) + 100);
 				float yOffset = (rand.nextBoolean() ? 1 : -1) * (rand.nextInt(100) + 100);
-				createWave(screen, playerX + xOffset, playerY + yOffset);
+				createWave(screen.player, playerX + xOffset, playerY + yOffset);
 			}
 			if(elapsedTime > lastWeatherChange + 30 && rand.nextInt(500) == 1) {
 				badWeather = true;
@@ -61,7 +61,7 @@ public class WeatherManager {
 			if(rand.nextInt(70) == 1) {
 				float xOffset = (rand.nextBoolean() ? 1 : -1) * (rand.nextInt(100) + 100);
 				float yOffset = (rand.nextBoolean() ? 1 : -1) * (rand.nextInt(100) + 100);
-				createWave(screen, playerX + xOffset, playerY + yOffset);
+				createWave(screen.player, playerX + xOffset, playerY + yOffset);
 			}
 			if(elapsedTime > lastWeatherChange + 10 && rand.nextInt(50) == 1) {
 				badWeather = false;
@@ -90,8 +90,8 @@ public class WeatherManager {
 	 * @param x			The x-coordinate to spawn the wave at.
 	 * @param y			The y-coordinate to spawn the wave at. 
 	 */
-	public Enemy_Wave createWave(GameScreen screen, float x, float y) {	
-		Enemy_Wave wave = new Enemy_Wave(waveTex, 0, screen.player, x, y);
+	public Enemy_Wave createWave(Player player, float x, float y) {
+		Enemy_Wave wave = new Enemy_Wave(waveTex, 0, player, x, y);
 		waves.add(wave);
 		return wave;
 	}
@@ -122,13 +122,15 @@ public class WeatherManager {
 		waves.clear();
 		badWeather = json.getBoolean("badWeather");
 		weatherPass = json.getBoolean("weatherPass");
-		if(badWeather) {
-			TextureAtlas atlas = screen.getMain().textureHandler.getTextureAtlas("YorkPiratesSkin");
-	        Skin skin = new Skin(Gdx.files.internal("Skin/YorkPiratesSkin.json"), atlas);
-	        skin.addRegions(atlas);
-			screen.getHUD().table.setBackground(skin.getDrawable("Selection"));
-		} else {
-			screen.getHUD().table.setBackground(new BaseDrawable());
+		if(screen != null) {
+			if (badWeather) {
+				TextureAtlas atlas = screen.getMain().textureHandler.getTextureAtlas("YorkPiratesSkin");
+				Skin skin = new Skin(Gdx.files.internal("Skin/YorkPiratesSkin.json"), atlas);
+				skin.addRegions(atlas);
+				screen.getHUD().table.setBackground(skin.getDrawable("Selection"));
+			} else {
+				screen.getHUD().table.setBackground(new BaseDrawable());
+			}
 		}
 		lastWeatherChange = json.getFloat("lastWeatherChange");
 		JsonValue wave = json.get("waves").child();
