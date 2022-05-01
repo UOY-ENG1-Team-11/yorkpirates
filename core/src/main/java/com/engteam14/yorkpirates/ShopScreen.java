@@ -28,7 +28,9 @@ public class ShopScreen extends ScreenAdapter {
     public ShopScreen(YorkPirates game, GameScreen screen){
         this.game = game;
         this.screen = screen;
-                
+
+        HUD.shopTutorialComplete = true;
+
         // Generate skin
         TextureAtlas atlas = game.textureHandler.getTextureAtlas("YorkPiratesSkin");
         Skin skin = new Skin(Gdx.files.internal("Skin/YorkPiratesSkin.json"), atlas);
@@ -53,21 +55,18 @@ public class ShopScreen extends ScreenAdapter {
         Image atkSpdIcon = new Image(screen.getMain().textureHandler.loadTexture("AtkSpdShop", Gdx.files.internal("ShopAtkSpd.png")));;
         atkSpdIcon.setScaling(Scaling.fit);
         if (Player.AtkSpdBought == true) {
-        	System.out.println("Setting");
         	Texture atkSpdIconNew = (screen.getMain().textureHandler.loadTexture("AtkSpdShopBought", Gdx.files.internal("ShopSold.png")));;
         	atkSpdIcon.setDrawable(new TextureRegionDrawable(new TextureRegion(atkSpdIconNew)));
         }
         Image atkDmgIcon = new Image(screen.getMain().textureHandler.loadTexture("AtkDmgShop", Gdx.files.internal("ShopAtkDmg.png")));;
         atkDmgIcon.setScaling(Scaling.fit);
         if (Player.AtkDmgBought == true) {
-        	System.out.println("Setting");
         	Texture atkDmgIconNew = (screen.getMain().textureHandler.loadTexture("AtkDmgShopBought", Gdx.files.internal("ShopSold.png")));;
     		atkDmgIcon.setDrawable(new TextureRegionDrawable(new TextureRegion(atkDmgIconNew)));
         }
         Image spdIcon = new Image(screen.getMain().textureHandler.loadTexture("SpdShop", Gdx.files.internal("ShopSpd.png")));;
         spdIcon.setScaling(Scaling.fit);
         if (Player.SpdBought == true) {
-        	System.out.println("Setting");
         	Texture spdIconNew = (screen.getMain().textureHandler.loadTexture("SpdShopBought", Gdx.files.internal("ShopSold.png")));;
     		spdIcon.setDrawable(new TextureRegionDrawable(new TextureRegion(spdIconNew)));
         }

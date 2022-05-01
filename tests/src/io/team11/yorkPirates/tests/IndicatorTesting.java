@@ -13,8 +13,8 @@ public class IndicatorTesting {
 
     @Test
     public void testGradient() {
-        College college = new College(null, null, 0, 0, 2, "Alcuin", "Alcuin", null, null);
-        Player player = new Player(null, null, 60 , 30, 60, 60, 60, "Player");
+        College college = new College(null, null, 30, 60, 2, "Alcuin", "Alcuin", null, null);
+        Player player = new Player(null, null, 0 , 0, 0, 60, 60, "Player");
 
         Indicator indicator = new Indicator(college, player, null);
         indicator.setVisible(true);
