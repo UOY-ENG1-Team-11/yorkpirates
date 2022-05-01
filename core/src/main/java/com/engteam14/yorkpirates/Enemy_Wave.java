@@ -21,13 +21,13 @@ public class Enemy_Wave extends GameObject {
 	
 	private final float speed  = 60f;
 	private final float maxDistance = 8000; //how far the wave can move before disappearing
-	private final float xComponent; //what value to add to x coordinate every frame
-	private final float yComponent; //what value to add to y coordinate every frame
-	private final float rotation;
+	public final float xComponent; //what value to add to x coordinate every frame
+	public final float yComponent; //what value to add to y coordinate every frame
+	public final float rotation;
 	private GameObject target; //reference to target game object
 	
 	private String state = "move"; //state the wave is in
-	private float distanceTravelled = 0; //current distance travelled
+	public float distanceTravelled = 0; //current distance travelled
 	
 	public static int count = 0; //how many wave instances exist
 	

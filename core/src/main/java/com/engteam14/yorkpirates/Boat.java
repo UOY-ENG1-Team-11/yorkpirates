@@ -14,9 +14,9 @@ public class Boat extends GameObject {
 	private static final float DETECT_RANGE = 80f;
 	private static final float STOP_RANGE = 40f;
 	
-	private float rotation;
-	private HealthBar boatHealth;
-	private Vector2[] patrol;
+	public float rotation;
+	public HealthBar boatHealth;
+	public Vector2[] patrol;
 	private int patrolIndex = 0;
 	private long lastShotFired = 0;
 	public final String collegeName;
@@ -39,8 +39,11 @@ public class Boat extends GameObject {
 		this.patrol = patrol;
 		this.collegeName = collegeName;
 		setMaxHealth(100);
-		Array<Texture> sprites = new Array<>();
-        sprites.add(game.textureHandler.getTexture("allyHealthBar"));
+		Array<Texture> sprites = null;
+		if(game != null) {
+			sprites = new Array<>();
+			sprites.add(game.textureHandler.getTexture("allyHealthBar"));
+		}
         boatHealth = new HealthBar(this,sprites);
 	}
 	
@@ -56,9 +59,12 @@ public class Boat extends GameObject {
 		super(frames, fps, json);
 		this.collegeName = collegeName;
 		fromJson(json);
-		Array<Texture> sprites = new Array<>();
-        sprites.add(game.textureHandler.getTexture("allyHealthBar"));
-        boatHealth = new HealthBar(this,sprites);
+		Array<Texture> sprites = null;
+		if(game != null) {
+			sprites = new Array<>();
+			sprites.add(game.textureHandler.getTexture("allyHealthBar"));
+		}
+		boatHealth = new HealthBar(this,sprites);
 	}
 	
 	/**
@@ -125,18 +131,20 @@ public class Boat extends GameObject {
 	@Override
     public void takeDamage(GameScreen screen, float damage, String projectileTeam){
         currentHealth -= damage;
-        if(currentHealth > 0) {
-        	boatHealth.resize(currentHealth);
-        	screen.sounds.damage();
-        } else {
-        	screen.sounds.death();
-            int pointsGained = 20;
-            screen.points.Add(pointsGained);
-            int lootGained = 4;
-            screen.loot.Add(lootGained);
-            boatHealth = null;
-            destroy(screen);
-        }
+		if(screen != null) {
+			if (currentHealth > 0) {
+				boatHealth.resize(currentHealth);
+				screen.sounds.damage();
+			} else {
+				screen.sounds.death();
+				int pointsGained = 20;
+				screen.points.Add(pointsGained);
+				int lootGained = 4;
+				screen.loot.Add(lootGained);
+				boatHealth = null;
+				destroy(screen);
+			}
+		}
 	}
 	
 	/**
@@ -164,7 +172,7 @@ public class Boat extends GameObject {
      * @param edges A 2d array containing safe/unsafe positions to be in.
      * @return      If the current position is safe.
      */
-	private Boolean safeMove(Array<Array<Boolean>> edges){
+	public Boolean safeMove(Array<Array<Boolean>> edges){
         return (
                         edges.get((int)((y+height/2)/16)).get((int)((x+width/2)/16)) &&
                         edges.get((int)((y+height/2)/16)).get((int)((x-width/2)/16)) &&

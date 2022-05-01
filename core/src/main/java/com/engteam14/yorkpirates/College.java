@@ -39,10 +39,13 @@ public class College extends GameObject {
      */
     public College(YorkPirates game, Array<Texture> sprites, float x, float y, float scale, String name, String team, Player player, Texture boatTexture){
         super(sprites, 0, x, y, (sprites != null) ? sprites.get(0).getWidth()*scale : 100*scale, (sprites != null) ? sprites.get(0).getHeight()*scale : 100*scale, team);
-
-        this.boatTexture = new Array<>();
         this.boats = new Array<>();
-        this.boatTexture.add(boatTexture);
+        if(boatTexture != null) {
+            this.boatTexture = new Array<>();
+            this.boatTexture.add(boatTexture);
+        } else {
+            this.boatTexture = null;
+        }
         collegeImages = new Array<>();
         if (sprite != null) {
             for (int i = 0; i < sprites.size; i++) {

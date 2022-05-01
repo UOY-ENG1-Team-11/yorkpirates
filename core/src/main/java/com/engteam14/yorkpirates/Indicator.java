@@ -11,11 +11,11 @@ public class Indicator extends GameObject{
     private final Player player;
     private final College college;
 
-    private Vector2 gradient;
+    public Vector2 gradient;
     private boolean visible;
 
     public Indicator(College college, Player player, Array<Texture> frames) {
-        super(frames, 0, player.x, player.y, frames.get(0).getWidth()/50f, frames.get(0).getHeight()/50f, college.team);
+        super(frames, 0, player.x, player.y, frames != null ?frames.get(0).getWidth()/50f : 50f, frames != null ? frames.get(0).getHeight()/50f : 50f, college.team);
 
         this.player = player;
         this.college = college;

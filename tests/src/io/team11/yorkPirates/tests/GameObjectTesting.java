@@ -1,5 +1,6 @@
 package io.team11.yorkPirates.tests;
 
+import com.badlogic.gdx.utils.JsonValue;
 import com.engteam14.yorkpirates.GameObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -67,6 +68,26 @@ public class GameObjectTesting {
 
     }
 
+    @Test
+    public void testJson() {
+        GameObject object = new GameObject(null, 0, 20, 20, 16, 16, "Player");
+        JsonValue json = object.toJson();
+        assertEquals(json.getFloat("x"), object.x, 0);
+        assertEquals(json.getFloat("y"), object.y, 0);
+        assertEquals(json.getFloat("width"), object.width, 0);
+        assertEquals(json.getFloat("height"), object.height, 0);
+        assertEquals(json.getInt("maxHealth"), object.maxHealth);
+        assertEquals(json.getFloat("currentHealth"), object.currentHealth, 0);
+        assertEquals(json.getString("team"), object.team);
 
+        GameObject object2 = new GameObject(null, 0, json);
+        assertEquals(object2.x, object.x, 0);
+        assertEquals(object2.y, object.y, 0);
+        assertEquals(object2.width, object.width, 0);
+        assertEquals(object2.height, object.height, 0);
+        assertEquals(object2.maxHealth, object.maxHealth);
+        assertEquals(object2.currentHealth, object.currentHealth, 0);
+        assertEquals(object2.team, object.team);
+    }
 
 }

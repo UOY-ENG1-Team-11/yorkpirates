@@ -20,7 +20,7 @@ public class GameObject {
     public int maxHealth;
     public float currentHealth;
 
-    String team;
+    public String team;
     Texture sprite;
     public Rectangle hitBox;
     Animation<Texture> anim;
@@ -50,7 +50,7 @@ public class GameObject {
         setHitbox();
     }
 
-    GameObject(Array<Texture> frames, float fps, JsonValue json) {
+    public GameObject(Array<Texture> frames, float fps, JsonValue json) {
         if(frames != null) {
             changeImage(frames,fps);
         }
