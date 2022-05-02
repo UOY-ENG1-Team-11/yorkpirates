@@ -27,33 +27,32 @@ public class PowerUps extends GameObject {
     public void update(GameScreen screen) {
         // Check for collision with power-ups
         if (overlaps(screen.getPlayer().hitBox)) {
-
             // Attack speed power-up
-            if (this.powerType == "ATKSPD") {
+            if (this.powerType.equals("ATKSPD")) {
                 screen.getPlayer().increaseAttackSpeed(screen);
                 destroy(screen);
             }
 
             // Damage power-up
-            if (this.powerType == "DMGUP") {
+            if (this.powerType.equals("DMGUP")) {
                 screen.getPlayer().increaseDamage(screen);
                 destroy(screen);
             }
 
             // Health power-up
-            if (this.powerType == "HEALTH") {
+            if (this.powerType.equals("HEALTH")) {
                 screen.getPlayer().increaseHealth(screen);
                 destroy(screen);
             }
 
             // Invincible power-up
-            if (this.powerType == "INVINCIBLE") {
+            if (this.powerType.equals("INVINCIBLE")) {
                 screen.getPlayer().setInvincible(screen);
                 destroy(screen);
             }
 
             // Speed power-up
-            if (this.powerType == "SPEED") {
+            if (this.powerType.equals("SPEED")) {
                 screen.getPlayer().increaseSpeed(screen);
                 destroy(screen);
             }

@@ -308,7 +308,7 @@ public class GameScreen extends ScreenAdapter {
         }
 
         // Check for projectile creation, then call projectile update
-        int shootFrequency = 700 / (Player.playerAttackSpeedMultiplier); // How often the player can shoot
+        int shootFrequency = 700 / (player.playerAttackSpeedMultiplier); // How often the player can shoot
         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && TimeUtils.timeSinceMillis(player.lastShotFired) > shootFrequency) {
             player.lastShotFired = TimeUtils.millis();
             sounds.cannon();
@@ -401,6 +401,7 @@ public class GameScreen extends ScreenAdapter {
      * Called to switch from the current screen to the title screen.
      */
     public void gameReset() {
+    	this.dispose();
         game.setScreen(new TitleScreen(game));
     }
 

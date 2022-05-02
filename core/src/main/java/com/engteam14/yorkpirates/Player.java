@@ -22,17 +22,17 @@ public class Player extends GameObject {
     private boolean invincible = false;
 
     // Upgrade check variables
-    public static boolean AtkSpdBought = false;
-    public static boolean AtkDmgBought = false;
-    public static boolean SpdBought = false;
+    public boolean AtkSpdBought = false;
+    public boolean AtkDmgBought = false;
+    public boolean SpdBought = false;
 
     // Player Multipliers
-    public static float playerProjectileDamageUpgrade = 1;
-    public static int playerAttackSpeedUpgrade = 1;
+    public float playerProjectileDamageUpgrade = 1;
+    public int playerAttackSpeedUpgrade = 1;
     public float playerSpeedUpgrade = 1f;
 
-    public static float playerProjectileDamageMultiplier = 1f; // Player Projectile damage Multiplier
-    public static int playerAttackSpeedMultiplier = 1 * playerAttackSpeedUpgrade; // Player Projectile Fire Rate Multiplier
+    public float playerProjectileDamageMultiplier = 1f; // Player Projectile damage Multiplier
+    public int playerAttackSpeedMultiplier = 1 * playerAttackSpeedUpgrade; // Player Projectile Fire Rate Multiplier
     public float playerSpeedMultiplier = 1f * playerSpeedUpgrade; // Player Movement Speed Multiplier
 
     // Movement calculation values

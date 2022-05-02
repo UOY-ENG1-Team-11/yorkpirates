@@ -77,8 +77,8 @@ public class Enemy_Wave extends GameObject {
             float yMove = speed * yComponent * (badWeather ? 1.3f : 1);
             distanceTravelled += speed * (badWeather ? 1.3f : 1);
             move(xMove, yMove);
-            if (overlaps(target.hitBox)) {
-                target.takeDamage(screen, projectileDamage, team);
+            if (overlaps(screen.getPlayer().hitBox)) {
+                screen.getPlayer().takeDamage(screen, projectileDamage, team);
                 destroy(screen);
             }
         }

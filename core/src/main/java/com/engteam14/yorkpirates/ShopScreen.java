@@ -55,7 +55,7 @@ public class ShopScreen extends ScreenAdapter {
         Image atkSpdIcon = new Image(screen.getMain().textureHandler.loadTexture("AtkSpdShop", Gdx.files.internal("ShopAtkSpd.png")));
         ;
         atkSpdIcon.setScaling(Scaling.fit);
-        if (Player.AtkSpdBought == true) {
+        if (screen.player.AtkSpdBought == true) {
             Texture atkSpdIconNew = (screen.getMain().textureHandler.loadTexture("AtkSpdShopBought", Gdx.files.internal("ShopSold.png")));
             ;
             atkSpdIcon.setDrawable(new TextureRegionDrawable(new TextureRegion(atkSpdIconNew)));
@@ -63,7 +63,7 @@ public class ShopScreen extends ScreenAdapter {
         Image atkDmgIcon = new Image(screen.getMain().textureHandler.loadTexture("AtkDmgShop", Gdx.files.internal("ShopAtkDmg.png")));
         ;
         atkDmgIcon.setScaling(Scaling.fit);
-        if (Player.AtkDmgBought == true) {
+        if (screen.player.AtkDmgBought == true) {
             Texture atkDmgIconNew = (screen.getMain().textureHandler.loadTexture("AtkDmgShopBought", Gdx.files.internal("ShopSold.png")));
             ;
             atkDmgIcon.setDrawable(new TextureRegionDrawable(new TextureRegion(atkDmgIconNew)));
@@ -71,7 +71,7 @@ public class ShopScreen extends ScreenAdapter {
         Image spdIcon = new Image(screen.getMain().textureHandler.loadTexture("SpdShop", Gdx.files.internal("ShopSpd.png")));
         ;
         spdIcon.setScaling(Scaling.fit);
-        if (Player.SpdBought == true) {
+        if (screen.player.SpdBought == true) {
             Texture spdIconNew = (screen.getMain().textureHandler.loadTexture("SpdShopBought", Gdx.files.internal("ShopSold.png")));
             ;
             spdIcon.setDrawable(new TextureRegionDrawable(new TextureRegion(spdIconNew)));
@@ -82,8 +82,8 @@ public class ShopScreen extends ScreenAdapter {
         buyAtkSpd.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 screen.sounds.menu_button();
-                if (screen.loot.Get() >= 10 && Player.AtkSpdBought == false) {
-                    screen.getPlayer().upgradeAttackSpeed(screen);
+                if (screen.loot.Get() >= 10 && screen.player.AtkSpdBought == false) {
+                    screen.player.upgradeAttackSpeed(screen);
                     screen.loot.Add(-10);
                     Texture atkSpdIconNew = (screen.getMain().textureHandler.loadTexture("AtkSpdShopBought", Gdx.files.internal("ShopSold.png")));
                     ;
@@ -95,8 +95,8 @@ public class ShopScreen extends ScreenAdapter {
         buyAtkDmg.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 screen.sounds.menu_button();
-                if (screen.loot.Get() >= 10 && Player.AtkDmgBought == false) {
-                    screen.getPlayer().upgradeAttackDamage(screen);
+                if (screen.loot.Get() >= 10 && screen.player.AtkDmgBought == false) {
+                    screen.player.upgradeAttackDamage(screen);
                     screen.loot.Add(-10);
                     Texture atkDmgIconNew = (screen.getMain().textureHandler.loadTexture("AtkDmgShopBought", Gdx.files.internal("ShopSold.png")));
                     ;
@@ -108,8 +108,8 @@ public class ShopScreen extends ScreenAdapter {
         buySpd.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 screen.sounds.menu_button();
-                if (screen.loot.Get() >= 10 && Player.SpdBought == false) {
-                    screen.getPlayer().upgradeSpeed(screen);
+                if (screen.loot.Get() >= 10 && screen.player.SpdBought == false) {
+                    screen.player.upgradeSpeed(screen);
                     screen.loot.Add(-10);
                     Texture spdIconNew = (screen.getMain().textureHandler.loadTexture("SpdShopBought", Gdx.files.internal("ShopSold.png")));
                     ;

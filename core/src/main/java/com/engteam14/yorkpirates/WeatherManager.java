@@ -60,7 +60,7 @@ public class WeatherManager {
                 screen.getHUD().table.setBackground(skin.getDrawable("Selection"));
             }
         } else {
-            if (rand.nextInt(70) == 1) {
+            if (rand.nextInt(50) == 1) {
                 float xOffset = (rand.nextBoolean() ? 1 : -1) * (rand.nextInt(100) + 100);
                 float yOffset = (rand.nextBoolean() ? 1 : -1) * (rand.nextInt(100) + 100);
                 createWave(screen.player, playerX + xOffset, playerY + yOffset);

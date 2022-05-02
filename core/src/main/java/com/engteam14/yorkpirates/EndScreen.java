@@ -121,6 +121,7 @@ public class EndScreen extends ScreenAdapter {
      */
     private void update() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+        	screen.dispose();
             game.setScreen(new TitleScreen(game));
         }
     }
