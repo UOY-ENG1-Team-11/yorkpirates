@@ -74,11 +74,12 @@ public class Player extends GameObject {
 
         // Generate health
         setMaxHealth(HEALTH);
+        Array<Texture> sprites = null;
         if (game != null) {
-            Array<Texture> sprites = new Array<>();
+            sprites = new Array<>();
             sprites.add(game.textureHandler.getTexture("allyHealthBar"));
-            playerHealth = new HealthBar(this, sprites);
         }
+        playerHealth = new HealthBar(this, sprites);
     }
 
     /**

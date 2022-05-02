@@ -457,46 +457,48 @@ public class GameScreen extends ScreenAdapter {
      * Loads the game from the local file 'savegame.json'
      */
     public void loadGame() {
-    	projectiles.clear();
-    	powerups.clear();
-    	JsonValue root = new JsonReader().parse(Gdx.files.local("savegame.json").readString());
-    	JsonValue general = root.get("general");
-    	points.Set(general.getInt("points"));
-    	loot.Set(general.getInt("loot"));
-    	difficulty = general.getInt("difficulty");
-    	playerName = general.getString("playerName");
-    	elapsedTime = general.getFloat("elapsedTime");
-    	College.capturedCount = general.getInt("capturedCount");
-    	
-    	player.fromJson(root.get("player"));
-    	
-    	JsonValue college = root.get("colleges").child();
-    	while(college != null) {
-    		College c = getCollege(college.getString("collegeName"));
-    		if(c != null) {
-    			c.fromJson(this, college);
-    		}
-    		college = college.next();
+    	if(Gdx.files.local("savegame.json").exists()) {
+	    	projectiles.clear();
+	    	powerups.clear();
+	    	JsonValue root = new JsonReader().parse(Gdx.files.local("savegame.json").readString());
+	    	JsonValue general = root.get("general");
+	    	points.Set(general.getInt("points"));
+	    	loot.Set(general.getInt("loot"));
+	    	difficulty = general.getInt("difficulty");
+	    	playerName = general.getString("playerName");
+	    	elapsedTime = general.getFloat("elapsedTime");
+	    	College.capturedCount = general.getInt("capturedCount");
+	    	
+	    	player.fromJson(root.get("player"));
+	    	
+	    	JsonValue college = root.get("colleges").child();
+	    	while(college != null) {
+	    		College c = getCollege(college.getString("collegeName"));
+	    		if(c != null) {
+	    			c.fromJson(this, college);
+	    		}
+	    		college = college.next();
+	    	}
+	    	
+	    	Array<Texture> sprites = new Array<>();
+	        sprites.add(getMain().textureHandler.getTexture("tempProjectile"));
+	    	JsonValue projectile = root.get("projectiles").child();
+	    	while(projectile != null) {
+	    		projectiles.add(new Projectile(sprites, 0, projectile));
+	    		projectile = projectile.next();
+	    	}
+	    	
+	    	JsonValue pow = root.get("powerups").child();
+	    	while(pow != null) {
+	    		createPowerUp(pow.getFloat("x"), pow.getFloat("y"), pow.getString("powerType"));
+	    		pow = pow.next();
+	    	}
+	    	
+	    	weather.fromJson(this, root.get("weather"));
+	    	
+	    	game.camera.position.x = player.x;
+	    	game.camera.position.y = player.y;
     	}
-    	
-    	Array<Texture> sprites = new Array<>();
-        sprites.add(getMain().textureHandler.getTexture("tempProjectile"));
-    	JsonValue projectile = root.get("projectiles").child();
-    	while(projectile != null) {
-    		projectiles.add(new Projectile(sprites, 0, projectile));
-    		projectile = projectile.next();
-    	}
-    	
-    	JsonValue pow = root.get("powerups").child();
-    	while(pow != null) {
-    		createPowerUp(pow.getFloat("x"), pow.getFloat("y"), pow.getString("powerType"));
-    		pow = pow.next();
-    	}
-    	
-    	weather.fromJson(this, root.get("weather"));
-    	
-    	game.camera.position.x = player.x;
-    	game.camera.position.y = player.y;
     }
 
     /**

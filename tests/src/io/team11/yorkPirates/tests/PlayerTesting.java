@@ -1,11 +1,12 @@
 package io.team11.yorkPirates.tests;
 
+import com.badlogic.gdx.utils.JsonValue;
 import com.engteam14.yorkpirates.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
+
 @RunWith(GdxTestRunner.class)
 public class PlayerTesting {
 
@@ -111,6 +112,25 @@ public class PlayerTesting {
 
     }
 
+    @Test
+    public void testPlayerJson() {
+        Player.AtkDmgBought = false;
+        Player.AtkSpdBought = false;
+        Player.SpdBought = false;
 
+        Player player = new Player(null, null, 60 , 60, 60, 60, 60, "Player");
+
+        player.upgradeAttackDamage(null);
+        player.upgradeSpeed(null);
+
+        JsonValue json = player.toJson();
+        assertFalse(json.getBoolean("AtkSpdBought"));
+        assertTrue(json.getBoolean("AtkDmgBought"));
+        assertTrue(json.getBoolean("SpdBought"));
+
+        assertEquals(json.getFloat("distance"), player.getDistance(), 0);
+
+        player.fromJson(json);
+    }
 
 }
