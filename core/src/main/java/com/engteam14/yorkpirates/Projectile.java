@@ -116,7 +116,7 @@ public class Projectile extends GameObject {
     public JsonValue toJson() {
         JsonValue json = super.toJson();
         json.addChild("dx", new JsonValue(dx));
-        json.addChild("dy", new JsonValue(dx));
+        json.addChild("dy", new JsonValue(dy));
         json.addChild("speed", new JsonValue(projectileSpeed));
         json.addChild("maxDistance", new JsonValue(maxDistance));
         json.addChild("origin", origin.toJson());
