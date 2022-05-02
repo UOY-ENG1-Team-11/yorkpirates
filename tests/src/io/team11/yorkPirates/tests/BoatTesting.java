@@ -17,7 +17,7 @@ public class BoatTesting {
 
         float damage = 50;
 
-        Boat boat = new Boat(null, null, 0, 0, 0, 25, 12, "Enemy", new Vector2[] {}, "Alcuin");
+        Boat boat = new Boat(null, null, 0, 0, 0, 25, 12, "Enemy", new Vector2[]{}, "Alcuin");
 
         boat.takeDamage(null, damage, "Player");
         assertTrue(boat.currentHealth == boat.maxHealth - damage);
@@ -25,7 +25,7 @@ public class BoatTesting {
 
     @Test
     public void testBoatMove() {
-        Boat boat = new Boat(null, null, 0, 0, 0, 25, 12, "Enemy", new Vector2[] {}, "Alcuin");
+        Boat boat = new Boat(null, null, 0, 0, 0, 25, 12, "Enemy", new Vector2[]{}, "Alcuin");
         boat.move(100, 200);
 
         //Test player moved
@@ -34,17 +34,17 @@ public class BoatTesting {
 
         //Test healthbar moved with player
         assertTrue(boat.boatHealth.x == boat.x);
-        assertTrue(boat.boatHealth.y == boat.y + + boat.height/2 + 2f);
+        assertTrue(boat.boatHealth.y == boat.y + +boat.height / 2 + 2f);
     }
 
     @Test
     public void testBoatSafemove() {
         /*
-        * Create an edge array that looks like:
-        * f t t
-        * t t t
-        * f t f
-        * */
+         * Create an edge array that looks like:
+         * f t t
+         * t t t
+         * f t f
+         * */
         Array<Array<Boolean>> edges = new Array<Array<Boolean>>();
         Array<Boolean> row1 = new Array<Boolean>();
         row1.add(false);
@@ -63,7 +63,7 @@ public class BoatTesting {
         edges.add(row2);
         edges.add(row3);
 
-        Boat boat = new Boat(null, null, 0, 0, 0, 25, 12, "Enemy", new Vector2[] {}, "Alcuin");
+        Boat boat = new Boat(null, null, 0, 0, 0, 25, 12, "Enemy", new Vector2[]{}, "Alcuin");
         assertFalse(boat.safeMove(edges));
         boat.x = 32;
         boat.y = 32;
@@ -72,7 +72,7 @@ public class BoatTesting {
 
     @Test
     public void testBoatJson() {
-        Boat boat = new Boat(null, null, 0, 0, 0, 25, 12, "Enemy", new Vector2[] {new Vector2(100, 200)}, "Alcuin");
+        Boat boat = new Boat(null, null, 0, 0, 0, 25, 12, "Enemy", new Vector2[]{new Vector2(100, 200)}, "Alcuin");
         boat.rotation = 40f;
         JsonValue json = boat.toJson();
         assertEquals(json.getFloat("rotation"), boat.rotation, 0);

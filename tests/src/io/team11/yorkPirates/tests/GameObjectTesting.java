@@ -12,7 +12,7 @@ import static org.junit.Assert.assertTrue;
 public class GameObjectTesting {
 
     @Test
-    public void testSetMaxHealth(){
+    public void testSetMaxHealth() {
 
         GameObject gameObject = new GameObject(null, 60, 60, 60, 60, 60, "Alcuin");
         gameObject.setMaxHealth(100);
@@ -21,7 +21,7 @@ public class GameObjectTesting {
     }
 
     @Test
-    public void testSetHitbox(){
+    public void testSetHitbox() {
 
         float width = 60;
         float height = 60;
@@ -34,7 +34,7 @@ public class GameObjectTesting {
     }
 
     @Test
-    public void testTakeDamage(){
+    public void testTakeDamage() {
 
         float width = 60;
         float height = 60;
@@ -51,7 +51,7 @@ public class GameObjectTesting {
     }
 
     @Test
-    public void testOverLap(){
+    public void testOverLap() {
         float width = 60;
         float height = 60;
 

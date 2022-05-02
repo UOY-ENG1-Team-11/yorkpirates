@@ -7,46 +7,52 @@ public class ScoreManager {
     /**
      * Initialises a ScoreManager with a default score of 0.
      */
-    public ScoreManager(){
+    public ScoreManager() {
         this(0);
     }
 
     /**
      * Initialises a ScoreManager.
-     * @param defaultScore  the default score value.
+     *
+     * @param defaultScore the default score value.
      */
-    public ScoreManager(int defaultScore){
+    public ScoreManager(int defaultScore) {
         score = defaultScore;
     }
 
     /**
-     *  Adds an integer value to the score.
-     * @param amount    the value to be added.
+     * Adds an integer value to the score.
+     *
+     * @param amount the value to be added.
      */
-    public void Add(int amount){;
+    public void Add(int amount) {
+        ;
         score += amount;
 
     }
 
     /**
-     *  Gets the score value in integer form.
-     * @return  the score.
+     * Gets the score value in integer form.
+     *
+     * @return the score.
      */
-    public int Get(){
+    public int Get() {
         return score;
-    }
-    
-    /**
-     * Sets the score value
-     * @param score 	the value to set the score to
-     *  */
-    public void Set(int score) {
-    	this.score = score;
     }
 
     /**
-     *  Gets the score value in string form.
-     * @return  the score.
+     * Sets the score value
+     *
+     * @param score the value to set the score to
+     */
+    public void Set(int score) {
+        this.score = score;
+    }
+
+    /**
+     * Gets the score value in string form.
+     *
+     * @return the score.
      */
     public String GetString() {
         return Integer.toString(score);

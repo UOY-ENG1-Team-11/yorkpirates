@@ -1,6 +1,6 @@
 package com.engteam14.yorkpirates;
 
-import com.badlogic.gdx.Gdx; 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Texture;
@@ -23,9 +23,9 @@ public class ShopScreen extends ScreenAdapter {
     private final Table shop;
     private final Table coinCount;
     private final Label loot;
-    
-        
-    public ShopScreen(YorkPirates game, GameScreen screen){
+
+
+    public ShopScreen(YorkPirates game, GameScreen screen) {
         this.game = game;
         this.screen = screen;
 
@@ -43,69 +43,78 @@ public class ShopScreen extends ScreenAdapter {
         table.setFillParent(true);
         table.setTouchable(Touchable.enabled);
         table.setBackground(skin.getDrawable("Selection"));
-        if(YorkPirates.DEBUG_ON) table.setDebug(true);
-        
+        if (YorkPirates.DEBUG_ON) table.setDebug(true);
+
         // Create Gold Indicator
         Image coin = new Image(screen.getMain().textureHandler.loadTexture("loot", Gdx.files.internal("loot.png")));
         coin.setScaling(Scaling.fit);
         loot = new Label(screen.loot.GetString(), skin);
         loot.setFontScale(2f);
-        
+
         // Create Shop Icons
-        Image atkSpdIcon = new Image(screen.getMain().textureHandler.loadTexture("AtkSpdShop", Gdx.files.internal("ShopAtkSpd.png")));;
+        Image atkSpdIcon = new Image(screen.getMain().textureHandler.loadTexture("AtkSpdShop", Gdx.files.internal("ShopAtkSpd.png")));
+        ;
         atkSpdIcon.setScaling(Scaling.fit);
         if (Player.AtkSpdBought == true) {
-        	Texture atkSpdIconNew = (screen.getMain().textureHandler.loadTexture("AtkSpdShopBought", Gdx.files.internal("ShopSold.png")));;
-        	atkSpdIcon.setDrawable(new TextureRegionDrawable(new TextureRegion(atkSpdIconNew)));
+            Texture atkSpdIconNew = (screen.getMain().textureHandler.loadTexture("AtkSpdShopBought", Gdx.files.internal("ShopSold.png")));
+            ;
+            atkSpdIcon.setDrawable(new TextureRegionDrawable(new TextureRegion(atkSpdIconNew)));
         }
-        Image atkDmgIcon = new Image(screen.getMain().textureHandler.loadTexture("AtkDmgShop", Gdx.files.internal("ShopAtkDmg.png")));;
+        Image atkDmgIcon = new Image(screen.getMain().textureHandler.loadTexture("AtkDmgShop", Gdx.files.internal("ShopAtkDmg.png")));
+        ;
         atkDmgIcon.setScaling(Scaling.fit);
         if (Player.AtkDmgBought == true) {
-        	Texture atkDmgIconNew = (screen.getMain().textureHandler.loadTexture("AtkDmgShopBought", Gdx.files.internal("ShopSold.png")));;
-    		atkDmgIcon.setDrawable(new TextureRegionDrawable(new TextureRegion(atkDmgIconNew)));
+            Texture atkDmgIconNew = (screen.getMain().textureHandler.loadTexture("AtkDmgShopBought", Gdx.files.internal("ShopSold.png")));
+            ;
+            atkDmgIcon.setDrawable(new TextureRegionDrawable(new TextureRegion(atkDmgIconNew)));
         }
-        Image spdIcon = new Image(screen.getMain().textureHandler.loadTexture("SpdShop", Gdx.files.internal("ShopSpd.png")));;
+        Image spdIcon = new Image(screen.getMain().textureHandler.loadTexture("SpdShop", Gdx.files.internal("ShopSpd.png")));
+        ;
         spdIcon.setScaling(Scaling.fit);
         if (Player.SpdBought == true) {
-        	Texture spdIconNew = (screen.getMain().textureHandler.loadTexture("SpdShopBought", Gdx.files.internal("ShopSold.png")));;
-    		spdIcon.setDrawable(new TextureRegionDrawable(new TextureRegion(spdIconNew)));
+            Texture spdIconNew = (screen.getMain().textureHandler.loadTexture("SpdShopBought", Gdx.files.internal("ShopSold.png")));
+            ;
+            spdIcon.setDrawable(new TextureRegionDrawable(new TextureRegion(spdIconNew)));
         }
-        
+
         // Create Shop Buttons
         TextButton buyAtkSpd = new TextButton("Buy", skin);
         buyAtkSpd.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-            	screen.sounds.menu_button();
-            	if (screen.loot.Get() >= 10 && Player.AtkSpdBought == false) {
-            		screen.getPlayer().upgradeAttackSpeed(screen);
-            		screen.loot.Add(-10);
-            		Texture atkSpdIconNew = (screen.getMain().textureHandler.loadTexture("AtkSpdShopBought", Gdx.files.internal("ShopSold.png")));;
-            		atkSpdIcon.setDrawable(new TextureRegionDrawable(new TextureRegion(atkSpdIconNew)));
-            	}
+                screen.sounds.menu_button();
+                if (screen.loot.Get() >= 10 && Player.AtkSpdBought == false) {
+                    screen.getPlayer().upgradeAttackSpeed(screen);
+                    screen.loot.Add(-10);
+                    Texture atkSpdIconNew = (screen.getMain().textureHandler.loadTexture("AtkSpdShopBought", Gdx.files.internal("ShopSold.png")));
+                    ;
+                    atkSpdIcon.setDrawable(new TextureRegionDrawable(new TextureRegion(atkSpdIconNew)));
+                }
             }
         });
         TextButton buyAtkDmg = new TextButton("Buy", skin);
         buyAtkDmg.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-            	screen.sounds.menu_button();
-            	if (screen.loot.Get() >= 10 && Player.AtkDmgBought == false) {
-            		screen.getPlayer().upgradeAttackDamage(screen);
-            		screen.loot.Add(-10);
-            		Texture atkDmgIconNew = (screen.getMain().textureHandler.loadTexture("AtkDmgShopBought", Gdx.files.internal("ShopSold.png")));;
-            		atkDmgIcon.setDrawable(new TextureRegionDrawable(new TextureRegion(atkDmgIconNew)));
-            	}
+                screen.sounds.menu_button();
+                if (screen.loot.Get() >= 10 && Player.AtkDmgBought == false) {
+                    screen.getPlayer().upgradeAttackDamage(screen);
+                    screen.loot.Add(-10);
+                    Texture atkDmgIconNew = (screen.getMain().textureHandler.loadTexture("AtkDmgShopBought", Gdx.files.internal("ShopSold.png")));
+                    ;
+                    atkDmgIcon.setDrawable(new TextureRegionDrawable(new TextureRegion(atkDmgIconNew)));
+                }
             }
         });
         TextButton buySpd = new TextButton("Buy", skin);
         buySpd.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-            	screen.sounds.menu_button();
-            	if (screen.loot.Get() >= 10 && Player.SpdBought == false) {
-            		screen.getPlayer().upgradeSpeed(screen);
-            		screen.loot.Add(-10);
-            		Texture spdIconNew = (screen.getMain().textureHandler.loadTexture("SpdShopBought", Gdx.files.internal("ShopSold.png")));;
-            		spdIcon.setDrawable(new TextureRegionDrawable(new TextureRegion(spdIconNew)));
-            	}
+                screen.sounds.menu_button();
+                if (screen.loot.Get() >= 10 && Player.SpdBought == false) {
+                    screen.getPlayer().upgradeSpeed(screen);
+                    screen.loot.Add(-10);
+                    Texture spdIconNew = (screen.getMain().textureHandler.loadTexture("SpdShopBought", Gdx.files.internal("ShopSold.png")));
+                    ;
+                    spdIcon.setDrawable(new TextureRegionDrawable(new TextureRegion(spdIconNew)));
+                }
             }
         });
 
@@ -119,7 +128,7 @@ public class ShopScreen extends ScreenAdapter {
         TextButton quit = new TextButton("Exit", skin);
         quit.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-            	screen.sounds.menu_button();
+                screen.sounds.menu_button();
                 gameContinue();
 
             }
@@ -134,13 +143,13 @@ public class ShopScreen extends ScreenAdapter {
         shop.add(buyAtkSpd).pad(25);
         shop.add(buyAtkDmg).pad(25);
         shop.add(buySpd).pad(25);
-        if(YorkPirates.DEBUG_ON) shop.setDebug(true);
-        
+        if (YorkPirates.DEBUG_ON) shop.setDebug(true);
+
         coinCount = new Table();
         coinCount.add(coin).size(150).left().top().pad(25);
         coinCount.add(loot);
-        if(YorkPirates.DEBUG_ON) coinCount.setDebug(true);
-        
+        if (YorkPirates.DEBUG_ON) coinCount.setDebug(true);
+
         // Add title to table
         table.row();
         table.add(coinCount).size(350).left().top();
@@ -151,7 +160,7 @@ public class ShopScreen extends ScreenAdapter {
         table.row();
         table.add().expand();
         table.add(shop);
-        
+
         // Add return to game button
         table.row();
         table.add().expand();
@@ -163,24 +172,25 @@ public class ShopScreen extends ScreenAdapter {
 
     /**
      * Is called once every frame. Runs update() and then renders the title screen.
+     *
      * @param delta The time passed since the previously rendered frame.
      */
     @Override
-    public void render(float delta){
+    public void render(float delta) {
         Gdx.input.setInputProcessor(shopStage);
         update();
         ScreenUtils.clear(0.6f, 0.6f, 1.0f, 1.0f);
         screen.render(delta); // Draws the gameplay screen as a background
         shopStage.draw(); // Draws the stage
-        
+
         loot.setText(screen.loot.GetString());
     }
 
     /**
      * Is called once every frame. Used for calculations that take place before rendering.
      */
-    private void update(){
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+    private void update() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             gameContinue();
         }
     }

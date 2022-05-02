@@ -1,9 +1,10 @@
 package com.engteam14.yorkpirates;
 
-import com.badlogic.gdx.Gdx; 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -22,9 +23,10 @@ public class TitleScreen extends ScreenAdapter {
 
     /**
      * Initialises the title screen, as well as relevant textures and data it may contain.
-     * @param game  Passes in the base game class for reference.
+     *
+     * @param game Passes in the base game class for reference.
      */
-    public TitleScreen(YorkPirates game){
+    public TitleScreen(YorkPirates game) {
         this.game = game;
 
         // Generates main gameplay for use as background
@@ -43,7 +45,7 @@ public class TitleScreen extends ScreenAdapter {
         Table table = new Table();
         table.setFillParent(true);
         table.setBackground(skin.getDrawable("Selection"));
-        if(YorkPirates.DEBUG_ON) table.setDebug(true);
+        if (YorkPirates.DEBUG_ON) table.setDebug(true);
 
         // Get title texture
         TextureRegion titleT = game.logo.getKeyFrame(0f);
@@ -60,13 +62,13 @@ public class TitleScreen extends ScreenAdapter {
                 newGameStart(false);
             }
         });
-        
+
         loadButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 newGameStart(true);
             }
         });
-        
+
         quitButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 game.quit();
@@ -90,10 +92,11 @@ public class TitleScreen extends ScreenAdapter {
 
     /**
      * Is called once every frame. Runs update() and then renders the title screen.
+     *
      * @param delta The time passed since the previously rendered frame.
      */
     @Override
-    public void render(float delta){
+    public void render(float delta) {
         // Update values
         elapsedTime += delta;
         update();
@@ -115,20 +118,20 @@ public class TitleScreen extends ScreenAdapter {
     /**
      * Is called once every frame to check for player input.
      */
-    private void update(){
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
+    private void update() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             newGameStart(false);
         }
     }
-    
+
     private void newGameStart(boolean loadGame) {
-    	if(!loadGame) {
-    		game.setScreen(new NewGameScreen(game));
-    	} else {
-    		GameScreen gs = new GameScreen(game);
-    		gs.loadGame();
-    		game.setScreen(gs);
-    	}
+        if (!loadGame) {
+            game.setScreen(new NewGameScreen(game));
+        } else {
+            GameScreen gs = new GameScreen(game);
+            gs.loadGame();
+            game.setScreen(gs);
+        }
     }
-    
+
 }

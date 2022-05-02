@@ -3,7 +3,9 @@ package io.team11.yorkPirates.tests;
 import com.badlogic.gdx.Gdx;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import static org.junit.Assert.assertTrue;
+
 @RunWith(GdxTestRunner.class)
 public class AssetTesting {
     @Test

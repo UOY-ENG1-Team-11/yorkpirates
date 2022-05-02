@@ -1,144 +1,144 @@
 {
-"BitmapFont": {
-	"Raleway-Bold": {
-		"file": "Raleway-Bold(5).fnt"
-	},
-	"Raleway-Bold-Small": {
-		"file": "Raleway-Bold(6).fnt"
-	}
-},
-"Color": {
-	"blue": {
-		"hex": "83c2e9ff"
-	},
-	"blue-dark": {
-		"hex": "3299daff"
-	},
-	"blue-light": {
-		"hex": "afe8fbff"
-	},
-	"Shadow": {
-		"hex": "00000080"
-	},
-	"White": {
-		"hex": "ffffffff"
-	}
-},
-"TintedDrawable": {
-	"Selection": {
-		"name": "white-pixel",
-		"color": "Shadow"
-	}
-},
-"ButtonStyle": {
-	"default": {
-		"up": "button",
-		"down": "button_down",
-		"over": "button_over"
-	},
-	"Wide": {
-		"up": "wide",
-		"down": "wide_down",
-		"over": "wide_over"
-	}
-},
-"CheckBoxStyle": {
-	"default": {
-		"checkboxOn": "checkbox",
-		"checkboxOff": "checkbox_full",
-		"font": "Raleway-Bold-Small"
-	}
-},
-"ImageButtonStyle": {
-	"default": {
-		"parent": "default"
-	},
-	"Menu": {
-		"parent": "default",
-		"imageUp": "menu",
-		"imageDown": "menu_down",
-		"imageOver": "menu_over"
-	},
-	"Restart": {
-		"parent": "default",
-		"imageUp": "restart",
-		"imageDown": "restart_down",
-		"imageOver": "restart_over"
-	},
-	"Play": {
-		"parent": "default",
-		"imageUp": "play",
-		"imageDown": "play_down",
-		"imageOver": "play_over"
-	},
-	"Quit": {
-		"parent": "default",
-		"imageUp": "quit",
-		"imageDown": "quit_down",
-		"imageOver": "quit_over"
-	}
-},
-"ImageTextButtonStyle": {
-	"default": {
-		"parent": "Wide",
-		"font": "Raleway-Bold",
-		"unpressedOffsetY": 7
-	},
-	"Restart": {
-		"parent": "default",
-		"imageUp": "restart",
-		"imageDown": "restart_down",
-		"imageOver": "restart_over",
-		"pressedOffsetY": -3,
-		"unpressedOffsetY": 3
-	},
-	"Resume": {
-		"parent": "default",
-		"imageUp": "play",
-		"imageDown": "play_down",
-		"imageOver": "play_over",
-		"pressedOffsetY": -3,
-		"unpressedOffsetY": 3
-	},
-	"Quit": {
-		"parent": "default",
-		"imageUp": "quit",
-		"imageDown": "quit_down",
-		"imageOver": "quit_over"
-	}
-},
-"LabelStyle": {
-	"default": {
-		"font": "Raleway-Bold"
-	}
-},
-"TextButtonStyle": {
-	"default": {
-		"parent": "Wide",
-		"font": "Raleway-Bold",
-		"pressedOffsetY": -3,
-		"unpressedOffsetY": 6
-	}
-},
-"TextFieldStyle": {
-	"default": {
-		"font": "Raleway-Bold",
-		"fontColor": "White",
-		"background": "textfield",
-		"cursor": "textfield_cursor",
-		"selection": "Selection"
-	},
-	"edges": {
-		"font": "Raleway-Bold-Small",
-		"fontColor": "White",
-		"background": "textfield_alt",
-		"cursor": "textfield_cursor",
-		"selection": "Selection"
-	}
-},
-"TextTooltipStyle": {
-	"default": {
-		"label": "default"
-	}
-}
+  "BitmapFont": {
+    "Raleway-Bold": {
+      "file": "Raleway-Bold(5).fnt"
+    },
+    "Raleway-Bold-Small": {
+      "file": "Raleway-Bold(6).fnt"
+    }
+  },
+  "Color": {
+    "blue": {
+      "hex": "83c2e9ff"
+    },
+    "blue-dark": {
+      "hex": "3299daff"
+    },
+    "blue-light": {
+      "hex": "afe8fbff"
+    },
+    "Shadow": {
+      "hex": "00000080"
+    },
+    "White": {
+      "hex": "ffffffff"
+    }
+  },
+  "TintedDrawable": {
+    "Selection": {
+      "name": "white-pixel",
+      "color": "Shadow"
+    }
+  },
+  "ButtonStyle": {
+    "default": {
+      "up": "button",
+      "down": "button_down",
+      "over": "button_over"
+    },
+    "Wide": {
+      "up": "wide",
+      "down": "wide_down",
+      "over": "wide_over"
+    }
+  },
+  "CheckBoxStyle": {
+    "default": {
+      "checkboxOn": "checkbox",
+      "checkboxOff": "checkbox_full",
+      "font": "Raleway-Bold-Small"
+    }
+  },
+  "ImageButtonStyle": {
+    "default": {
+      "parent": "default"
+    },
+    "Menu": {
+      "parent": "default",
+      "imageUp": "menu",
+      "imageDown": "menu_down",
+      "imageOver": "menu_over"
+    },
+    "Restart": {
+      "parent": "default",
+      "imageUp": "restart",
+      "imageDown": "restart_down",
+      "imageOver": "restart_over"
+    },
+    "Play": {
+      "parent": "default",
+      "imageUp": "play",
+      "imageDown": "play_down",
+      "imageOver": "play_over"
+    },
+    "Quit": {
+      "parent": "default",
+      "imageUp": "quit",
+      "imageDown": "quit_down",
+      "imageOver": "quit_over"
+    }
+  },
+  "ImageTextButtonStyle": {
+    "default": {
+      "parent": "Wide",
+      "font": "Raleway-Bold",
+      "unpressedOffsetY": 7
+    },
+    "Restart": {
+      "parent": "default",
+      "imageUp": "restart",
+      "imageDown": "restart_down",
+      "imageOver": "restart_over",
+      "pressedOffsetY": -3,
+      "unpressedOffsetY": 3
+    },
+    "Resume": {
+      "parent": "default",
+      "imageUp": "play",
+      "imageDown": "play_down",
+      "imageOver": "play_over",
+      "pressedOffsetY": -3,
+      "unpressedOffsetY": 3
+    },
+    "Quit": {
+      "parent": "default",
+      "imageUp": "quit",
+      "imageDown": "quit_down",
+      "imageOver": "quit_over"
+    }
+  },
+  "LabelStyle": {
+    "default": {
+      "font": "Raleway-Bold"
+    }
+  },
+  "TextButtonStyle": {
+    "default": {
+      "parent": "Wide",
+      "font": "Raleway-Bold",
+      "pressedOffsetY": -3,
+      "unpressedOffsetY": 6
+    }
+  },
+  "TextFieldStyle": {
+    "default": {
+      "font": "Raleway-Bold",
+      "fontColor": "White",
+      "background": "textfield",
+      "cursor": "textfield_cursor",
+      "selection": "Selection"
+    },
+    "edges": {
+      "font": "Raleway-Bold-Small",
+      "fontColor": "White",
+      "background": "textfield_alt",
+      "cursor": "textfield_cursor",
+      "selection": "Selection"
+    }
+  },
+  "TextTooltipStyle": {
+    "default": {
+      "label": "default"
+    }
+  }
 }

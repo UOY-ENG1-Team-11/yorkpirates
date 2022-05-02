@@ -15,7 +15,7 @@ public class Enemy_WaveTesting {
     public void testEnemy_WaveJson() {
 
         GameObject target = new GameObject(null, 0, 20, 20, 16, 16, "Enemy");
-        Enemy_Wave wave = new Enemy_Wave(null, 0, target,100,100);
+        Enemy_Wave wave = new Enemy_Wave(null, 0, target, 100, 100);
 
         JsonValue json = wave.toJson();
         assertEquals(json.getFloat("xComponent"), wave.xComponent, 0);

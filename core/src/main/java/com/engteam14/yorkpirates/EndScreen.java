@@ -19,11 +19,12 @@ public class EndScreen extends ScreenAdapter {
 
     /**
      * Initialises the title screen, as well as relevant textures and data it may contain.
-     * @param game      Passes in the base game class for reference.
-     * @param screen    Passes in the game screen for reference.
-     * @param win       Passes in the win status.
+     *
+     * @param game   Passes in the base game class for reference.
+     * @param screen Passes in the game screen for reference.
+     * @param win    Passes in the win status.
      */
-    public EndScreen(YorkPirates game, GameScreen screen, boolean win){
+    public EndScreen(YorkPirates game, GameScreen screen, boolean win) {
         this.game = game;
         this.screen = screen;
         screen.setPaused(true);
@@ -31,12 +32,11 @@ public class EndScreen extends ScreenAdapter {
         // Generate title image based on win/lose
         String imageN;
         if (win) {
-        	screen.sounds.win();
-        	imageN="game_win.png";
-        }
-        else {
-        	screen.sounds.lose();
-        	imageN="game_over.png";
+            screen.sounds.win();
+            imageN = "game_win.png";
+        } else {
+            screen.sounds.lose();
+            imageN = "game_over.png";
         }
         Texture titleT = game.textureHandler.loadTexture(imageN, Gdx.files.internal(imageN));
         Image title = new Image(titleT);
@@ -52,7 +52,7 @@ public class EndScreen extends ScreenAdapter {
         table.setFillParent(true);
         Gdx.input.setInputProcessor(endStage);
         table.setBackground(skin.getDrawable("Selection"));
-        if(YorkPirates.DEBUG_ON) table.setDebug(true);
+        if (YorkPirates.DEBUG_ON) table.setDebug(true);
 
         // Calculate stats
         int seconds = (int) screen.getElapsedTime();
@@ -72,7 +72,7 @@ public class EndScreen extends ScreenAdapter {
 
         restartB.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-            	screen.sounds.menu_button();
+                screen.sounds.menu_button();
                 screen.gameReset();
             }
         });
@@ -95,19 +95,21 @@ public class EndScreen extends ScreenAdapter {
         Table buttons = new Table();
         buttons.add(restartB).expand().size(200f).pad(100f);
         buttons.add(quitB).expand().size(200f).pad(100f);
-        if(YorkPirates.DEBUG_ON) buttons.setDebug(true);
+        if (YorkPirates.DEBUG_ON) buttons.setDebug(true);
         table.add(buttons);
 
         // Add table to the stage
         endStage.addActor(table);
     }
 
-    /**1
+    /**
+     * 1
      * Is called once every frame. Runs update() and then renders the title screen.
+     *
      * @param delta The time passed since the previously rendered frame.
      */
     @Override
-    public void render(float delta){
+    public void render(float delta) {
         update();
         ScreenUtils.clear(0.1f, 0.6f, 0.6f, 1.0f);
         screen.render(delta); // Draws the gameplay screen as a background
@@ -117,8 +119,8 @@ public class EndScreen extends ScreenAdapter {
     /**
      * Is called once every frame. Used for calculations that take place before rendering / inputs.
      */
-    private void update(){
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+    private void update() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             game.setScreen(new TitleScreen(game));
         }
     }

@@ -4,9 +4,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import static java.lang.Math.*;
 
-public class Indicator extends GameObject{
+import static java.lang.Math.abs;
+import static java.lang.Math.max;
+
+public class Indicator extends GameObject {
 
     private final Player player;
     private final College college;
@@ -15,7 +17,7 @@ public class Indicator extends GameObject{
     private boolean visible;
 
     public Indicator(College college, Player player, Array<Texture> frames) {
-        super(frames, 0, player.x, player.y, frames != null ?frames.get(0).getWidth()/50f : 50f, frames != null ? frames.get(0).getHeight()/50f : 50f, college.team);
+        super(frames, 0, player.x, player.y, frames != null ? frames.get(0).getWidth() / 50f : 50f, frames != null ? frames.get(0).getHeight() / 50f : 50f, college.team);
 
         this.player = player;
         this.college = college;
@@ -26,26 +28,27 @@ public class Indicator extends GameObject{
 
     /**
      * Called when drawing the Indicator.
-     * @param batch         The batch to draw the player within.
-     * @param elapsedTime   The current time the game has been running for.
+     *
+     * @param batch       The batch to draw the player within.
+     * @param elapsedTime The current time the game has been running for.
      */
     @Override
-    public void draw(SpriteBatch batch, float elapsedTime){
+    public void draw(SpriteBatch batch, float elapsedTime) {
         // Draw the indicator if visible
-        if(visible){
-            float rotation = (float) Math.toDegrees(Math.atan2(gradient.y,gradient.x));
-            batch.draw(sprite, x - width/2, y - height/2, width/2, height/2, width, height, 1f, 1f, rotation, 0, 0, sprite.getWidth(), sprite.getHeight(), false, false);
+        if (visible) {
+            float rotation = (float) Math.toDegrees(Math.atan2(gradient.y, gradient.x));
+            batch.draw(sprite, x - width / 2, y - height / 2, width / 2, height / 2, width, height, 1f, 1f, rotation, 0, 0, sprite.getWidth(), sprite.getHeight(), false, false);
         }
     }
 
     /**
      * Called when updating the gradient of the Indicator.
      */
-    public Vector2 updateGradient(){
+    public Vector2 updateGradient() {
         // Calculate the gradient to draw the indicator at.
         float changeInX = college.x - player.x;
         float changeInY = college.y - player.y;
-        float scaleFactor = max(abs(changeInX),abs(changeInY));
+        float scaleFactor = max(abs(changeInX), abs(changeInY));
         float dx = changeInX / scaleFactor;
         float dy = changeInY / scaleFactor;
 
@@ -55,7 +58,7 @@ public class Indicator extends GameObject{
     /**
      * Moves the object within the x and y-axis of the game world.
      */
-    void move(){
+    void move() {
         gradient = updateGradient();
         this.x = player.x + (50 * gradient.x);
         this.y = player.y + (50 * gradient.y);
@@ -63,7 +66,8 @@ public class Indicator extends GameObject{
 
     /**
      * Set whether the indicator is visible.
-     * @param visible   Whether the indicator is visible.
+     *
+     * @param visible Whether the indicator is visible.
      */
     public void setVisible(boolean visible) {
         this.visible = visible;

@@ -12,9 +12,9 @@ public class ProjectileTesting {
 
 
     @Test
-    public void projectileCreationTest(){
+    public void projectileCreationTest() {
 
-        Player player = new Player(null, null, 60 , 60, 60, 60, 60, "PLAYER");
+        Player player = new Player(null, null, 60, 60, 60, 60, 60, "PLAYER");
 
         Projectile projectile = new Projectile(null, 60, 60, player, 64, 64, "PLAYER");
         Projectile projectile2 = new Projectile(null, 60, 60, player, 64, 64, "ENEMY");

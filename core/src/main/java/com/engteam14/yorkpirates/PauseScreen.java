@@ -8,7 +8,10 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -20,7 +23,7 @@ public class PauseScreen extends ScreenAdapter {
     private final GameScreen screen;
     private final Stage pauseStage;
 
-    public PauseScreen(YorkPirates game, GameScreen screen){
+    public PauseScreen(YorkPirates game, GameScreen screen) {
         this.game = game;
         this.screen = screen;
 
@@ -36,7 +39,7 @@ public class PauseScreen extends ScreenAdapter {
         table.setFillParent(true);
         table.setTouchable(Touchable.enabled);
         table.setBackground(skin.getDrawable("Selection"));
-        if(YorkPirates.DEBUG_ON) table.setDebug(true);
+        if (YorkPirates.DEBUG_ON) table.setDebug(true);
 
         // Generate title texture
         Texture titleT = game.textureHandler.loadTexture("paused", Gdx.files.internal("paused.png"));
@@ -47,41 +50,41 @@ public class PauseScreen extends ScreenAdapter {
         TextButton resume = new TextButton("Resume", skin);
         resume.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-            	screen.sounds.menu_button();
+                screen.sounds.menu_button();
                 gameContinue();
             }
         });
-        
+
         TextButton shop = new TextButton("Shop", skin);
         shop.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-            	screen.sounds.menu_button();
-            	screen.gameShop();
+                screen.sounds.menu_button();
+                screen.gameShop();
             }
         });
-        
+
         TextButton save = new TextButton("Save", skin);
         save.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-            	screen.sounds.menu_button();
-            	screen.saveGame();
+                screen.sounds.menu_button();
+                screen.saveGame();
             }
-        });        
+        });
 
         TextButton restart = new TextButton("End Game", skin);
         restart.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-            	screen.sounds.menu_button();
+                screen.sounds.menu_button();
                 screen.gameEnd(false);
             }
         });
 
         TextButton music = new TextButton("", skin);
-        if (screen.music.getVolume() == 0)  music.setText("Turn Music ON");
-        else                                music.setText("Turn Music OFF");
+        if (screen.music.getVolume() == 0) music.setText("Turn Music ON");
+        else music.setText("Turn Music OFF");
         music.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-            	screen.sounds.menu_button();
+                screen.sounds.menu_button();
                 if (screen.music.getVolume() == 0) {
                     screen.music.setVolume(1);
                     screen.sounds.setVolume(1);
@@ -127,10 +130,11 @@ public class PauseScreen extends ScreenAdapter {
 
     /**
      * Is called once every frame. Runs update() and then renders the title screen.
+     *
      * @param delta The time passed since the previously rendered frame.
      */
     @Override
-    public void render(float delta){
+    public void render(float delta) {
         Gdx.input.setInputProcessor(pauseStage);
         update();
         ScreenUtils.clear(0.6f, 0.6f, 1.0f, 1.0f);
@@ -141,8 +145,8 @@ public class PauseScreen extends ScreenAdapter {
     /**
      * Is called once every frame. Used for calculations that take place before rendering.
      */
-    private void update(){
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+    private void update() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             gameContinue();
         }
     }
