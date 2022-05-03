@@ -153,12 +153,12 @@ The most recent version of the game can be downloaded from the releases tab.
 
 ## Team Members
 
-- [Felix French](https://github.com/orgs/engteam14/people/FelixRizzo)
-- [Joachim Jones](https://github.com/orgs/engteam14/people/JoachimJones)
-- [Saud Kidwai](https://github.com/orgs/engteam14/people/Saud1906)
-- [Katie Maison](https://github.com/orgs/engteam14/people/katie291100)
-- [Jacob Poulton](https://github.com/orgs/engteam14/people/jacobpoulton)
-- [Cody Spinks](https://github.com/orgs/engteam14/people/Cdsspnks96)
+- Osama Azaz
+- Adam Dawtry
+- Tom Jackson
+- Brendan Liew
+- Holly Reed
+- Harry Ryan
 
 ## Attribution
 
