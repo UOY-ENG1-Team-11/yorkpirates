@@ -127,7 +127,7 @@ public class TitleScreen extends ScreenAdapter {
     private void newGameStart(boolean loadGame) {
         if (!loadGame) {
             game.setScreen(new NewGameScreen(game));
-        } else {
+        } else if(Gdx.files.local("savegame.json").exists()){
             GameScreen gs = new GameScreen(game);
             gs.loadGame();
             game.setScreen(gs);
