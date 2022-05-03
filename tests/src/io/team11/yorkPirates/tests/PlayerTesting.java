@@ -81,7 +81,7 @@ public class PlayerTesting {
 
         Player player = new Player(null, null, 60, 60, 60, 60, 60, "Player");
 
-        player.setInvincible(null);
+        player.setInvincible(null, 10);
         player.takeDamage(null, damage, "Enemy");
         assertTrue(player.currentHealth == 200);
 
@@ -92,7 +92,7 @@ public class PlayerTesting {
     public void increasePlayerAttackSpeed() {
 
         Player player = new Player(null, null, 60, 60, 60, 60, 60, "Player");
-        player.increaseAttackSpeed(null);
+        player.increaseAttackSpeed(null, 10);
         assertTrue(player.playerAttackSpeedMultiplier == 2 && player.atkSpdTime != 0);
 
     }
@@ -101,7 +101,7 @@ public class PlayerTesting {
     public void increasePlayerDamage() {
 
         Player player = new Player(null, null, 60, 60, 60, 60, 60, "Player");
-        player.increaseDamage(null);
+        player.increaseDamage(null, 10);
         assertTrue(player.playerProjectileDamageMultiplier == 10 && player.dmgUpTime != 0);
 
     }
@@ -125,7 +125,7 @@ public class PlayerTesting {
         float playerTotalMoveSpeed;
 
         Player player = new Player(null, null, 60, 60, 60, 60, 60, "Player");
-        player.increaseSpeed(null);
+        player.increaseSpeed(null, 10);
 
         playerTotalMoveSpeed = player.SPEED * player.playerSpeedMultiplier;
         assertTrue(playerTotalMoveSpeed == player.SPEED * 1.5 && player.speedUpTime != 0);
@@ -156,7 +156,7 @@ public class PlayerTesting {
         Player player = new Player(null, null, 60, 60, 60, 60, 60, "Player");
         player.upgradeSpeed(null);
         assertTrue(player.playerSpeedMultiplier * player.playerSpeedUpgrade == 1.5 && player.SpdBought == true);
-        player.increaseSpeed(null);
+        player.increaseSpeed(null, 10);
         assertTrue(player.playerSpeedMultiplier * player.playerSpeedUpgrade == 1.5 * 1.5);
 
 
@@ -164,10 +164,6 @@ public class PlayerTesting {
 
     @Test
     public void testPlayerJson() {
-        Player.AtkDmgBought = false;
-        Player.AtkSpdBought = false;
-        Player.SpdBought = false;
-
         Player player = new Player(null, null, 60, 60, 60, 60, 60, "Player");
 
         player.upgradeAttackDamage(null);
@@ -180,7 +176,7 @@ public class PlayerTesting {
 
         assertEquals(json.getFloat("distance"), player.getDistance(), 0);
 
-        player.fromJson(json);
+        player.fromJson(null, json);
     }
 
 }

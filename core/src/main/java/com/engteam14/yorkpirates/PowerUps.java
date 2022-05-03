@@ -29,13 +29,13 @@ public class PowerUps extends GameObject {
         if (overlaps(screen.getPlayer().hitBox)) {
             // Attack speed power-up
             if (this.powerType.equals("ATKSPD")) {
-                screen.getPlayer().increaseAttackSpeed(screen);
+                screen.getPlayer().increaseAttackSpeed(screen, screen.getElapsedTime());
                 destroy(screen);
             }
 
             // Damage power-up
             if (this.powerType.equals("DMGUP")) {
-                screen.getPlayer().increaseDamage(screen);
+                screen.getPlayer().increaseDamage(screen, screen.getElapsedTime());
                 destroy(screen);
             }
 
@@ -47,13 +47,13 @@ public class PowerUps extends GameObject {
 
             // Invincible power-up
             if (this.powerType.equals("INVINCIBLE")) {
-                screen.getPlayer().setInvincible(screen);
+                screen.getPlayer().setInvincible(screen, screen.getElapsedTime());
                 destroy(screen);
             }
 
             // Speed power-up
             if (this.powerType.equals("SPEED")) {
-                screen.getPlayer().increaseSpeed(screen);
+                screen.getPlayer().increaseSpeed(screen, screen.getElapsedTime());
                 destroy(screen);
             }
         }

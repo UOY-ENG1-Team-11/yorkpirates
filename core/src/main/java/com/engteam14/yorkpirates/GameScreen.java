@@ -466,7 +466,7 @@ public class GameScreen extends ScreenAdapter {
             elapsedTime = general.getFloat("elapsedTime");
             College.capturedCount = general.getInt("capturedCount");
 
-            player.fromJson(root.get("player"));
+            player.fromJson(this, root.get("player"));
 
             JsonValue college = root.get("colleges").child();
             while (college != null) {
@@ -538,7 +538,7 @@ public class GameScreen extends ScreenAdapter {
     /**
      * Set the game difficulty.
      *
-     * @param difficulty Chosen difficulty.
+     * @param diff Chosen difficulty.
      */
     public void setDifficulty(Integer diff) {
         difficulty = diff;
@@ -547,7 +547,7 @@ public class GameScreen extends ScreenAdapter {
     /**
      * Get the game difficulty.
      *
-     * @param difficulty Chosen difficulty.
+     * @return the chosen difficulty
      */
     public Integer getDifficulty() {
         return difficulty;

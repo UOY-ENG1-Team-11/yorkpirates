@@ -44,17 +44,17 @@ public class Player extends GameObject {
     // Player Values
     public HealthBar playerHealth;
     private float splashTime;
-    private long timeLastHit;
+    private float timeLastHit;
     private boolean doBloodSplash = false;
     public long lastShotFired;
 
     public boolean alive = true;
 
     // Time variable declarations
-    public static long atkSpdTime;
-    public static long dmgUpTime;
-    public static long invincibleTime;
-    public static long speedUpTime;
+    public static float atkSpdTime = Float.MAX_VALUE;
+    public static float dmgUpTime = Float.MAX_VALUE;
+    public static float invincibleTime = Float.MAX_VALUE;
+    public static float speedUpTime = Float.MAX_VALUE;
 
     /**
      * Generates a player object within the game with animated frame(s) and a hit-box.
@@ -138,31 +138,31 @@ public class Player extends GameObject {
         }
 
         // Time Checks
-        if (TimeUtils.timeSinceMillis(timeLastHit) > 10000) {
+        if (screen.getElapsedTime() > timeLastHit + 10) {
             //System.out.println(screen.getDifficulty());
             currentHealth += (0.03 / screen.getDifficulty());
             if (currentHealth > maxHealth) currentHealth = maxHealth;
             playerHealth.resize(currentHealth);
         }
 
-        if (TimeUtils.timeSinceMillis(atkSpdTime) > 10000) {
+        if (screen.getElapsedTime() > atkSpdTime + 10 && atkSpdTime < Float.MAX_VALUE) {
             playerAttackSpeedMultiplier = 1 * playerAttackSpeedUpgrade;
-            atkSpdTime = 0;
+            atkSpdTime = Float.MAX_VALUE;
         }
 
-        if (TimeUtils.timeSinceMillis(dmgUpTime) > 10000) {
+        if (screen.getElapsedTime() > dmgUpTime + 10 && dmgUpTime < Float.MAX_VALUE) {
             playerProjectileDamageMultiplier = 1f * playerProjectileDamageUpgrade;
-            dmgUpTime = 0;
+            dmgUpTime = Float.MAX_VALUE;
         }
 
-        if (TimeUtils.timeSinceMillis(invincibleTime) > 10000) {
+        if (screen.getElapsedTime() > invincibleTime + 10 && invincibleTime < Float.MAX_VALUE) {
             invincible = false;
-            invincibleTime = 0;
+            invincibleTime = Float.MAX_VALUE;
         }
 
-        if (TimeUtils.timeSinceMillis(speedUpTime) > 10000) {
+        if (screen.getElapsedTime() > speedUpTime + 10 && speedUpTime < Float.MAX_VALUE) {
             playerSpeedMultiplier = 1f * playerSpeedUpgrade;
-            speedUpTime = 0;
+            speedUpTime = Float.MAX_VALUE;
         }
 
 
@@ -206,7 +206,7 @@ public class Player extends GameObject {
     @Override
     public void takeDamage(GameScreen screen, float damage, String projectileTeam) {
         if (invincible == false) {
-            timeLastHit = TimeUtils.millis();
+            timeLastHit = screen != null ? screen.getElapsedTime() : 0;
             currentHealth -= damage;
             doBloodSplash = true;
 
@@ -229,35 +229,37 @@ public class Player extends GameObject {
     /**
      * Called when colliding with an attack speed increase power-up.
      *
-     * @param screen The main game screen.
+     * @param screen        The main game screen.
+     * @param elapsedTime   The amount of time passed in the game
      */
-    public void increaseAttackSpeed(GameScreen screen) {
+    public void increaseAttackSpeed(GameScreen screen, float elapsedTime) {
         playerAttackSpeedMultiplier *= 2;
         // set back to 1
         if (screen != null) {
-            screen.AtkSpdTimer.getTime();
+            screen.AtkSpdTimer.getTime(elapsedTime);
         }
-        atkSpdTime = TimeUtils.millis();
+        atkSpdTime = elapsedTime;
     }
 
     /**
      * Called when colliding with a damage increase power-up.
      *
-     * @param screen The main game screen.
+     * @param screen        The main game screen.
+     * @param elapsedTime   The amount of time passed in the game
      */
-    public void increaseDamage(GameScreen screen) {
+    public void increaseDamage(GameScreen screen, float elapsedTime) {
         playerProjectileDamageMultiplier *= 10;
         // set back to 20f
         if (screen != null) {
-            screen.AtkDmgTimer.getTime();
+            screen.AtkDmgTimer.getTime(elapsedTime);
         }
-        dmgUpTime = TimeUtils.millis();
+        dmgUpTime = elapsedTime;
     }
 
     /**
      * Called when colliding with a health power-up.
      *
-     * @param screen The main game screen.
+     * @param screen        The main game screen.
      */
     public void increaseHealth(GameScreen screen) {
         currentHealth += 50;
@@ -272,27 +274,29 @@ public class Player extends GameObject {
     /**
      * Called when colliding with a speed power-up.
      *
-     * @param screen The main game screen.
+     * @param screen        The main game screen.
+     * @param elapsedTime   The amount of time passed in the game
      */
-    public void increaseSpeed(GameScreen screen) {
+    public void increaseSpeed(GameScreen screen, float elapsedTime) {
         playerSpeedMultiplier *= 1.5;
         if (screen != null) {
-            screen.SpeedTimer.getTime();
+            screen.SpeedTimer.getTime(elapsedTime);
         }
-        speedUpTime = TimeUtils.millis();
+        speedUpTime = elapsedTime;
     }
 
     /**
      * Called when colliding with an invincibilty power-up.
      *
-     * @param screen The main game screen.
+     * @param screen        The main game screen.
+     * @param elapsedTime   The amount of time passed in the game.
      */
-    public void setInvincible(GameScreen screen) {
+    public void setInvincible(GameScreen screen, float elapsedTime) {
         invincible = true;
         if (screen != null) {
-            screen.InvincibleTimer.getTime();
+            screen.InvincibleTimer.getTime(elapsedTime);
         }
-        invincibleTime = TimeUtils.millis();
+        invincibleTime = elapsedTime;
     }
 
     /**
@@ -387,26 +391,60 @@ public class Player extends GameObject {
         json.addChild("DmgUpgrade", new JsonValue(playerProjectileDamageUpgrade));
         json.addChild("AtkSpdUpgrade", new JsonValue(playerAttackSpeedUpgrade));
         json.addChild("SpdUpgrade", new JsonValue(playerSpeedUpgrade));
+        json.addChild("atkSpdTime", new JsonValue(atkSpdTime));
+        json.addChild("dmgUpTime", new JsonValue(dmgUpTime));
+        json.addChild("invincibleTime", new JsonValue(invincibleTime));
+        json.addChild("speedUpTime", new JsonValue(speedUpTime));
         return json;
     }
 
     /**
      * Sets all properties to those contained in the passed JsonValue.
      *
-     * @param json The root JsonValue containing the player properties.
+     * @param screen    The main game screen.
+     * @param json      The root JsonValue containing the player properties.
      */
-    @Override
-    public void fromJson(JsonValue json) {
+    public void fromJson(GameScreen screen, JsonValue json) {
         super.fromJson(json);
         previousDirectionX = json.getInt("previousDirectionX");
         previousDirectionY = json.getInt("previousDirectionY");
         distance = json.getFloat("distance");
+
+        //Read shop items bought
         AtkSpdBought = json.getBoolean("AtkSpdBought");
         AtkDmgBought = json.getBoolean("AtkDmgBought");
         SpdBought = json.getBoolean("SpdBought");
+
+        //Apply shop item effects
         playerProjectileDamageUpgrade = json.getFloat("DmgUpgrade");
+        playerProjectileDamageMultiplier = 1f * playerProjectileDamageUpgrade;
+
         playerAttackSpeedUpgrade = json.getInt("AtkSpdUpgrade");
+        playerAttackSpeedMultiplier = 1 * playerAttackSpeedUpgrade;
+
         playerSpeedUpgrade = json.getFloat("SpdUpgrade");
+        playerSpeedMultiplier = 1f * playerSpeedUpgrade;
+
+        invincible = false;
+
+        //Read current powerups and apply them
+        atkSpdTime = json.getFloat("atkSpdTime");
+        if(atkSpdTime < Float.MAX_VALUE) {
+            increaseAttackSpeed(screen, atkSpdTime);
+        }
+        dmgUpTime = json.getFloat("dmgUpTime");
+        if(dmgUpTime < Float.MAX_VALUE) {
+            increaseDamage(screen, dmgUpTime);
+        }
+        invincibleTime = json.getFloat("invincibleTime");
+        if(invincibleTime < Float.MAX_VALUE) {
+            setInvincible(screen, invincibleTime);
+        }
+        speedUpTime = json.getFloat("speedUpTime");
+        if(speedUpTime < Float.MAX_VALUE) {
+            increaseSpeed(screen, speedUpTime);
+        }
+
         playerHealth.resize(currentHealth);
         playerHealth.move(this.x, this.y + height / 2 + 2f);
     }

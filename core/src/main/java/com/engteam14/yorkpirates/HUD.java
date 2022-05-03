@@ -308,40 +308,40 @@ public class HUD {
         pointsTask.setText("Get " + POINT_GOAL + " points:  " + Math.min(screen.points.Get(), POINT_GOAL) + "/" + POINT_GOAL + "  ");
 
         // Attack Speed Timer Calls
-        if (Player.atkSpdTime > 0) {
+        if (Player.atkSpdTime < Float.MAX_VALUE) {
             AtkSpdTimer.setVisible(true);
             AtkSpdTable.setVisible(true);
-            screen.AtkSpdTimer.startTimer();
+            screen.AtkSpdTimer.startTimer(screen.getElapsedTime());
         } else {
             AtkSpdTimer.setVisible(false);
             AtkSpdTable.setVisible(false);
         }
 
         // Attack Damage Timer Calls
-        if (Player.dmgUpTime > 0) {
+        if (Player.dmgUpTime < Float.MAX_VALUE) {
             AtkDmgTimer.setVisible(true);
             AtkDmgTable.setVisible(true);
-            screen.AtkDmgTimer.startTimer();
+            screen.AtkDmgTimer.startTimer(screen.getElapsedTime());
         } else {
             AtkDmgTimer.setVisible(false);
             AtkDmgTable.setVisible(false);
         }
 
         // Invincible Timer Calls
-        if (Player.invincibleTime > 0) {
+        if (Player.invincibleTime < Float.MAX_VALUE) {
             InvincibleTimer.setVisible(true);
             InvincibleTable.setVisible(true);
-            screen.InvincibleTimer.startTimer();
+            screen.InvincibleTimer.startTimer(screen.getElapsedTime());
         } else {
             InvincibleTimer.setVisible(false);
             InvincibleTable.setVisible(false);
         }
 
         // Attack Damage Timer Calls
-        if (Player.speedUpTime > 0) {
+        if (Player.speedUpTime < Float.MAX_VALUE) {
             SpeedTimer.setVisible(true);
             SpeedTable.setVisible(true);
-            screen.SpeedTimer.startTimer();
+            screen.SpeedTimer.startTimer(screen.getElapsedTime());
         } else {
             SpeedTimer.setVisible(false);
             SpeedTable.setVisible(false);
