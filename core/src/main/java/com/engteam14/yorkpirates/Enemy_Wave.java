@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.JsonValue;
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
 
+//All of Enemy_Wave class is part of new requirements (UR.WEATHER, UR.OBSTACLES)
 public class Enemy_Wave extends GameObject {
 
     //Movement and coordinate values
@@ -21,7 +22,7 @@ public class Enemy_Wave extends GameObject {
     public final float rotation;
     public GameObject target; //reference to target game object
 
-    private String state = "move"; //state the wave is in
+    private final String state = "move"; //state the wave is in
     public float distanceTravelled = 0; //current distance travelled
 
     public static int count = 0; //how many wave instances exist

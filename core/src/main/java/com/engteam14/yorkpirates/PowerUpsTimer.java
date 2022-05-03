@@ -1,7 +1,6 @@
 package com.engteam14.yorkpirates;
 
-import com.badlogic.gdx.utils.TimeUtils;
-
+//All of PowerUpsTimer class is part of new requirement: UR.POWER_UPS
 public class PowerUpsTimer {
 
     private static final int POWERUPTIME = 10;

@@ -24,7 +24,7 @@ public class College extends GameObject {
     private long lastShotFired;
     public final String collegeName;
     private final Array<Texture> collegeImages;
-    private Array<Texture> boatTexture;
+    private final Array<Texture> boatTexture;
     public Array<Boat> boats;
 
     private boolean doBloodSplash = false;
@@ -40,6 +40,7 @@ public class College extends GameObject {
      */
     public College(YorkPirates game, Array<Texture> sprites, float x, float y, float scale, String name, String team, Player player, Texture boatTexture) {
         super(sprites, 0, x, y, (sprites != null) ? sprites.get(0).getWidth() * scale : 100 * scale, (sprites != null) ? sprites.get(0).getHeight() * scale : 100 * scale, team);
+
         this.boats = new Array<>();
         if (boatTexture != null) {
             this.boatTexture = new Array<>();
@@ -58,6 +59,7 @@ public class College extends GameObject {
         lastShotFired = 0;
         collegeName = name;
 
+        //Create HUD for the college
         if (game != null) {
             Array<Texture> healthBarSprite = new Array<>();
             Array<Texture> indicatorSprite = new Array<>();
@@ -233,7 +235,7 @@ public class College extends GameObject {
     }
 
     /**
-     * Saves all the college's properties in JSON format.
+     * Saves all the college's properties in JSON format. (New requirment: UR.SAVE_LOAD)
      *
      * @return A JsonValue containing all the college's properties.
      */
@@ -251,7 +253,7 @@ public class College extends GameObject {
     }
 
     /**
-     * Sets all properties to those contained in the passed JsonValue.
+     * Sets all properties to those contained in the passed JsonValue. (New requirement: UR.SAVE_LOAD)
      *
      * @param json The root JsonValue containing the college properties.
      */

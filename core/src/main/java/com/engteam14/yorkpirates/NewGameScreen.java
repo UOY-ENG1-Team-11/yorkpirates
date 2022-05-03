@@ -64,7 +64,7 @@ public class NewGameScreen extends ScreenAdapter {
         // Generate Title
         title = new Label("New Game Creation", skin);
 
-        // Generate difficulty reminder
+        // Generate difficulty reminder (New requirement: UR.DIFFICULTY)
         reminder = new Label("Please Select A Difficulty", skin);
         reminder.setVisible(false);
 
@@ -141,7 +141,7 @@ public class NewGameScreen extends ScreenAdapter {
             }
         });
 
-        // Create difficulty selection subtable
+        // Create difficulty selection subtable (New requirement: UR.DIFFICULTY)
         difficulties = new Table();
         difficulties.add(easyButton).pad(100);
         difficulties.add(normalButton).pad(100);

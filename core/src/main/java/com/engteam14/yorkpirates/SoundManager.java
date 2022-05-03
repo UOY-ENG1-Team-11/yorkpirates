@@ -8,14 +8,14 @@ import java.util.Random;
 
 
 public class SoundManager {
-    private Array<Sound> snds_cannon_shoot;
-    private Array<Sound> snds_hurt;
-    private Sound snd_game_win;
-    private Sound snd_game_lose;
-    private Sound snd_death;
-    private Sound snd_menu_button;
+    private final Array<Sound> snds_cannon_shoot;
+    private final Array<Sound> snds_hurt;
+    private final Sound snd_game_win;
+    private final Sound snd_game_lose;
+    private final Sound snd_death;
+    private final Sound snd_menu_button;
     private float volume;
-    private Random randGen;
+    private final Random randGen;
 
     /**
      * SoundManager class. Has method calls for all the sounds the game should make.

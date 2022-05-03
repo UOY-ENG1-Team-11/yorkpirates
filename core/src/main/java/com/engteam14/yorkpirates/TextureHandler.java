@@ -6,10 +6,11 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 import java.util.HashMap;
 
+//Texture handler was added in Assessment 2
 public class TextureHandler {
 
-    private HashMap<String, Texture> textures;
-    private HashMap<String, TextureAtlas> textureAtlas;
+    private final HashMap<String, Texture> textures;
+    private final HashMap<String, TextureAtlas> textureAtlas;
 
     /**
      * Creates a handler for all textures loaded in the game.

@@ -55,6 +55,7 @@ public class PauseScreen extends ScreenAdapter {
             }
         });
 
+        //Shop button (New requirement: UR.SPEND_LOOT)
         TextButton shop = new TextButton("Shop", skin);
         shop.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
@@ -63,6 +64,7 @@ public class PauseScreen extends ScreenAdapter {
             }
         });
 
+        //Save button (New requirement: UR.SAVE_LOAD)
         TextButton save = new TextButton("Save", skin);
         save.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {

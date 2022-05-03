@@ -139,11 +139,12 @@ public class Player extends GameObject {
 
         // Time Checks
         if (screen.getElapsedTime() > timeLastHit + 10) {
-            //System.out.println(screen.getDifficulty());
             currentHealth += (0.03 / screen.getDifficulty());
             if (currentHealth > maxHealth) currentHealth = maxHealth;
             playerHealth.resize(currentHealth);
         }
+
+        //Check if powerups have timed out (New requirement: UR.POWER_UPS)
 
         if (screen.getElapsedTime() > atkSpdTime + 10 && atkSpdTime < Float.MAX_VALUE) {
             playerAttackSpeedMultiplier = 1 * playerAttackSpeedUpgrade;
@@ -196,6 +197,7 @@ public class Player extends GameObject {
         playerHealth.move(this.x, this.y + height / 2 + 2f); // Healthbar moves with player
     }
 
+
     /**
      * Called when a projectile hits the college.
      *
@@ -227,10 +229,10 @@ public class Player extends GameObject {
     }
 
     /**
-     * Called when colliding with an attack speed increase power-up.
+     * Called when colliding with an attack speed increase power-up. (New requirement: UR.POWER_UPS)
      *
-     * @param screen        The main game screen.
-     * @param elapsedTime   The amount of time passed in the game
+     * @param screen      The main game screen.
+     * @param elapsedTime The amount of time passed in the game
      */
     public void increaseAttackSpeed(GameScreen screen, float elapsedTime) {
         playerAttackSpeedMultiplier *= 2;
@@ -242,10 +244,10 @@ public class Player extends GameObject {
     }
 
     /**
-     * Called when colliding with a damage increase power-up.
+     * Called when colliding with a damage increase power-up. (New requirement: UR.POWER_UPS)
      *
-     * @param screen        The main game screen.
-     * @param elapsedTime   The amount of time passed in the game
+     * @param screen      The main game screen.
+     * @param elapsedTime The amount of time passed in the game
      */
     public void increaseDamage(GameScreen screen, float elapsedTime) {
         playerProjectileDamageMultiplier *= 10;
@@ -257,9 +259,9 @@ public class Player extends GameObject {
     }
 
     /**
-     * Called when colliding with a health power-up.
+     * Called when colliding with a health power-up. (New requirement: UR.POWER_UPS)
      *
-     * @param screen        The main game screen.
+     * @param screen The main game screen.
      */
     public void increaseHealth(GameScreen screen) {
         currentHealth += 50;
@@ -272,10 +274,10 @@ public class Player extends GameObject {
     }
 
     /**
-     * Called when colliding with a speed power-up.
+     * Called when colliding with a speed power-up. (New requirement: UR.POWER_UPS)
      *
-     * @param screen        The main game screen.
-     * @param elapsedTime   The amount of time passed in the game
+     * @param screen      The main game screen.
+     * @param elapsedTime The amount of time passed in the game
      */
     public void increaseSpeed(GameScreen screen, float elapsedTime) {
         playerSpeedMultiplier *= 1.5;
@@ -286,10 +288,10 @@ public class Player extends GameObject {
     }
 
     /**
-     * Called when colliding with an invincibilty power-up.
+     * Called when colliding with an invincibilty power-up. (New requirement: UR.POWER_UPS)
      *
-     * @param screen        The main game screen.
-     * @param elapsedTime   The amount of time passed in the game.
+     * @param screen      The main game screen.
+     * @param elapsedTime The amount of time passed in the game.
      */
     public void setInvincible(GameScreen screen, float elapsedTime) {
         invincible = true;
@@ -300,7 +302,7 @@ public class Player extends GameObject {
     }
 
     /**
-     * Called when attack speed shop upgrade is bought.
+     * Called when attack speed shop upgrade is bought. (New requirement: UR.SPEND_LOOT)
      *
      * @param screen The main game screen.
      */
@@ -310,7 +312,7 @@ public class Player extends GameObject {
     }
 
     /**
-     * Called when attack damage shop upgrade is bought.
+     * Called when attack damage shop upgrade is bought. (New requirement: UR.SPEND_LOOT)
      *
      * @param screen The main game screen.
      */
@@ -320,7 +322,7 @@ public class Player extends GameObject {
     }
 
     /**
-     * Called when speed shop upgrade is bought.
+     * Called when speed shop upgrade is bought. (New requirement: UR.SPEND_LOOT)
      *
      * @param screen The main game screen.
      */
@@ -375,34 +377,41 @@ public class Player extends GameObject {
     }
 
     /**
-     * Saves all the players's properties in JSON format.
+     * Saves all the player's properties in JSON format. (New requirement: UR.SAVE_LOAD)
      *
      * @return A JsonValue containing all the player's properties.
      */
     @Override
     public JsonValue toJson() {
         JsonValue json = super.toJson();
+
+        //Store movement variables
         json.addChild("previousDirectionX", new JsonValue(previousDirectionX));
         json.addChild("previousDirectionY", new JsonValue(previousDirectionY));
         json.addChild("distance", new JsonValue(distance));
+
+        //Store stop items purchased
         json.addChild("AtkSpdBought", new JsonValue(AtkSpdBought));
         json.addChild("AtkDmgBought", new JsonValue(AtkDmgBought));
         json.addChild("SpdBought", new JsonValue(SpdBought));
         json.addChild("DmgUpgrade", new JsonValue(playerProjectileDamageUpgrade));
         json.addChild("AtkSpdUpgrade", new JsonValue(playerAttackSpeedUpgrade));
         json.addChild("SpdUpgrade", new JsonValue(playerSpeedUpgrade));
+
+        //Store current powerup timers
         json.addChild("atkSpdTime", new JsonValue(atkSpdTime));
         json.addChild("dmgUpTime", new JsonValue(dmgUpTime));
         json.addChild("invincibleTime", new JsonValue(invincibleTime));
         json.addChild("speedUpTime", new JsonValue(speedUpTime));
+
         return json;
     }
 
     /**
-     * Sets all properties to those contained in the passed JsonValue.
+     * Sets all properties to those contained in the passed JsonValue. (New requirement: UR.SAVE_LOAD)
      *
-     * @param screen    The main game screen.
-     * @param json      The root JsonValue containing the player properties.
+     * @param screen The main game screen.
+     * @param json   The root JsonValue containing the player properties.
      */
     public void fromJson(GameScreen screen, JsonValue json) {
         super.fromJson(json);
@@ -429,19 +438,19 @@ public class Player extends GameObject {
 
         //Read current powerups and apply them
         atkSpdTime = json.getFloat("atkSpdTime");
-        if(atkSpdTime < Float.MAX_VALUE) {
+        if (atkSpdTime < Float.MAX_VALUE) {
             increaseAttackSpeed(screen, atkSpdTime);
         }
         dmgUpTime = json.getFloat("dmgUpTime");
-        if(dmgUpTime < Float.MAX_VALUE) {
+        if (dmgUpTime < Float.MAX_VALUE) {
             increaseDamage(screen, dmgUpTime);
         }
         invincibleTime = json.getFloat("invincibleTime");
-        if(invincibleTime < Float.MAX_VALUE) {
+        if (invincibleTime < Float.MAX_VALUE) {
             setInvincible(screen, invincibleTime);
         }
         speedUpTime = json.getFloat("speedUpTime");
-        if(speedUpTime < Float.MAX_VALUE) {
+        if (speedUpTime < Float.MAX_VALUE) {
             increaseSpeed(screen, speedUpTime);
         }
 

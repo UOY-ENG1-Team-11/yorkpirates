@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.ScreenUtils;
 
+//All of the shop screen is part of new requirement: UR.SPEND_LOOT
 public class ShopScreen extends ScreenAdapter {
 
     private final YorkPirates game;
@@ -53,27 +54,21 @@ public class ShopScreen extends ScreenAdapter {
 
         // Create Shop Icons
         Image atkSpdIcon = new Image(screen.getMain().textureHandler.loadTexture("AtkSpdShop", Gdx.files.internal("ShopAtkSpd.png")));
-        ;
         atkSpdIcon.setScaling(Scaling.fit);
         if (screen.player.AtkSpdBought == true) {
             Texture atkSpdIconNew = (screen.getMain().textureHandler.loadTexture("AtkSpdShopBought", Gdx.files.internal("ShopSold.png")));
-            ;
             atkSpdIcon.setDrawable(new TextureRegionDrawable(new TextureRegion(atkSpdIconNew)));
         }
         Image atkDmgIcon = new Image(screen.getMain().textureHandler.loadTexture("AtkDmgShop", Gdx.files.internal("ShopAtkDmg.png")));
-        ;
         atkDmgIcon.setScaling(Scaling.fit);
         if (screen.player.AtkDmgBought == true) {
             Texture atkDmgIconNew = (screen.getMain().textureHandler.loadTexture("AtkDmgShopBought", Gdx.files.internal("ShopSold.png")));
-            ;
             atkDmgIcon.setDrawable(new TextureRegionDrawable(new TextureRegion(atkDmgIconNew)));
         }
         Image spdIcon = new Image(screen.getMain().textureHandler.loadTexture("SpdShop", Gdx.files.internal("ShopSpd.png")));
-        ;
         spdIcon.setScaling(Scaling.fit);
         if (screen.player.SpdBought == true) {
             Texture spdIconNew = (screen.getMain().textureHandler.loadTexture("SpdShopBought", Gdx.files.internal("ShopSold.png")));
-            ;
             spdIcon.setDrawable(new TextureRegionDrawable(new TextureRegion(spdIconNew)));
         }
 
@@ -86,7 +81,6 @@ public class ShopScreen extends ScreenAdapter {
                     screen.player.upgradeAttackSpeed(screen);
                     screen.loot.Add(-10);
                     Texture atkSpdIconNew = (screen.getMain().textureHandler.loadTexture("AtkSpdShopBought", Gdx.files.internal("ShopSold.png")));
-                    ;
                     atkSpdIcon.setDrawable(new TextureRegionDrawable(new TextureRegion(atkSpdIconNew)));
                 }
             }
@@ -99,7 +93,6 @@ public class ShopScreen extends ScreenAdapter {
                     screen.player.upgradeAttackDamage(screen);
                     screen.loot.Add(-10);
                     Texture atkDmgIconNew = (screen.getMain().textureHandler.loadTexture("AtkDmgShopBought", Gdx.files.internal("ShopSold.png")));
-                    ;
                     atkDmgIcon.setDrawable(new TextureRegionDrawable(new TextureRegion(atkDmgIconNew)));
                 }
             }
@@ -112,7 +105,6 @@ public class ShopScreen extends ScreenAdapter {
                     screen.player.upgradeSpeed(screen);
                     screen.loot.Add(-10);
                     Texture spdIconNew = (screen.getMain().textureHandler.loadTexture("SpdShopBought", Gdx.files.internal("ShopSold.png")));
-                    ;
                     spdIcon.setDrawable(new TextureRegionDrawable(new TextureRegion(spdIconNew)));
                 }
             }

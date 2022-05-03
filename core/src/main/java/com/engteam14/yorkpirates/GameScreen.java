@@ -97,7 +97,7 @@ public class GameScreen extends ScreenAdapter {
         points = new ScoreManager();
         loot = new ScoreManager();
 
-        // Initialise power-ups manager
+        // Initialise power-ups manager (New requirements: UR.POWER_UPS)
         AtkSpdTimer = new PowerUpsTimer();
         AtkDmgTimer = new PowerUpsTimer();
         InvincibleTimer = new PowerUpsTimer();
@@ -141,14 +141,11 @@ public class GameScreen extends ScreenAdapter {
         followPos = new Vector3(player.x, player.y, 0f);
         game.camera.position.lerp(new Vector3(760, 510, 0f), 1f);
 
-        //initalise a wave
-        //enemy_waves.add(new Enemy_Wave());
-
         // Initialise tilemap
         tiledMap = new TmxMapLoader().load("FINAL_MAP.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 
-        // Initialise weather
+        // Initialise weather (New requirement)
         Array<Texture> waveTex = new Array<Texture>();
         waveTex.add(getMain().textureHandler.getTexture("enemyWave"));
         weather = new WeatherManager(waveTex);
@@ -196,7 +193,7 @@ public class GameScreen extends ScreenAdapter {
         // Initialise projectiles array to be used storing live projectiles
         projectiles = new Array<>();
 
-        // Initialise powerups array to be used for storing the power-ups
+        // Initialise powerups array to be used for storing the power-ups (New requirement: UR.POWER_UPS)
         powerups = new Array<PowerUps>();
         getMain().textureHandler.loadTexture("UpAtkSpd", Gdx.files.internal("UpAtkSpd.png"));
         getMain().textureHandler.loadTexture("UpDmg", Gdx.files.internal("UpDmg.png"));
@@ -204,6 +201,7 @@ public class GameScreen extends ScreenAdapter {
         getMain().textureHandler.loadTexture("UpInvincible", Gdx.files.internal("UpInvincible.png"));
         getMain().textureHandler.loadTexture("UpSpeed", Gdx.files.internal("UpSpeed.png"));
 
+        //Create powerups (New requirement: UR.POWER_UPS)
         createPowerUp(768, 1120, attackSpeed);
         createPowerUp(1456, 1088, attackSpeed);
         createPowerUp(1520, 432, attackSpeed);
@@ -257,10 +255,10 @@ public class GameScreen extends ScreenAdapter {
             projectiles.get(i).draw(game.batch, 0);
         }
 
-        //Draw waves
+        //Draw waves (New requirement: UR.WEATHER, UR.OBSTACLES)
         weather.draw(game.batch, 0);
 
-        // Draw Consumables
+        // Draw Consumables (New requirement: UR.POWER_UPS)
         for (int i = 0; i < powerups.size; i++) {
             powerups.get(i).draw(game.batch, 0);
         }
@@ -303,6 +301,7 @@ public class GameScreen extends ScreenAdapter {
             }
         }
 
+        //Update powerups for collision (New requirement: UR.POWER_UPS)
         for (int i = 0; i < powerups.size; i++) {
             powerups.get(i).update(this);
         }
@@ -323,6 +322,8 @@ public class GameScreen extends ScreenAdapter {
         for (int i = projectiles.size - 1; i >= 0; i--) {
             projectiles.get(i).update(this);
         }
+
+        //Update weather state (New requirement: UR.WEATHER)
         weather.update(this, elapsedTime, player.x, player.y);
 
         // Camera calculations based on player movement
@@ -336,14 +337,14 @@ public class GameScreen extends ScreenAdapter {
             gamePause();
         }
 
-        // Call to open the shop
+        // Call to open the shop (New requirement: UR.SPEND_LOOT)
         if (Gdx.input.isKeyJustPressed(Input.Keys.P) && elapsedTime - lastPause > 0.1f) {
             gameShop();
         }
     }
 
     /**
-     * Creates a powerup on the map
+     * Creates a powerup on the map (New requirement: UR.POWER_UPS)
      *
      * @param x         The x-coordinate to spawn the powerup at
      * @param y         The y-coordinate to spawn the powerup at
@@ -380,8 +381,11 @@ public class GameScreen extends ScreenAdapter {
         game.setScreen(new PauseScreen(game, this));
     }
 
+    //Game shop (New requirement)
+
     /**
      * Called to switch from the current screen to the shop screen while retaining the current screen's information
+     * (New requirement: UR.SPEND_LOOT)
      */
     public void gameShop() {
         isPaused = true;
@@ -401,12 +405,12 @@ public class GameScreen extends ScreenAdapter {
      * Called to switch from the current screen to the title screen.
      */
     public void gameReset() {
-    	this.dispose();
+        this.dispose();
         game.setScreen(new TitleScreen(game));
     }
 
     /**
-     * Saves the game to the local file 'savegame.json'
+     * Saves the game to the local file 'savegame.json' (New requirement: UR.SAVE_LOAD)
      */
     public void saveGame() {
         JsonValue root = new JsonValue(ValueType.object);
@@ -451,7 +455,7 @@ public class GameScreen extends ScreenAdapter {
     }
 
     /**
-     * Loads the game from the local file 'savegame.json'
+     * Loads the game from the local file 'savegame.json' (New requirement: UR.SAVE_LOAD)
      */
     public void loadGame() {
         if (Gdx.files.local("savegame.json").exists()) {
@@ -536,7 +540,7 @@ public class GameScreen extends ScreenAdapter {
     }
 
     /**
-     * Set the game difficulty.
+     * Set the game difficulty. (New requirement: UR.DIFFICULTY)
      *
      * @param diff Chosen difficulty.
      */

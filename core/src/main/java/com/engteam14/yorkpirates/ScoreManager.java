@@ -26,7 +26,6 @@ public class ScoreManager {
      * @param amount the value to be added.
      */
     public void Add(int amount) {
-        ;
         score += amount;
 
     }

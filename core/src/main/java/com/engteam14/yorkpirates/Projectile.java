@@ -53,7 +53,7 @@ public class Projectile extends GameObject {
     }
 
     /**
-     * Generates a projectile object within the game from a saved JsonValue.
+     * Generates a projectile object within the game from a saved JsonValue. (New requirement)
      *
      * @param frames The animation frames, or a single sprite.
      * @param fps    The number of frames to be displayed per second.
@@ -81,7 +81,8 @@ public class Projectile extends GameObject {
         move(xMove, yMove);
 
         // Hit calculations
-        if (team == screen.playerTeam) {
+        if (team == GameScreen.playerTeam) {
+            //Collision with colleges
             for (int i = 0; i < screen.colleges.size; i++) {
                 if (overlaps(screen.colleges.get(i).hitBox)) {
                     if (!Objects.equals(team, screen.colleges.get(i).team)) { // Checks if projectile and college are on the same team
@@ -89,6 +90,7 @@ public class Projectile extends GameObject {
                     }
                     destroy(screen);
                 } else {
+                    //Collision with boats (New requirement: UR.ATK_SHIP)
                     for (int n = 0; n < screen.colleges.get(i).boats.size; n++) {
                         if (overlaps(screen.colleges.get(i).boats.get(n).hitBox)) {
                             if (!Objects.equals(team, screen.colleges.get(i).team)) { // Checks if projectile and boat are on the same time
@@ -100,6 +102,7 @@ public class Projectile extends GameObject {
                 }
             }
         } else {
+            //Collision with player
             if (overlaps(screen.getPlayer().hitBox)) {
                 if (!Objects.equals(team, GameScreen.playerTeam)) { // Checks if projectile and player are on the same team
                     screen.getPlayer().takeDamage(screen, collegeProjectileDamage * screen.getDifficulty(), team);
@@ -112,6 +115,11 @@ public class Projectile extends GameObject {
         if (Math.sqrt(Math.pow(origin.x - x, 2) + Math.pow(origin.y - y, 2)) > maxDistance) destroy(screen);
     }
 
+    /**
+     * Saves all the projectile's properties in JSON format. (New requirement: UR.SAVE_LOAD)
+     *
+     * @return A JsonValue containing all the player's properties.
+     */
     @Override
     public JsonValue toJson() {
         JsonValue json = super.toJson();

@@ -348,11 +348,7 @@ public class HUD {
         }
 
         // New Requirement
-        if (WeatherManager.weatherPass == true) {
-            weatherTable.setVisible(true);
-        } else {
-            weatherTable.setVisible(false);
-        }
+        weatherTable.setVisible(WeatherManager.weatherPass == true);
     }
 
     public void updateName(GameScreen screen) {

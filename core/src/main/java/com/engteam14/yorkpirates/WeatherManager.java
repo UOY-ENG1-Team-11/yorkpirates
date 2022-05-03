@@ -11,15 +11,16 @@ import com.badlogic.gdx.utils.JsonValue;
 
 import java.util.Random;
 
+//WeatherManeger is part of new requirement: UR.WEATHER
 public class WeatherManager {
 
     public boolean badWeather = false;
     public static boolean weatherPass = false;
     public Array<Enemy_Wave> waves;
     private float lastWeatherChange = 0;
-    private Array<Texture> waveTex;
+    private final Array<Texture> waveTex;
 
-    private Random rand;
+    private final Random rand;
 
     /**
      * Creates the weather manager for waves and the current weather.
@@ -45,11 +46,12 @@ public class WeatherManager {
             wave.update(screen, badWeather);
         }
         if (!badWeather) {
-            if (rand.nextInt(130) == 1) {
+            if (rand.nextInt(130) == 1) { //Randomly create new waves
                 float xOffset = (rand.nextBoolean() ? 1 : -1) * (rand.nextInt(100) + 100);
                 float yOffset = (rand.nextBoolean() ? 1 : -1) * (rand.nextInt(100) + 100);
                 createWave(screen.player, playerX + xOffset, playerY + yOffset);
             }
+            //After 30 seconds of good weather, randomly change to bad
             if (elapsedTime > lastWeatherChange + 30 && rand.nextInt(500) == 1) {
                 badWeather = true;
                 weatherPass = true;
@@ -60,11 +62,12 @@ public class WeatherManager {
                 screen.getHUD().table.setBackground(skin.getDrawable("Selection"));
             }
         } else {
-            if (rand.nextInt(50) == 1) {
+            if (rand.nextInt(50) == 1) { //In bad weather randomly create waves at a higher rate
                 float xOffset = (rand.nextBoolean() ? 1 : -1) * (rand.nextInt(100) + 100);
                 float yOffset = (rand.nextBoolean() ? 1 : -1) * (rand.nextInt(100) + 100);
                 createWave(screen.player, playerX + xOffset, playerY + yOffset);
             }
+            //After 10 seconds of bad weather, randomly change back
             if (elapsedTime > lastWeatherChange + 10 && rand.nextInt(50) == 1) {
                 badWeather = false;
                 weatherPass = false;
@@ -90,7 +93,7 @@ public class WeatherManager {
     /**
      * Creates a wave.
      *
-     * @param screen The main game screen.
+     * @param player The player.
      * @param x      The x-coordinate to spawn the wave at.
      * @param y      The y-coordinate to spawn the wave at.
      */

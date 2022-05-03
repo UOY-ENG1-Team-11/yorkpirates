@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.TimeUtils;
 
+//All of Boat class is a new requirement (UR.ATK_SHIP)
 public class Boat extends GameObject {
 
     private static final float SPEED = 35f;
@@ -83,6 +84,7 @@ public class Boat extends GameObject {
         int horizontal = 0;
         int vertical = 0;
         int shootFrequency = 700;
+        //If player is near the boat, move to a distance near them and shoot at them.
         if (Math.sqrt(Math.pow(x - this.x, 2) + Math.pow(y - this.y, 2)) <= DETECT_RANGE && this.team != GameScreen.playerTeam) {
             if (TimeUtils.timeSinceMillis(lastShotFired) > shootFrequency) {
                 lastShotFired = TimeUtils.millis();
@@ -96,6 +98,7 @@ public class Boat extends GameObject {
                 vertical = (int) Math.signum(Math.floor(y - this.y));
             }
         } else {
+            //If not near player continue on patrol
             if (patrol[patrolIndex].dst(this.x, this.y) < 8) {
                 patrolIndex++;
                 if (patrolIndex >= patrol.length) {
